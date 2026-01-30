@@ -1,5 +1,8 @@
 ---
 title: "Wrangling & Analysis"
 format: html
+execute:
+  cache: false       # disables caching
+  eval: false        # optional: only enable when ready to run
 ---
 
