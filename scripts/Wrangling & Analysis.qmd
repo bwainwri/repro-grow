@@ -53,23 +53,24 @@ library(ggplot2)
 library(viridis)
 library(lme4)
 library(LeafArea)
-library(mapdata)
-library(maps)
-library(terra)
+#library(mapdata)
+#library(maps)
+#library(terra)
 library(broom)
 library(tidyverse)
-library(sf)
-library(geodata)
-library(terra)
+#library(sf)
+#library(geodata)
 library(tigris)
 library(ggnewscale)
-library(scatterpie)
+#library(scatterpie)
 library(lmtest)
 library(car)
 library(bbmle)
 library(cropgrowdays)
 library(emmeans)
 library(here)
+#install.packages("DHARMa")
+library(DHARMa)
 ```
 
 ## CA Map and Plant Comp
@@ -79,7 +80,7 @@ Make a map of California with the inside of the boundary as a heat map of an ari
 Precip data from WorlClim
 
 ```{r}
-
+#| eval: false
 # ----- climate data -----
 ppt <- worldclim_global(var = "prec", res = 2.5, path = "data/")
 ppt_annual <- sum(ppt)
@@ -297,6 +298,7 @@ rm(ca,
 Read in data, find outliers, fill in missing data
 
 ```{r}
+#| eval: false
 #| warning: false
 ## Read in Data
 repro <- read_csv(here::here("data/Reproductive Allocation_2023.csv"))
@@ -311,6 +313,7 @@ head(repro)
 Remove rows that have NA in the Flower Count row and in the Veg Mass Row. 
 
 ```{r}
+#| eval: false
 # Remove individuals with no veg mass and no flower count
 repro_narm <- repro %>% 
   drop_na(Flower_Count) %>% 
@@ -394,6 +397,7 @@ rm(repro,repro_narm)
 
 Now check for outliers
 ```{r}
+#| eval: false
 # Make a dataset so we can average flower mass per species x population x treatment and then find outliers
 
 repro_outliers_vg <- repro_full %>% 
@@ -624,7 +628,7 @@ Now flower outliers have been removed, veg outliers have been checked.
 Now fill in average flower mass for for each Species x population x treatment and fill in for individuals with no flower masses. 
 
 ```{r}
-
+#| eval: false
 # Average flower masses for each individual
 firstfl = which(colnames(repro_full)=="Flower_1_g")
 lastfl = which(colnames(repro_full)=="Flower_10_g")
@@ -670,6 +674,7 @@ rm(repro_full,
 Now remove species with low data, less than three observations
 
 ```{r}
+#| eval: false
 unique(repro_fill$Sp_Code)
 
 # Who are the species with low n?
@@ -730,6 +735,7 @@ write.csv(d1, "SPEI_Pop.csv")
 ```
 
 ```{r}
+#| eval: false
 spei <- read_csv(here::here("data/SPEI_Pop.csv"))
 spei <- spei %>% 
   filter(month > 2 & month < 6)
@@ -772,9 +778,16 @@ rm(
   , spei_avg
 )
 
+write.csv(repro_fill_hi_n_narm, here::here("data/repro_fill_hi_n_narm.csv"))
+
 ```
 
 We did it! Now graph and analyze. Use "repro_fill_hi_n_narm" for reproductive allocation.
+
+Read in cleaned dataset to reduce computing power
+```{r}
+repro_fill_hi_n_narm <- read_csv(here::here("data/repro_fill_hi_n_narm.csv"))
+```
 
 ## Q1: 1:1
 
@@ -914,49 +927,7 @@ ICtab(m0,m1,m2,m3,m4,m5,m6)
 
 m5 <- glmer(RV ~ 1 + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
 
-m_native <- glmer(RV ~ Native_Status + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
-
-m_rating <- glmer(RV ~ Rating + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
-
-m_growth <- glmer(RV ~ Growth_Habit + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
-
-m_precip <- glmer(RV ~ Precip_mm + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
-
-m_pdif <- glmer(RV ~ precip_dif + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
-
-m_spei <- glmer(RV ~ spei_avg + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
-
-m_rating.n <- glmer(RV ~ rating.n + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
-
-m_nativexgrowth <- glmer(RV ~ Native_Status*Growth_Habit + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
-
-m_ratingxgrowth <- glmer(RV ~ Rating*Growth_Habit + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
-
-m_nativexpop <- glmer(RV ~ Native_Status*Population + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
-
-m_nativexspei <- glmer(RV ~ Native_Status*spei_avg + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
-
 m_ratingxpop <- glmer(RV ~ Rating*Population + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
-
-m_ratingxspei <- glmer(RV ~ Rating*spei_avg + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
-
-m_growthxpop <- glmer(RV ~ Growth_Habit*Population + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
-
-m_growthxspei <- glmer(RV ~ Growth_Habit*spei_avg + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
-
-m_nativexprecip <- glmer(RV ~ Native_Status*Precip_mm + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
-
-m_ratingxprecip <- glmer(RV ~ Rating*Precip_mm + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
-
-m_growthxprecip <- glmer(RV ~ Growth_Habit*Precip_mm + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
-
-m_rating.nxpop <- glmer(RV ~ rating.n*Population + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
-
-m_rating.nxgrowth <- glmer(RV ~ rating.n*Growth_Habit + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
-
-m_rating.nxprecip <- glmer(RV ~ rating.n*Precip_mm + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
-
-m_rating.nxspei <- glmer(RV ~ rating.n*spei_avg + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
 
 ICtab(m5
       ,m_native
@@ -987,34 +958,52 @@ summary(m_ratingxpop)
 
 # try additive terms
 
+repro_sub <- repro_fill_hi_n_narm %>% 
+  select(
+    RV,
+    Native_Status,
+    Rating,
+    Rating_2,
+    rating.n,
+    Growth_Habit,
+    Growth_2,
+    Population,
+    Precip_mm,
+    precip_dif,
+    spei_avg
+  )
+
+# Initialize an empty model
+forward_model <- lm(RV ~ ., data = repro_sub)
+
+# Forward stepwise regression
+forward_model <- step(forward_model, direction = "forward", scope = formula(~ .))
+
+# Initialize a model with all predictors
+backward_model <- lm(RV ~ ., data = repro_sub)
+
+# Backward stepwise regression
+backward_model <- step(backward_model, direction = "backward")
+
+# Initialize a model with all predictors
+both_model <- lm(RV ~ ., data = repro_sub)
+
+# Both-direction stepwise regression
+both_model <- step(both_model, direction = "both")
+
 # Check for overdispersion
 # deviance/residual df
 
 
 ### Come back to this
+### Kind of a mess
 
 ```
-
-
 
 #### Model: Fl Mass
 
 ```{r}
 str(repro_fill_hi_n_narm)
-
-# Create ratio of fl to v
-repro_fill_hi_n_narm$RV <- repro_fill_hi_n_narm$total_fl_mass_ln/repro_fill_hi_n_narm$Veg_Mass_ln
-
-repro_fill_hi_n_narm <- repro_fill_hi_n_narm %>% 
-  mutate(rating.n = (
-    case_when(
-      Rating == "Native" ~ 1
-      , Rating == "Non-native" ~ 2
-      , Rating == "Limited" ~ 3
-      , Rating == "Moderate" ~ 4
-      , Rating == "High" ~ 5
-    )
-  ))
 
 m0 <- glm(total_fl_mass_ln ~ 1, family = gaussian, data = repro_fill_hi_n_narm)
 
@@ -1092,6 +1081,41 @@ Anova(m_growth)
 summary(m_growth)
 #mall
 
+# Check assumptions
+
+sim_res <- simulateResiduals(m_growth)
+plot(sim_res)
+
+plotResiduals(sim_res, form = repro_fill_hi_n_narm$Veg_Mass_ln)
+plotResiduals(sim_res, form = repro_fill_hi_n_narm$Growth_Habit)
+plotResiduals(sim_res, form = repro_fill_hi_n_narm$Veg_Mass_ln, group = repro_fill_hi_n_narm$Growth_Habit)
+plotResiduals(sim_res, fitted(m_growth))
+
+
+
+
+res <- resid(m_growth)
+fitted <- fitted(m_growth)
+
+plot(fitted, res)
+abline(h = 0)
+
+qqnorm(res)
+qqline(res)
+
+plot(fitted(m_growth), resid(m_growth))
+
+plotResiduals(sim_res, form = dat$x1)
+
+re <- ranef(m_growth)$group[,1]
+qqnorm(re)
+qqline(re)
+
+testOutliers(sim_res)
+
+car::vif(m_growth)
+
+
 slopes <- emtrends(m_growth, ~ Growth_Habit, var = "Veg_Mass_ln")
 slopes
 
@@ -1107,10 +1131,10 @@ ggplot(slopes.df, aes(x = Growth_Habit, y = Veg_Mass_ln.trend
        y = "RV Slope",
        fill = "")
 
-ggsave("slopes_growth_pred.jpg")
+ggsave(here::here("figs/slopes_growth_pred.jpg"))
 
 
-# Check assumptions
+
 
 ```
 
