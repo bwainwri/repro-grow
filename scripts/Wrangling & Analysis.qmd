@@ -6,3 +6,1114 @@ execute:
   eval: false        # optional: only enable when ready to run
 ---
 
+## Background
+
+These data come from a common garden drought experiment in Davis, California investigating the functional trait strategies of California grassland plants from five different grassland communities spanning California's latitudinal precipitation gradient. There 10-12 species per community or provenance, each provenance has 16 plots (8 drought, 8 control) across 10 shelters (5 drought, 5 control). In 2022-2023, we focused on collecting whole plant traits, including reproductive investment. This study focuses on how these traits relate to reproductive investment depending on native status, growth habit or provenance. This document will clean and wrangle the many datasets and images associated with this study.
+
+## Traits & Objectives
+
+-   Reproductive allocation
+-   End of Season biomass
+-   Relative Growth Rate
+-   Photosynthetic Rate
+-   Leaf Mass Area
+-   Leaf Area
+-   WUE Height
+-   Leaf Nitrogen
+-   Date of first flower
+-   Mid season biomass partial
+-   Root biomass partial
+-   Root:shoot ratio partial
+-   Root diameter partial
+-   Specific root length partial
+-   Root nitrogen partial
+
+## To-do list
+- Check for effects of drought treatment
+- Check assumptions for models
+- Fix Map orientation
+- Licor outliers and mismatches
+- Include seed mass in PCA
+- Figure out if PCA is predicting something
+- check for outliers in not RGR and non reproductive stuff
+
+## Setup
+
+```{r}
+#| message: false
+#| warning: false
+#| echo: false
+
+library(colorspace)
+library(readr)
+library(plyr)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(viridis)
+library(lme4)
+library(LeafArea)
+library(mapdata)
+library(maps)
+library(terra)
+library(broom)
+library(tidyverse)
+library(sf)
+library(geodata)
+library(terra)
+library(tigris)
+library(ggnewscale)
+library(scatterpie)
+library(lmtest)
+library(car)
+library(bbmle)
+library(cropgrowdays)
+library(emmeans)
+library(here)
+```
+
+## CA Map and Plant Comp
+
+Make a map of California with the inside of the boundary as a heat map of an aridity index. Then add five pie charts of plant composition.
+
+Precip data from WorlClim
+
+```{r}
+
+# ----- climate data -----
+ppt <- worldclim_global(var = "prec", res = 2.5, path = "data/")
+ppt_annual <- sum(ppt)
+
+# ----- California boundary -----
+ca <- states(cb = TRUE) |> subset(NAME == "California")
+ca_vect <- vect(ca)
+
+# ----- crop & mask -----
+ppt_ca <- crop(ppt_annual, ca_vect)
+ppt_ca <- mask(ppt_ca, ca_vect)
+
+# ----- convert to df -----
+ppt_df <- as.data.frame(ppt_ca, xy = TRUE)
+names(ppt_df) <- c("x", "y", "ppt")
+
+# ----- plot -----
+ggplot(ppt_df) +
+  geom_raster(aes(x = x, y = y, fill = ppt)) +
+  geom_sf(data = ca, fill = NA, color = "black") +
+  scale_fill_viridis_c(name = "Annual precip (mm)") +
+  coord_sf() +
+  labs(title = "Annual Precipitation in California (WorldClim v2.1)") +
+  theme_minimal()
+
+rm(ppt_ca, ppt, ppt_annual)
+
+# Put it all together now
+
+## Need the pie chart data to have the following columns: ID, Lat, Long, Sp1 proportion, Sp2 proportion, etc.
+
+# so we need to pivot wider the dataset and average across ten plots and add coordaintes for each site then use mapPies function
+plant_comp <- read_csv(here::here("data/USDA_Site Composition.csv"))
+str(plant_comp)
+
+# First average across ten plots
+comp_sum <- plant_comp %>%
+  filter(!Species == "Grass") %>% 
+  group_by(Site, Species) %>% 
+  summarise(avg_cov = mean(Percent_Cover, na.rm = TRUE))
+
+# get rid of bare ground, rock, and litter
+comp_sum <- comp_sum %>%
+  filter(!Species %in% c("Litter","Rock","Bare ground")) %>% 
+  group_by(Site) %>% 
+  arrange(desc(avg_cov), .by_group = TRUE)
+
+PlList_2023 <- read_csv(here::here("data/USDA Drought Project 2023 Plant List.csv"))
+pl_list <- PlList_2023 %>% 
+  select(Site, Species)
+
+comp_reduced <- left_join(pl_list, comp_sum, by=join_by(Site, Species))
+
+comp_reduced$prop_cov <- comp_reduced$avg_cov/100
+
+comp_reduced <- comp_reduced %>% 
+  group_by(Site) %>% 
+  mutate(prop_total = sum(prop_cov))
+
+comp_reduced$prop_adj <- comp_reduced$prop_cov/comp_reduced$prop_total
+
+comp_wide <- comp_reduced %>% 
+  select(Site,
+         Species,
+         prop_adj) %>% 
+  pivot_wider(names_from = Species,
+              values_from = prop_adj)
+
+## add lat and long columns
+comp_wide$lat <- c(39.75141,37.37914,38.87508,34.70243,34.91771)
+comp_wide$long <- c(-123.6302,-121.72841,-122.42114,-120.0545,-119.16882)
+comp_wide$long_move <- comp_wide$long - 2
+comp_wide$lat_move<- comp_wide$lat
+comp_wide$lat_move[4] <- comp_wide$lat[4] + 1
+comp_wide$lat_move[5] <- comp_wide$lat[5] - 1
+comp_wide$lat_move[1] <- comp_wide$lat[1] + 1
+comp_wide$lat_move[2] <- comp_wide$lat[2] - 0.5
+comp_wide$long_move[3] <- comp_wide$long[3] - 2.5
+comp_wide$lat_move[3] <- comp_wide$lat[3] - 0.25
+comp_wide$long_move[4] <- comp_wide$long[4] - 3.5
+comp_wide$lat_move[4] <- comp_wide$lat[4] + 0.1
+comp_wide$long_move[5] <- comp_wide$long[5] - 2.5
+comp_wide$lat_move[5] <- comp_wide$lat[5] - 1.5
+#comp_wide$long_move[1] <- comp_wide$long[1] + 0.2
+comp_wide
+
+comp_wide[is.na(comp_wide)] <- 0
+colors <- rainbow_hcl(37)
+
+
+# ----- plot -----
+ggplot() +
+  geom_raster(data = ppt_df, aes(x = x, y = y, fill = ppt)) +
+    scale_fill_viridis_c(name = "Annual precip (mm)") +
+  new_scale_fill() +
+ geom_segment(
+  data = comp_wide,
+  aes(x = long, y = lat, xend = long_move, yend = lat_move),
+  color = "black", linewidth = 0.75
+) +
+   geom_scatterpie(
+    data = comp_wide,
+    aes(long_move, lat_move, r = 1),
+    cols = c("Acmispon parviflorus"
+             ,"Aira caryophyllea"
+             ,"Bromus diandrus"
+             ,"Bromus hordeaceus"
+             ,"Clarkia purpurea"
+             ,"Danthonia californica"
+             ,"Daucus pusillus"
+             ,"Eschscholzia californica"
+             ,"Galium parisiense"
+             ,"Hypochaeris glabra"
+             ,"Madia gracilis"
+             ,"Sanicula bipinnatifida"
+             ,"Avena barbata"
+             ,"Erodium botrys"
+             ,"Geranium dissectum"
+             ,"Lupinus bicolor"
+             ,"Torilis arvensis"
+             ,"Trifolium hirtum"
+             ,"Vicia sativa"
+             ,"Bromus madritensis"
+             ,"Elymus caput-medusae"
+             ,"Holocarpha virgata"
+             ,"Micropus californicus"
+             ,"Plantago erecta"
+             ,"Avena fatua"
+             ,"Calandrinia menziesii"
+             ,"Centaurea melitensis"
+             ,"Corethrogyne filaginifolia"
+             ,"Erodium cicutarium"
+             ,"Stipa pulchra"
+             ,"Amsinckia menziesii"
+             ,"Bromus arenarius"
+             ,"Caulanthus coulteri"
+             ,"Lupinus microcarpus"
+             ,"Lupinus succulentus"
+             ,"Phacelia tanacetifolia"
+             ,"Mirabilis multiflora")   # your pie-slice variables
+  ) +
+scale_fill_manual(
+    name = "Species",
+    values = c(
+             "Acmispon parviflorus" = colors[1]
+             ,"Aira caryophyllea" = colors[2]
+             ,"Bromus diandrus" = colors[3]
+             ,"Bromus hordeaceus" = colors[4]
+             ,"Clarkia purpurea" = colors[5]
+             ,"Danthonia californica" = colors[6]
+             ,"Daucus pusillus" = colors[7]
+             ,"Eschscholzia californica" = colors[8]
+             ,"Galium parisiense" = colors[9]
+             ,"Hypochaeris glabra" = colors[10]
+             ,"Madia gracilis" = colors[11]
+             ,"Sanicula bipinnatifida" = colors[12]
+             ,"Avena barbata" = colors[13]
+             ,"Erodium botrys" = colors[14]
+             ,"Geranium dissectum" = colors[15]
+             ,"Lupinus bicolor" = colors[16]
+             ,"Torilis arvensis" = colors[17]
+             ,"Trifolium hirtum" = colors[18]
+             ,"Vicia sativa" = colors[19]
+             ,"Bromus madritensis" = colors[20]
+             ,"Elymus caput-medusae" = colors[21]
+             ,"Holocarpha virgata" = colors[22]
+             ,"Micropus californicus" = colors[23]
+             ,"Plantago erecta" = colors[24]
+             ,"Avena fatua" = colors[25]
+             ,"Calandrinia menziesii" = colors[26]
+             ,"Centaurea melitensis" = colors[27]
+             ,"Corethrogyne filaginifolia" = colors[28]
+             ,"Erodium cicutarium" = colors[29]
+             ,"Stipa pulchra" = colors[30]
+             ,"Amsinckia menziesii" = colors[31]
+             ,"Bromus arenarius" = colors[32]
+             ,"Caulanthus coulteri" = colors[33]
+             ,"Lupinus microcarpus" = colors[34]
+             ,"Lupinus succulentus" = colors[35]
+             ,"Phacelia tanacetifolia" = colors[36]
+             ,"Mirabilis multiflora" = colors[37]
+    )
+    , guide = "none"
+  ) +
+  geom_sf(data = ca, fill = NA, color = "black",linewidth = 0.75) +
+  coord_sf(xlim = c(-127, -113), ylim = c(32, 42)) +
+  labs(title = "Annual Precipitation in California (WorldClim v2.1)") +
+  theme_minimal() +
+  theme(
+    panel.grid = element_blank(),
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    axis.title = element_blank(),
+    legend.position = c(0.925,0.725)
+  )  +
+  geom_point(data = data.frame(lat = 38.544854, long = -121.784516), 
+             aes(x = long, y = lat),
+                 color = "red", 
+                 size = 4)
+
+ggsave(here::here("figs/CA_precip_comp_map.jpg"))
+
+rm(ca,
+   ca_vect,
+   comp_reduced,
+   comp_sum, 
+   comp_wide,
+   pl_list,
+   plant_comp,
+   PlList_2023,
+   ppt_df)
+```
+## Reproductive allocation & End of Season biomass
+
+Read in data, find outliers, fill in missing data
+
+```{r}
+#| warning: false
+## Read in Data
+repro <- read_csv(here::here("data/Reproductive Allocation_2023.csv"))
+str(repro)
+summary(repro)
+head(repro)
+
+```
+
+### Clean up and create variables
+
+Remove rows that have NA in the Flower Count row and in the Veg Mass Row. 
+
+```{r}
+# Remove individuals with no veg mass and no flower count
+repro_narm <- repro %>% 
+  drop_na(Flower_Count) %>% 
+  drop_na(Veg_Mass)
+
+# Read in plot data
+plots <- read_csv(here::here("data/Plot_info.csv"))
+str(plots)
+summary(plots)
+head(plots)
+
+# Read in species data
+spp <- read_csv(here::here("data/Species Codes.csv"))
+unique(spp$Sp_Code)
+unique(repro$Species)
+
+# Pull plot code from Plant_ID, first two characters
+repro_narm <- repro_narm %>% 
+  mutate(Plot = substr(Plant_ID, start = 1, stop = 2))
+unique(repro_narm$Plot)
+
+# merge with plots
+repro_full <- left_join(repro_narm,plots,by = join_by(Plot))
+
+# Change name for consistency
+repro_full$Sp_Code <- repro_full$Species
+
+# merge with species data
+repro_full <- left_join(repro_full,spp,by = join_by(Sp_Code))
+
+# clean up dataset and re-order
+repro_full <- repro_full %>% 
+  select(
+    Plant_ID,
+    Sp_Code,
+    Scientific_Name,
+    Native_Status,
+    Growth_Habit,
+    Growth_2,
+    Perenniality,
+    Rating,
+    Rating_2,
+    Source,
+    Recorder,
+    Collection_Date,
+    Plot,
+    Block,
+    Shelter,
+    Plot_number,
+    Population,
+    Treatment,
+    Flower_Count,
+    Flower_1_g,
+    Flower_2_g,
+    Flower_3_g,
+    Flower_4_g,
+    Flower_5_g,
+    Flower_6_g,
+    Flower_7_g,
+    Flower_8_g,
+    Flower_9_g,
+    Flower_10_g,
+    Veg_Mass
+  )
+
+
+# repro_full[which(repro_full$Plant_ID == "G3.AVEFAT.1"),]
+# two separate entries, go back and fix manually. Probably additive
+# Additive! two flower bags and two veg bags.
+
+# repro_full[which(repro_full$Plant_ID == "F2.BRODIA.1"),]
+# was this counted twice?
+# Counted twice, go with the heavier veg mass since debris was probably lost
+
+# repro_full[which(repro_full$Plant_ID == "J1.BRODIA.1"),]
+# was this counted twice?
+# this was counted twice. The 4.01 mass is correct
+
+rm(repro,repro_narm)
+```
+
+Now check for outliers
+```{r}
+# Make a dataset so we can average flower mass per species x population x treatment and then find outliers
+
+repro_outliers_vg <- repro_full %>% 
+  group_by(Sp_Code,
+           Population) %>% 
+  mutate(vg_avg = mean(Veg_Mass, na.rm = TRUE),
+        vg_sd = sd(Veg_Mass, na.rm = TRUE)) %>% 
+  select(Plant_ID,
+         Sp_Code,
+         Population,
+         Veg_Mass,
+         vg_avg,
+         vg_sd)
+
+# remove any rows with NAs
+repro_outliers_vg <- repro_outliers_vg[complete.cases(repro_outliers_vg),]
+
+# get minimums and maximums using 3 standard deviations
+veg_avgs <- repro_outliers_vg %>% 
+  mutate(vg_max = vg_avg + 3*vg_sd,
+         vg_min = vg_avg - 3*vg_sd)
+
+# do the same for veg mass
+vg_outliers <- veg_avgs[which(veg_avgs$Veg_Mass > veg_avgs$vg_max | veg_avgs$Veg_Mass < veg_avgs$vg_min),c("Plant_ID","Sp_Code","Population", "Veg_Mass","vg_avg","vg_sd","vg_min","vg_max")]
+# Only 4 and they are just above the maximum, keep
+
+# write_csv(vg_outliers, "vg_outliers.csv")
+
+# now do separately for fls
+repro_outliers_fl <- repro_full %>% 
+  pivot_longer(cols = c(Flower_1_g, 
+                        Flower_2_g, 
+                        Flower_3_g,
+                        Flower_4_g,
+                        Flower_5_g,
+                        Flower_6_g,
+                        Flower_7_g,
+                        Flower_8_g,
+                        Flower_9_g,
+                        Flower_10_g),
+               names_to = "Flower",
+               values_to = "Flower_Mass_g") %>% 
+  select(Plant_ID,
+         Sp_Code,
+         Scientific_Name,
+         Population,
+         Flower,
+         Flower_Mass_g,
+         Veg_Mass) %>% 
+  filter(!is.na(Flower_Mass_g))
+
+# export dataset for intern/undergraduate practice
+# write_csv(repro_outliers, "repro_intern.csv")
+
+# Group by spp and population and then find averages and standard deviations
+str(repro_outliers_fl)
+
+repro_avgs_fl <- repro_outliers_fl %>% 
+  group_by(Sp_Code,
+           Population) %>% 
+  mutate(fl_avg = mean(Flower_Mass_g, na.rm = TRUE),
+            fl_sd = sd(Flower_Mass_g, na.rm = TRUE)) %>% 
+  select(Plant_ID,
+         Sp_Code,
+         Population,
+         Flower,
+         Flower_Mass_g,
+         fl_avg,
+         fl_sd)
+
+# remove any rows with NAs
+repro_avgs_fl <- repro_avgs_fl[complete.cases(repro_avgs_fl),]
+
+# get minimums and maximums using 3 standard deviations
+repro_avgs_fl <- repro_avgs_fl %>% 
+  mutate(fl_max = fl_avg + 3*fl_sd,
+         fl_min = fl_avg - 3*fl_sd)
+
+# Make a dataframe with rows of observations of flower masses that are either larger than the maximum or smaller than the minimum
+fl_outliers <- repro_avgs_fl[which(repro_avgs_fl$Flower_Mass_g > repro_avgs_fl$fl_max | repro_avgs_fl$Flower_Mass_g < repro_avgs_fl$fl_min),c("Plant_ID","Sp_Code","Population", "Flower", "Flower_Mass_g","fl_avg","fl_sd","fl_min","fl_max")]
+
+# make csvs to look deeper
+# write_csv(fl_outliers, "fl_outliers.csv")
+
+# find difference between flower mass and maximum
+fl_outliers$dif <- fl_outliers$Flower_Mass_g-fl_outliers$fl_max
+
+# how bad is it? anything bigger than 1 standard deviation difference is too big
+fl_hi <- fl_outliers[which(fl_outliers$dif >= fl_outliers$fl_sd),]
+# flower masses in fl_hi are way too big to include
+
+# Make those flower masses NAs and replace in repro_full
+
+# make repro_full long and then rbind and remove duplicates
+fl_hi$Flower_Mass_g <- NA
+fl_hi <- fl_hi %>% 
+  select(
+    Plant_ID,
+    Sp_Code,
+    Population,
+    Flower,
+    Flower_Mass_g) %>% 
+  mutate(
+    ID_no = paste0(Plant_ID,Flower)
+  )
+
+# make original dataset long
+repro_full_long <- repro_full %>% 
+  pivot_longer(cols = c(Flower_1_g, 
+                        Flower_2_g, 
+                        Flower_3_g,
+                        Flower_4_g,
+                        Flower_5_g,
+                        Flower_6_g,
+                        Flower_7_g,
+                        Flower_8_g,
+                        Flower_9_g,
+                        Flower_10_g),
+               names_to = "Flower",
+               values_to = "Flower_Mass_g") %>% 
+  mutate(
+    ID_no = paste0(Plant_ID,Flower)
+  )
+
+# create list of Plant_ID and flower number combos that need to become NA
+nays <- fl_hi$ID_no
+
+# create that dataset of 
+repro_long_filt <- repro_full_long %>% 
+  filter(ID_no %in% c(nays)) %>% 
+  mutate(
+    Flower_Mass_g = NA
+  )
+# 27 outliers converted to NA
+
+# check your work, should return an NA
+repro_long_filt$Flower_Mass_g[repro_long_filt$ID_no == sample(nays,1)]
+
+# Now rbind, order, and remove duplicates
+# 5620 in repro fill long, and 27 in repro long filt
+# should have 5647
+repro_fullfilt_long <- rbind(repro_long_filt,repro_full_long)
+
+repro_long <- repro_fullfilt_long[-which(duplicated(repro_fullfilt_long$ID_no)),]
+
+repro_full_2 <- repro_long %>% 
+  pivot_wider(id_cols = Plant_ID,
+              names_from = Flower,
+              values_from = Flower_Mass_g)
+
+# bind with original
+repro_full <- repro_full %>% 
+  select(
+    Plant_ID,
+    Sp_Code,
+    Scientific_Name,
+    Native_Status,
+    Growth_Habit,
+    Growth_2,
+    Rating,
+    Rating_2,
+    Source,
+    Recorder,
+    Collection_Date,
+    Plot,
+    Block,
+    Shelter,
+    Plot_number,
+    Population,
+    Treatment,
+    Flower_Count,
+    Veg_Mass
+  )
+
+repro_full_3 <- left_join(repro_full_2,repro_full,by=join_by(Plant_ID))
+
+repro_full <- repro_full_3 %>% 
+  select(
+    Plant_ID,
+    Sp_Code,
+    Scientific_Name,
+    Native_Status,
+    Growth_Habit,
+    Growth_2,
+    Rating,
+    Rating_2,
+    Source,
+    Plot,
+    Block, 
+    Shelter,
+    Plot_number,
+    Population,
+    Treatment,
+    Recorder,
+    Collection_Date,
+    Flower_1_g,
+    Flower_2_g,
+    Flower_3_g,
+    Flower_4_g,
+    Flower_5_g,
+    Flower_6_g,
+    Flower_7_g,
+    Flower_8_g,
+    Flower_9_g,
+    Flower_10_g,
+    Flower_Count,
+    Veg_Mass
+  )
+
+rm(repro_outliers_fl,
+   repro_outliers_vg, 
+   repro_avgs_fl,
+   veg_avgs, 
+   fl_outliers, 
+   vg_outliers, 
+   fl_hi, 
+   repro_full_long, 
+   nays, 
+   repro_long_filt, 
+   repro_fullfilt_long, 
+   repro_long,
+   repro_full_2,
+   repro_full_3)
+```
+
+Now flower outliers have been removed, veg outliers have been checked.
+
+Now fill in average flower mass for for each Species x population x treatment and fill in for individuals with no flower masses. 
+
+```{r}
+
+# Average flower masses for each individual
+firstfl = which(colnames(repro_full)=="Flower_1_g")
+lastfl = which(colnames(repro_full)=="Flower_10_g")
+repro_full[,c(firstfl:lastfl)]
+
+repro_full$fl_average <- rowMeans(repro_full[,c(firstfl:lastfl)], na.rm = TRUE)
+
+# Find the individuals with no flower mass
+no_fls <- repro_full[which(repro_full$fl_average == "NaN"),]
+
+# include everything except fl-Average
+firstcol = which(colnames(no_fls)=="Plant_ID")
+lastcol = which(colnames(no_fls)=="Veg_Mass")
+no_fls <- no_fls[,c(firstcol:lastcol)]
+
+# remove the individuals with no flower masses
+repro_full <- repro_full[which(repro_full$fl_average != "NaN"),]
+
+# detach(package:plyr)
+# when plyr is loaded after dplyr, group_by doesn't work
+avg_fls <- repro_full %>% 
+  group_by(Sp_Code, Population, Treatment) %>% 
+  summarise(fl_average = mean(fl_average, na.rm = TRUE))
+
+# mast avg fls onto no_fls and then re-merge no-fls with larger dataset
+rep_fls <- left_join(no_fls,avg_fls,by=join_by(Sp_Code,Population,Treatment))
+repro_fill <- rbind(rep_fls,repro_full)
+
+# check your work
+repro_fill[which(is.na(repro_fill$fl_average)),]
+# There's one without averages to fill in? Calmen in E6...investigate
+
+repro_fill$total_fl_mass <- repro_fill$Flower_Count*repro_fill$fl_average
+
+# There's an entry for ESCCAL which hasn't been done yet -- look into
+# Later you can remove any species with only one entry
+
+rm(repro_full,
+   no_fls,
+   avg_fls)
+
+```
+Now remove species with low data, less than three observations
+
+```{r}
+unique(repro_fill$Sp_Code)
+
+# Who are the species with low n?
+summary <- repro_fill %>% 
+  group_by(Sp_Code) %>% 
+  summarise(n = n()) %>% 
+  filter(n < 3)
+# ACMPAR, CAUCOU, ESCCAL, LUPSUC
+
+Sp_List_small <- summary$Sp_Code
+
+# Remove species with less than 3 entries
+repro_fill_hi_n <- repro_fill[-(which(repro_fill$Sp_Code %in% c(Sp_List_small))),]
+unique(repro_fill_hi_n$Sp_Code)
+
+summary(repro_fill_hi_n)
+
+repro_fill_hi_n_narm <- repro_fill_hi_n[-(which(repro_fill_hi_n$total_fl_mass %in% c(NA, -Inf))),]
+
+repro_fill_hi_n_narm_1 <- repro_fill_hi_n_narm
+
+# Lastly add in precipitation
+precip <- read_csv(here::here("data/Site_Precip.csv"))
+repro_fill_hi_n_narm <- left_join(repro_fill_hi_n_narm_1,precip, by=join_by("Population"))
+
+rm(summary,
+   Sp_List_small,
+   repro_fill,
+   repro_fill_hi_n,
+   precip,
+   repro_fill_hi_n_narm_1
+   )
+```
+
+Find and add in SPEI
+
+```{r}
+#| eval: false
+install.packages("devtools")
+require(devtools)
+devtools::install_github('seschaub/getSpei')
+require(getSpei)
+
+workdir <- getwd()
+setwd(workdir)
+
+# create data frame:
+Population  <- c("ANGELO", "MCL", "BORR","SEDG","WWP")
+longitude    <- c(-123.6302, -121.72841, -122.42114, -120.0545, -119.16882)
+latitude     <- c(39.75141, 37.37914, 38.87508, 34.70243, 34.91771)
+locations_df <- data.frame(Population, longitude, latitude)
+
+# specify arguments and run function:
+d1 <- spec_spei(spei_files = "spei48", start_y = 2015, end_y = 2015, 
+                locations = locations_df)
+
+write.csv(d1, "SPEI_Pop.csv")
+```
+
+```{r}
+spei <- read_csv(here::here("data/SPEI_Pop.csv"))
+spei <- spei %>% 
+  filter(month > 2 & month < 6)
+
+
+spei_avg <- spei %>% 
+  group_by(location_id) %>% 
+  summarise(spei_avg = mean(spei48)) %>% 
+  mutate(Population = location_id)
+
+spei_avg <- spei_avg[,c("Population","spei_avg")]
+
+repro_fill_hi_n_narm_1 <- left_join(repro_fill_hi_n_narm,spei_avg, by=join_by("Population"))
+
+repro_fill_hi_n_narm <- repro_fill_hi_n_narm_1
+
+repro_fill_hi_n_narm$Veg_Mass_ln <- log(repro_fill_hi_n_narm$Veg_Mass)
+repro_fill_hi_n_narm$total_fl_mass_ln <- log(repro_fill_hi_n_narm$total_fl_mass)
+
+repro_fill_hi_n_narm <- repro_fill_hi_n_narm[-(which(repro_fill_hi_n_narm$total_fl_mass_ln %in% c(NA, -Inf))),]
+
+# Create ratio of fl to v
+repro_fill_hi_n_narm$RV <- repro_fill_hi_n_narm$total_fl_mass_ln/repro_fill_hi_n_narm$Veg_Mass_ln
+
+repro_fill_hi_n_narm <- repro_fill_hi_n_narm %>% 
+  mutate(rating.n = (
+    case_when(
+      Rating == "Native" ~ 1
+      , Rating == "Non-native" ~ 2
+      , Rating == "Limited" ~ 3
+      , Rating == "Moderate" ~ 4
+      , Rating == "High" ~ 5
+    )
+  ))
+
+rm(
+  rep_fls
+  , repro_fill_hi_n_narm_1
+  , spei
+  , spei_avg
+)
+
+```
+
+We did it! Now graph and analyze. Use "repro_fill_hi_n_narm" for reproductive allocation.
+
+## Q1: 1:1
+
+```{r}
+anova(lm(total_fl_mass_ln ~ Veg_Mass_ln*Scientific_Name, data = repro_fill_hi_n_narm))
+
+mod <- lm(total_fl_mass_ln ~ Veg_Mass_ln * Scientific_Name, 
+          data = repro_fill_hi_n_narm)
+
+
+slopes <- emtrends(mod, ~ Scientific_Name, var = "Veg_Mass_ln")
+slopes
+
+slopes.df <- summary(slopes) %>% 
+  arrange(desc(Veg_Mass_ln.trend))
+
+test_slopes_vs1 <- summary(slopes, infer = TRUE, null = 1)
+test_slopes_vs1[which(test_slopes_vs1$p.value<0.05),]
+
+level_order <- unique(as.factor(slopes.df$Scientific_Name))
+
+
+# Graph a bar plot of each species in order of slope with standard error bars and line at 1
+
+#("ANGELO" = "#440154FF", "MCL" = "#3B528BFF", "BORR" = "#21908CFF", "SEDG" = "#5DC863FF", "WWP" = "#FDE725FF")) + 
+
+# Make species names italic and 45 degrees
+# Maybe make bar colors if significant
+
+sigs <- test_slopes_vs1[which(test_slopes_vs1$p.value<0.05),1]
+
+slopes.df$columnColor <- "N.S."
+
+slopes.df$columnColor[which(slopes.df$Scientific_Name == sigs[1])] <- "p-value < 0.05"
+
+slopes.df$columnColor[which(slopes.df$Scientific_Name == sigs[2])] <- "p-value < 0.05"
+
+slopes.df$columnColor[which(slopes.df$Scientific_Name == sigs[3])] <- "p-value < 0.05"
+
+slopes.df$columnColor[which(slopes.df$Scientific_Name == sigs[4])] <- "p-value < 0.05"
+
+ggplot(slopes.df, aes(x = factor(Scientific_Name, level=c(level_order)), y = Veg_Mass_ln.trend
+                       , fill = columnColor
+                      )) + 
+  geom_bar(position = position_dodge(), stat = "identity") +
+  geom_hline(yintercept = 1, linetype = "dashed") +
+  geom_errorbar(aes(ymin=Veg_Mass_ln.trend-SE, ymax=Veg_Mass_ln.trend+SE), width=0.3, colour="#FDE725FF", alpha=0.9, linewidth=1.3, position = position_dodge(0.9)) +
+  theme_classic() +
+  scale_fill_manual(values = c("N.S." = "#21908CFF", "p-value < 0.05" = "#440154FF")) +
+  theme(
+    axis.text.x = element_text(face = "italic", angle = 45, vjust = 1, hjust = 1),
+    legend.position = c(0.75, 0.95),
+    #legend.justification = c("right", "top"),
+    legend.box.just = "right",
+    legend.margin = margin(6, 6, 6, 6),
+    plot.margin = unit(c(0.25,0.25,0.25,0.75), "cm")
+  ) + 
+  guides(fill=guide_legend(ncol=2)) +
+  labs(x = "Species",
+       y = "RV Slope",
+       fill = "")
+
+ggsave(here::here("figs/Q1_slopes_spp.jpg"))
+
+
+ggplot(slopes.df, aes(x = factor(Scientific_Name, level=c(level_order)), y = Veg_Mass_ln.trend
+                       , fill = columnColor
+                      )) + 
+  geom_bar(position = position_dodge(), stat = "identity") +
+  geom_hline(yintercept = 1, linetype = "dashed") +
+  geom_errorbar(aes(ymin=Veg_Mass_ln.trend-SE, ymax=Veg_Mass_ln.trend+SE), width=0.3, colour="#FDE725FF", alpha=0.9, linewidth=1.3, position = position_dodge(0.9)) +
+  theme_classic() +
+  scale_fill_manual(values = c("N.S." = "#21908CFF", "p-value < 0.05" = "#440154FF")) +
+  theme(
+    axis.text.x = element_blank(),
+    legend.text =element_text(size=12, colour="black"),
+    axis.text.y=element_text(size=12, colour="black"),
+    axis.title=element_text(size=12,face="bold"),
+    legend.position = c(0.75, 0.95),
+    #legend.justification = c("right", "top"),
+    legend.box.just = "right",
+    legend.margin = margin(6, 6, 6, 6),
+    plot.margin = unit(c(0.25,0.25,0.25,0.75), "cm")
+  ) + 
+  guides(fill=guide_legend(ncol=2)) +
+  labs(x = "Species",
+       y = "RV Slope",
+       fill = "")
+
+ggsave(here::here("figs/Q1_slopes_spp_prez.jpg"), width = 7,height = 3.5)
+
+rm(
+  mod
+  , slopes
+  , slopes.df
+  , test_slopes_vs1
+)
+
+```
+
+It's interesting that the three most widespread species are significant and low. And the arguable invasive native is the other significant.
+
+## Q2: Growth Native
+
+#### Model: RV
+Model looking at what creates the ratio of log r and log v. Use species as random effect, and use that to determine best graph
+
+```{r}
+str(repro_fill_hi_n_narm)
+
+repro_fill_hi_n_narm <- repro_fill_hi_n_narm %>% 
+  mutate(rating.n = (
+    case_when(
+      Rating == "Native" ~ 1
+      , Rating == "Non-native" ~ 2
+      , Rating == "Limited" ~ 3
+      , Rating == "Moderate" ~ 4
+      , Rating == "High" ~ 5
+    )
+  ))
+
+m0 <- glm(RV ~ 1, family = gaussian, data = repro_fill_hi_n_narm)
+
+m1 <- glmer(RV ~ 1 + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
+
+m2 <- glmer(RV ~ 1 + (1|Block/Shelter/Plot), family = gaussian, data = repro_fill_hi_n_narm)
+
+m3 <- glmer(RV ~ 1 + (1|Block) + (1|Treatment), family = gaussian, data = repro_fill_hi_n_narm)
+
+m4 <- glmer(RV ~ 1 + (1|Block/Shelter/Plot) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
+
+m5 <- glmer(RV ~ 1 + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
+
+m6 <- glmer(RV ~ 1 + (1|Block) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
+
+ICtab(m0,m1,m2,m3,m4,m5,m6)
+
+m5 <- glmer(RV ~ 1 + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
+
+m_native <- glmer(RV ~ Native_Status + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
+
+m_rating <- glmer(RV ~ Rating + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
+
+m_growth <- glmer(RV ~ Growth_Habit + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
+
+m_precip <- glmer(RV ~ Precip_mm + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
+
+m_pdif <- glmer(RV ~ precip_dif + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
+
+m_spei <- glmer(RV ~ spei_avg + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
+
+m_rating.n <- glmer(RV ~ rating.n + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
+
+m_nativexgrowth <- glmer(RV ~ Native_Status*Growth_Habit + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
+
+m_ratingxgrowth <- glmer(RV ~ Rating*Growth_Habit + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
+
+m_nativexpop <- glmer(RV ~ Native_Status*Population + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
+
+m_nativexspei <- glmer(RV ~ Native_Status*spei_avg + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
+
+m_ratingxpop <- glmer(RV ~ Rating*Population + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
+
+m_ratingxspei <- glmer(RV ~ Rating*spei_avg + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
+
+m_growthxpop <- glmer(RV ~ Growth_Habit*Population + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
+
+m_growthxspei <- glmer(RV ~ Growth_Habit*spei_avg + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
+
+m_nativexprecip <- glmer(RV ~ Native_Status*Precip_mm + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
+
+m_ratingxprecip <- glmer(RV ~ Rating*Precip_mm + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
+
+m_growthxprecip <- glmer(RV ~ Growth_Habit*Precip_mm + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
+
+m_rating.nxpop <- glmer(RV ~ rating.n*Population + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
+
+m_rating.nxgrowth <- glmer(RV ~ rating.n*Growth_Habit + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
+
+m_rating.nxprecip <- glmer(RV ~ rating.n*Precip_mm + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
+
+m_rating.nxspei <- glmer(RV ~ rating.n*spei_avg + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
+
+ICtab(m5
+      ,m_native
+      ,m_rating
+      ,m_growth
+      ,m_growthxpop
+      ,m_growthxprecip
+      ,m_nativexgrowth
+      ,m_nativexpop
+      ,m_nativexprecip
+      ,m_pdif
+      ,m_precip
+      ,m_spei
+      ,m_ratingxgrowth
+      ,m_ratingxpop
+      ,m_ratingxprecip
+      ,m_rating.n
+      ,m_rating.nxgrowth
+      ,m_rating.nxpop
+      ,m_rating.nxprecip
+      ,m_nativexspei
+      ,m_ratingxspei
+      ,m_growthxspei
+      ,m_rating.nxspei)
+lrtest(m_ratingxpop, m5)
+Anova(m_ratingxpop)
+summary(m_ratingxpop)
+
+# try additive terms
+
+# Check for overdispersion
+# deviance/residual df
+
+
+### Come back to this
+
+```
+
+
+
+#### Model: Fl Mass
+
+```{r}
+str(repro_fill_hi_n_narm)
+
+# Create ratio of fl to v
+repro_fill_hi_n_narm$RV <- repro_fill_hi_n_narm$total_fl_mass_ln/repro_fill_hi_n_narm$Veg_Mass_ln
+
+repro_fill_hi_n_narm <- repro_fill_hi_n_narm %>% 
+  mutate(rating.n = (
+    case_when(
+      Rating == "Native" ~ 1
+      , Rating == "Non-native" ~ 2
+      , Rating == "Limited" ~ 3
+      , Rating == "Moderate" ~ 4
+      , Rating == "High" ~ 5
+    )
+  ))
+
+m0 <- glm(total_fl_mass_ln ~ 1, family = gaussian, data = repro_fill_hi_n_narm)
+
+m1 <- glmer(total_fl_mass_ln ~ 1 + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
+
+m2 <- glmer(total_fl_mass_ln ~ 1 + (1|Block/Shelter/Plot), family = gaussian, data = repro_fill_hi_n_narm)
+
+m3 <- glmer(total_fl_mass_ln ~ 1 + (1|Block) + (1|Treatment), family = gaussian, data = repro_fill_hi_n_narm)
+
+m4 <- glmer(total_fl_mass_ln ~ 1 + (1|Block/Shelter/Plot) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
+
+m5 <- glmer(total_fl_mass_ln ~ 1 + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
+
+m6 <- glmer(total_fl_mass_ln ~ 1 + (1|Block) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
+
+m7 <- glmer(total_fl_mass_ln ~ 1 + (1|Block) + (1|Treatment) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm)
+
+ICtab(m0,m1,m2,m3,m4,m5,m6,m7)
+
+m7 <- glmer(total_fl_mass_ln ~ 1 + (1|Block) + (1|Treatment) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm)
+
+mV <- glmer(total_fl_mass_ln ~ Veg_Mass_ln + (1|Block) + (1|Treatment) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm)
+
+m_native <- glmer(total_fl_mass_ln ~ Native_Status*Veg_Mass_ln + (1|Block) + (1|Treatment) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm)
+
+m_rating <- glmer(total_fl_mass_ln ~ Rating*Veg_Mass_ln + (1|Block) + (1|Treatment) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm)
+
+m_growth <- glmer(total_fl_mass_ln ~ Growth_Habit*Veg_Mass_ln + (1|Block) + (1|Treatment) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm)
+
+m_rating.n <- glmer(total_fl_mass_ln ~ rating.n*Veg_Mass_ln + (1|Block) + (1|Treatment) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm)
+
+m_growth2 <- glmer(total_fl_mass_ln ~ Growth_2*Veg_Mass_ln + (1|Block) + (1|Treatment) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm)
+
+m_rating2 <- glmer(total_fl_mass_ln ~ Growth_2*Veg_Mass_ln + (1|Block) + (1|Treatment) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm)
+
+m_nativexgrowth <- glmer(total_fl_mass_ln ~ Native_Status*Growth_Habit*Veg_Mass_ln + (1|Block) + (1|Treatment) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm)
+
+m_ratingxgrowth <- glmer(total_fl_mass_ln ~ Rating*Growth_Habit*Veg_Mass_ln + (1|Block) + (1|Treatment) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm)
+
+m_rating.nxgrowth <- glmer(total_fl_mass_ln ~ rating.n*Growth_Habit*Veg_Mass_ln + (1|Block) + (1|Treatment) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm)
+
+m_rating2xgrowth <- glmer(total_fl_mass_ln ~ Rating_2*Growth_Habit*Veg_Mass_ln + (1|Block) + (1|Treatment) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm)
+
+m_rating2xgrowth2 <- glmer(total_fl_mass_ln ~ Rating_2*Growth_2*Veg_Mass_ln + (1|Block) + (1|Treatment) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm)
+
+m_nativexgrowth2 <- glmer(total_fl_mass_ln ~ Native_Status*Growth_2*Veg_Mass_ln + (1|Block) + (1|Treatment) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm)
+
+m_nativepgrowth <- glmer(total_fl_mass_ln ~ Native_Status + Growth_Habit + Veg_Mass_ln + (1|Block) + (1|Treatment) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm)
+
+m_nativep <- glmer(total_fl_mass_ln ~ Native_Status + Veg_Mass_ln + (1|Block) + (1|Treatment) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm)
+
+m_growthp <- glmer(total_fl_mass_ln ~ Growth_Habit + Veg_Mass_ln + (1|Block) + (1|Treatment) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm)
+
+# add in three way growth habit and three way native
+
+ICtab(m7
+      ,mV
+      ,m_native
+      ,m_rating
+      ,m_growth
+      ,m_rating.n
+      ,m_growth2
+      ,m_rating2
+      ,m_nativexgrowth
+      ,m_ratingxgrowth
+      ,m_rating.nxgrowth
+      ,m_rating2xgrowth
+      ,m_rating2xgrowth2
+      ,m_nativexgrowth2
+      ,m_nativepgrowth
+      ,m_nativep
+      ,m_growthp)
+anova(m_growth, mV)
+Anova(m_growth)
+summary(m_growth)
+#mall
+
+slopes <- emtrends(m_growth, ~ Growth_Habit, var = "Veg_Mass_ln")
+slopes
+
+slopes.df <- summary(slopes)
+
+ggplot(slopes.df, aes(x = Growth_Habit, y = Veg_Mass_ln.trend
+                      )) + 
+  geom_bar(position = position_dodge(), stat = "identity", fill = "#21908CFF") +
+  # geom_hline(yintercept = 1, linetype = "dashed") +
+  geom_errorbar(aes(ymin=Veg_Mass_ln.trend-SE, ymax=Veg_Mass_ln.trend+SE), width=0.3, colour="#FDE725FF", alpha=0.9, size=1.3, position = position_dodge(0.9)) +
+  theme_classic() +
+  labs(x = "Growth Habit",
+       y = "RV Slope",
+       fill = "")
+
+ggsave("slopes_growth_pred.jpg")
+
+
+# Check assumptions
+
+```
+
+
+
+
