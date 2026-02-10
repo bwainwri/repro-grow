@@ -930,28 +930,7 @@ m5 <- glmer(RV ~ 1 + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = g
 m_ratingxpop <- glmer(RV ~ Rating*Population + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
 
 ICtab(m5
-      ,m_native
-      ,m_rating
-      ,m_growth
-      ,m_growthxpop
-      ,m_growthxprecip
-      ,m_nativexgrowth
-      ,m_nativexpop
-      ,m_nativexprecip
-      ,m_pdif
-      ,m_precip
-      ,m_spei
-      ,m_ratingxgrowth
-      ,m_ratingxpop
-      ,m_ratingxprecip
-      ,m_rating.n
-      ,m_rating.nxgrowth
-      ,m_rating.nxpop
-      ,m_rating.nxprecip
-      ,m_nativexspei
-      ,m_ratingxspei
-      ,m_growthxspei
-      ,m_rating.nxspei)
+      ,m_ratingxpop)
 lrtest(m_ratingxpop, m5)
 Anova(m_ratingxpop)
 summary(m_ratingxpop)
@@ -1005,61 +984,63 @@ both_model <- step(both_model, direction = "both")
 ```{r}
 str(repro_fill_hi_n_narm)
 
-m0 <- glm(total_fl_mass_ln ~ 1, family = gaussian, data = repro_fill_hi_n_narm)
+m0 <- glm(total_fl_mass_ln ~ 1, family = gaussian, data = repro_fill_hi_n_narm_i)
 
-m1 <- glmer(total_fl_mass_ln ~ 1 + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
+m1 <- glmer(total_fl_mass_ln ~ 1 + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm_i)
 
-m2 <- glmer(total_fl_mass_ln ~ 1 + (1|Block/Shelter/Plot), family = gaussian, data = repro_fill_hi_n_narm)
+m2 <- glmer(total_fl_mass_ln ~ 1 + (1|Plot), family = gaussian, data = repro_fill_hi_n_narm_i)
 
-m3 <- glmer(total_fl_mass_ln ~ 1 + (1|Block) + (1|Treatment), family = gaussian, data = repro_fill_hi_n_narm)
+m3 <- glmer(total_fl_mass_ln ~ 1 + (1|Block) + (1|Treatment), family = gaussian, data = repro_fill_hi_n_narm_i)
 
-m4 <- glmer(total_fl_mass_ln ~ 1 + (1|Block/Shelter/Plot) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
+m4 <- glmer(total_fl_mass_ln ~ 1 + (1|Plot) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm_i)
 
-m5 <- glmer(total_fl_mass_ln ~ 1 + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
+m5 <- glmer(total_fl_mass_ln ~ 1 + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm_i)
 
-m6 <- glmer(total_fl_mass_ln ~ 1 + (1|Block) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
+m6 <- glmer(total_fl_mass_ln ~ 1 + (1|Block) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm_i)
 
-m7 <- glmer(total_fl_mass_ln ~ 1 + (1|Block) + (1|Treatment) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm)
+m7 <- glmer(total_fl_mass_ln ~ 1 + (1|Block) + (1|Treatment) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm_i)
 
-ICtab(m0,m1,m2,m3,m4,m5,m6,m7)
+m8 <- glmer(total_fl_mass_ln ~ 1 + (1|Plot) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm_i)
 
-m7 <- glmer(total_fl_mass_ln ~ 1 + (1|Block) + (1|Treatment) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm)
+ICtab(m0,m1,m2,m3,m4,m5,m6,m7,m8)
 
-mV <- glmer(total_fl_mass_ln ~ Veg_Mass_ln + (1|Block) + (1|Treatment) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm)
+mV <- glmer(total_fl_mass_ln ~ Veg_Mass_ln + (1|Plot) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm_i)
 
-m_native <- glmer(total_fl_mass_ln ~ Native_Status*Veg_Mass_ln + (1|Block) + (1|Treatment) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm)
+m_native <- glmer(total_fl_mass_ln ~ Native_Status*Veg_Mass_ln + (1|Plot) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm_i)
 
-m_rating <- glmer(total_fl_mass_ln ~ Rating*Veg_Mass_ln + (1|Block) + (1|Treatment) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm)
+m_rating <- glmer(total_fl_mass_ln ~ Rating*Veg_Mass_ln + (1|Plot) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm_i)
 
-m_growth <- glmer(total_fl_mass_ln ~ Growth_Habit*Veg_Mass_ln + (1|Block) + (1|Treatment) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm)
 
-m_rating.n <- glmer(total_fl_mass_ln ~ rating.n*Veg_Mass_ln + (1|Block) + (1|Treatment) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm)
+repro_fill_hi_n_narm_i <- repro_fill_hi_n_narm %>% 
+  filter(!Plant_ID %in% high_infl_m$Plant_ID)
+  
+m_growth <- glmer(total_fl_mass_ln ~ Growth_Habit*Veg_Mass_ln + (1|Plot) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm_i)
 
-m_growth2 <- glmer(total_fl_mass_ln ~ Growth_2*Veg_Mass_ln + (1|Block) + (1|Treatment) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm)
+m_rating.n <- glmer(total_fl_mass_ln ~ rating.n*Veg_Mass_ln + (1|Plot) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm_i)
 
-m_rating2 <- glmer(total_fl_mass_ln ~ Growth_2*Veg_Mass_ln + (1|Block) + (1|Treatment) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm)
+m_growth2 <- glmer(total_fl_mass_ln ~ Growth_2*Veg_Mass_ln + (1|Plot) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm_i)
 
-m_nativexgrowth <- glmer(total_fl_mass_ln ~ Native_Status*Growth_Habit*Veg_Mass_ln + (1|Block) + (1|Treatment) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm)
+m_rating2 <- glmer(total_fl_mass_ln ~ Growth_2*Veg_Mass_ln + (1|Plot) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm_i)
 
-m_ratingxgrowth <- glmer(total_fl_mass_ln ~ Rating*Growth_Habit*Veg_Mass_ln + (1|Block) + (1|Treatment) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm)
+m_nativexgrowth <- glmer(total_fl_mass_ln ~ Native_Status*Growth_Habit*Veg_Mass_ln + (1|Plot) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm_i)
 
-m_rating.nxgrowth <- glmer(total_fl_mass_ln ~ rating.n*Growth_Habit*Veg_Mass_ln + (1|Block) + (1|Treatment) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm)
+m_ratingxgrowth <- glmer(total_fl_mass_ln ~ Rating*Growth_Habit*Veg_Mass_ln + (1|Plot) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm_i)
 
-m_rating2xgrowth <- glmer(total_fl_mass_ln ~ Rating_2*Growth_Habit*Veg_Mass_ln + (1|Block) + (1|Treatment) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm)
+m_rating.nxgrowth <- glmer(total_fl_mass_ln ~ rating.n*Growth_Habit*Veg_Mass_ln + (1|Plot) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm_i)
 
-m_rating2xgrowth2 <- glmer(total_fl_mass_ln ~ Rating_2*Growth_2*Veg_Mass_ln + (1|Block) + (1|Treatment) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm)
+m_rating2xgrowth <- glmer(total_fl_mass_ln ~ Rating_2*Growth_Habit*Veg_Mass_ln + (1|Plot) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm_i)
 
-m_nativexgrowth2 <- glmer(total_fl_mass_ln ~ Native_Status*Growth_2*Veg_Mass_ln + (1|Block) + (1|Treatment) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm)
+m_rating2xgrowth2 <- glmer(total_fl_mass_ln ~ Rating_2*Growth_2*Veg_Mass_ln + (1|Plot) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm_i)
 
-m_nativepgrowth <- glmer(total_fl_mass_ln ~ Native_Status + Growth_Habit + Veg_Mass_ln + (1|Block) + (1|Treatment) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm)
+m_nativexgrowth2 <- glmer(total_fl_mass_ln ~ Native_Status*Growth_2*Veg_Mass_ln + (1|Plot) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm_i)
 
-m_nativep <- glmer(total_fl_mass_ln ~ Native_Status + Veg_Mass_ln + (1|Block) + (1|Treatment) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm)
+m_nativepgrowth <- glmer(total_fl_mass_ln ~ Native_Status + Growth_Habit + Veg_Mass_ln + (1|Plot) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm_i)
 
-m_growthp <- glmer(total_fl_mass_ln ~ Growth_Habit + Veg_Mass_ln + (1|Block) + (1|Treatment) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm)
+m_nativep <- glmer(total_fl_mass_ln ~ Native_Status + Veg_Mass_ln + (1|Plot) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm_i)
 
-# add in three way growth habit and three way native
+m_growthp <- glmer(total_fl_mass_ln ~ Growth_Habit + Veg_Mass_ln + (1|Plot) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm_i)
 
-ICtab(m7
+ICtab(m8
       ,mV
       ,m_native
       ,m_rating
@@ -1077,43 +1058,124 @@ ICtab(m7
       ,m_nativep
       ,m_growthp)
 anova(m_growth, mV)
+anova(m_growthp, mV)
+anova(m_native, mV)
 Anova(m_growth)
 summary(m_growth)
+
+# Left off here. i removed 14 influential points. That my have been too many. Check m_growth to see if removing points helped assumptions. 
+# Now m_growth not a significant predictor compared to the model with just vegetative biomass.
+# Consider adding in Population as fixed effect and looking at SPEI and precip. Remove low performing models, try more additive ones
+
+
+
+library(glmmTMB)
+
+m_growth_gamma <- glmmTMB(
+  total_fl_mass_ln ~ Growth_Habit * Veg_Mass_ln + 
+    (1 | Plot) + (1 | Scientific_Name) + (1|Population),
+  family = Gamma(link = "log"),
+  data = repro_fill_hi_n_narm_i
+)
+
 #mall
 
 # Check assumptions
+# 1 Correct mean structure
 
-sim_res <- simulateResiduals(m_growth)
-plot(sim_res)
-
-plotResiduals(sim_res, form = repro_fill_hi_n_narm$Veg_Mass_ln)
-plotResiduals(sim_res, form = repro_fill_hi_n_narm$Growth_Habit)
-plotResiduals(sim_res, form = repro_fill_hi_n_narm$Veg_Mass_ln, group = repro_fill_hi_n_narm$Growth_Habit)
-plotResiduals(sim_res, fitted(m_growth))
-
-
-
-
-res <- resid(m_growth)
-fitted <- fitted(m_growth)
-
-plot(fitted, res)
-abline(h = 0)
-
+# 2 Normally distributed residuals
+res <- resid(mV)
 qqnorm(res)
 qqline(res)
 
+library(DHARMa)
+
+sim_res <- simulateResiduals(mV)
+plot(sim_res)
+testUniformity(sim_res)
+
+plot(fitted(mV), resid(mV))
+abline(h = 0, lty = 2)
+
+
+
+# kind of a strong s shape...
+
+# 3 Homescedascity
 plot(fitted(m_growth), resid(m_growth))
+abline(h = 0)
 
-plotResiduals(sim_res, form = dat$x1)
+boxplot(resid(m_growth) ~ Growth_Habit,
+        data = repro_fill_hi_n_narm)
+# No funnel shape but forbs have a larger spread
 
-re <- ranef(m_growth)$group[,1]
-qqnorm(re)
-qqline(re)
+# 4 independence
+boxplot(resid(m_growth) ~ Plot,
+        data = repro_fill_hi_n_narm,
+        las = 2,
+        outline = FALSE)
+abline(h = 0, lty = 2)
+# no clear structure
 
-testOutliers(sim_res)
+# 5 Random effects are normally distributed
+ranef_vals <- ranef(m_growth, condVar = TRUE)
+qqnorm(ranef_vals$Scientific_Name[,1])
+qqline(ranef_vals$Scientific_Name[,1])
+# quite skewy
 
-car::vif(m_growth)
+qqnorm(ranef_vals$Block[,1])
+qqline(ranef_vals$Block[,1])
+
+qqnorm(ranef_vals$Shelter[,1])
+qqline(ranef_vals$Shelter[,1])
+# a bit skewy?
+
+qqnorm(ranef_vals$Plot[,1])
+qqline(ranef_vals$Plot[,1])
+
+qqnorm(ranef_vals$Population[,1])
+qqline(ranef_vals$Population[,1])
+# skewy
+
+# 6 Random effects independent of fixed effects
+## species aren't systematically related to veg mass ln (I think they are)
+# May need random slopes?
+
+# 7 No singularity
+isSingular(m_growth)
+# it's true because one or more variance components = 0
+summary(m_growth)
+# Plot:Shelter:Block is 0
+
+# 8 no severe multicollinearity
+car::vif(lm(total_fl_mass_ln ~ Growth_Habit * Veg_Mass_ln, data = repro_fill_hi_n_narm))
+# all good because all less than 3
+
+# 9 no influential points
+library(influence.ME)
+influence.ME::influence(m_growth, obs = TRUE)
+infl <- influence(m_growth, obs = TRUE)
+cd <- cooks.distance(infl)
+cd_df <- data.frame(
+  row = seq_along(cd),
+  cooks_d = cd
+)
+p <- length(fixef(m_growth))   # number of fixed effects
+n <- nobs(m_growth)
+
+cd_thresh <- 4 / (n - p)
+
+high_infl <- cd_df[cd_df$cooks_d > cd_thresh, ]
+high_infl_2 <- cd_df[order(-cd_df$cooks_d), ][1:20, ]
+
+high_infl_m <- merge(
+  high_infl,
+  repro_fill_hi_n_narm,
+  by.x = "row",
+  by.y = "row.names"
+)
+# This gives us 14 plants with high influence
+# Try removing plants with high influence
 
 
 slopes <- emtrends(m_growth, ~ Growth_Habit, var = "Veg_Mass_ln")
