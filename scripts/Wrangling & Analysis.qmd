@@ -1997,11 +1997,16 @@ licor.na <- licor2 %>%
 
 unique(licor.na$Plant_ID)
 licor2[which(licor2$Plant_ID == "E4.PHATAN.2-E2"),]
-# AIRCAR, ACMPAR is not present
-# For some reason the ones with dashes aren't lining up
-# A4 BROHOR has no match but it shouldn't because there was no brohor in wwp -- should be a3
-# E8 CENMEL doesn't have a match but it shouldnt because CENMEL should be in e5 or e6
-# Such a mess, think about just taking off the number at the end
+# C6.PHATAN.1 is missing, no photo
+# H1.AVEBAR.1 is missing, no photo
+# G8.VICSAT.2 is missing, no photo
+# A2.BROMAD.2 is missing, no photo
+# H1.BROMAD.2 is missing, no photo
+# C7.ESCCAL.2 is missing, no photo
+# D4.TRIHIR.2 is missing, no photo
+# C4.TRIHIR.1 is missing, no photo
+# A6.STIPUL.2 is missing, no photo
+# D7.CORFIL.2 is missing, no photo
 # Come back to this
 
 # multiply focal data by leaf area fraction
