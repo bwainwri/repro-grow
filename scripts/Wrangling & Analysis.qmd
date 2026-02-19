@@ -987,6 +987,8 @@ Growthp gets the closest to being "normal". repro_fill_hi_n_narm_i has three inf
 ```{r}
 str(repro_fill_hi_n_narm)
 
+repro_fill_hi_n_narm_i <- repro_fill_hi_n_narm
+
 m0 <- glm(total_fl_mass_ln ~ 1, family = gaussian, data = repro_fill_hi_n_narm_i)
 
 m1 <- glmer(total_fl_mass_ln ~ 1 + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm_i)
@@ -1092,15 +1094,6 @@ anova(m_native, mV)
 Anova(m_speip_growthx)
 summary(m_speip_growthx)
 
-library(glmmTMB)
-
-m_growth_gamma <- glmmTMB(
-  total_fl_mass_ln ~ Growth_Habit * Veg_Mass_ln + 
-    (1 | Plot) + (1 | Scientific_Name) + (1|Population),
-  family = Gamma(link = "log"),
-  data = repro_fill_hi_n_narm
-)
-
 #mall
 
 # Check assumptions
@@ -1148,18 +1141,18 @@ qqnorm(ranef_vals$Scientific_Name[,1])
 qqline(ranef_vals$Scientific_Name[,1])
 # quite skewy
 
-qqnorm(ranef_vals$Block[,1])
-qqline(ranef_vals$Block[,1])
+#qqnorm(ranef_vals$Block[,1])
+#qqline(ranef_vals$Block[,1])
 
-qqnorm(ranef_vals$Shelter[,1])
-qqline(ranef_vals$Shelter[,1])
+#qqnorm(ranef_vals$Shelter[,1])
+#qqline(ranef_vals$Shelter[,1])
 # a bit skewy?
 
 qqnorm(ranef_vals$Plot[,1])
 qqline(ranef_vals$Plot[,1])
 
-qqnorm(ranef_vals$Population[,1])
-qqline(ranef_vals$Population[,1])
+#qqnorm(ranef_vals$Population[,1])
+#qqline(ranef_vals$Population[,1])
 # skewy
 
 # 6 Random effects independent of fixed effects
@@ -1178,35 +1171,35 @@ car::vif(lm(total_fl_mass_ln ~ spei_avg + Growth_Habit + Veg_Mass_ln, data = rep
 
 # 9 no influential points
 library(influence.ME)
-influence.ME::influence(m_speip_growthp, obs = TRUE)
-infl <- influence(m_speip, obs = TRUE)
-cd <- cooks.distance(infl)
-cd_df <- data.frame(
-  row = seq_along(cd),
-  cooks_d = cd
-)
-p <- length(fixef(m_speip))   # number of fixed effects
-n <- nobs(m_speip)
+#influence.ME::influence(m_speip_growthp, obs = TRUE)
+#infl <- influence(m_speip, obs = TRUE)
+#cd <- cooks.distance(infl)
+#cd_df <- data.frame(
+#  row = seq_along(cd),
+#  cooks_d = cd
+#)
+#p <- length(fixef(m_speip))   # number of fixed effects
+#n <- nobs(m_speip)
 
-cd_thresh <- 4 / (n - p)
+#cd_thresh <- 4 / (n - p)
 
-high_infl <- cd_df[cd_df$cooks_d > cd_thresh, ]
-high_infl_2 <- cd_df[order(-cd_df$cooks_d), ][1:20, ]
+#high_infl <- cd_df[cd_df$cooks_d > cd_thresh, ]
+#high_infl_2 <- cd_df[order(-cd_df$cooks_d), ][1:20, ]
 
-high_infl_m <- merge(
-  high_infl,
-  repro_fill_hi_n_narm,
-  by.x = "row",
-  by.y = "row.names"
-)
+#high_infl_m <- merge(
+#  high_infl,
+#  repro_fill_hi_n_narm,
+ # by.x = "row",
+#  by.y = "row.names"
+#)
 # This gives us 14 plants with high influence
 # Try removing plants with high influence
 
-high_infl_m <- high_infl_m %>% 
-  filter(cooks_d > 0.099)
+#high_infl_m <- high_infl_m %>% 
+#  filter(cooks_d > 0.099)
 
-repro_fill_hi_n_narm_i <- repro_fill_hi_n_narm %>% 
-  filter(!Plant_ID %in% high_infl_m$Plant_ID)
+#repro_fill_hi_n_narm_i <- repro_fill_hi_n_narm %>% 
+#  filter(!Plant_ID %in% high_infl_m$Plant_ID)
 
 slopes <- emtrends(m_growth, ~ Growth_Habit, var = "Veg_Mass_ln")
 slopes
@@ -1223,7 +1216,7 @@ ggplot(slopes.df, aes(x = Growth_Habit, y = Veg_Mass_ln.trend
        y = "RV Slope",
        fill = "")
 
-ggsave(here::here("figs/slopes_growth_pred.jpg"))
+#ggsave(here::here("figs/slopes_growth_pred.jpg"))
 
 ```
 
@@ -1702,8 +1695,16 @@ GALPAR, Holvir, miccal not working -- fixed, just needed to adjust minimum size.
 acmpar = run.ij(set.directory = "/Users/brookewainwright/Documents/GitHub_Projects/repro-grow/data/Licor Leaf Area/ACMPAR",
               distance.pixel = 355,
               known.distance = 3,
-              log = TRUE)
+              log = TRUE,
+              low.size = 0.005)
 acmpar<-acmpar$summary
+
+aircar = run.ij(set.directory = "/Users/brookewainwright/Documents/GitHub_Projects/repro-grow/data/Licor Leaf Area/AIRCAR",
+              distance.pixel = 355,
+              known.distance = 3,
+              log = TRUE,
+              low.size = 0.005)
+aircar<-aircar$summary
 
 amsmen = run.ij(set.directory = "/Users/brookewainwright/Documents/GitHub_Projects/repro-grow/data/Licor Leaf Area/AMSMEN",
               distance.pixel = 355,
@@ -1909,6 +1910,7 @@ vicsat<-vicsat$summary
 
 # missing galpar, miccal, holvir
 leaf_licor_area <- rbind(acmpar,
+                         aircar,
                          amsmen,
                          avebar,
                          broare,
@@ -1941,7 +1943,7 @@ leaf_licor_area <- rbind(acmpar,
                          trihir,
                          vicsat)
 
-write_csv(leaf_licor_area, "leaf_licor_area.csv")
+write_csv(leaf_licor_area, here::here("data/leaf_licor_area.csv"))
 ```
 
 Double check that the numbers of values per species aligns with number of images per species folder. -- All good
