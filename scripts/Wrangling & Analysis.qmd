@@ -1982,6 +1982,58 @@ leaf_licor_area$Plant_ID
 # capitalize Licor plant id
 licor$Plant_ID <- toupper(licor$`plant id`)
 
+# NAs to fill in
+# C6.PHATAN.1 is missing, no photo
+# H1.AVEBAR.1 is missing, no photo
+# G8.VICSAT.2 is missing, no photo
+# A2.BROMAD.2 is missing, no photo
+# H1.BROMAD.2 is missing, no photo
+# C7.ESCCAL.2 is missing, no photo
+# D4.TRIHIR.2 is missing, no photo
+# C4.TRIHIR.1 is missing, no photo
+# A6.STIPUL.2 is missing, no photo
+# D7.CORFIL.2 is missing, no photo
+
+# Now I need to interpolate leaf area for the missing ones
+leaf_licor_area$Species <- substr(leaf_licor_area$Plant_ID,4,9)
+lf_area_avg <- leaf_licor_area %>% 
+  group_by(Species) %>% 
+  summarise(lf_avg = mean(total.leaf.area))
+
+lf_NAs <- data.frame(
+  Plant_ID = c(
+    "C6.PHATAN.1",
+    "H1.AVEBAR.1",
+    "G8.VICSAT.2",
+    "A2.BROMAD.2",
+    "H1.BROMAD.2",
+    "C7.ESCCAL.2",
+    "D4.TRIHIR.2",
+    "C4.TRIHIR.1",
+    "A6.STIPUL.2",
+    "D7.CORFIL.2"
+  ))
+
+lf_NAs$Species <- substr(lf_NAs$Plant_ID,4,9)
+lf_NAs_fill <- left_join(lf_NAs,lf_area_avg,by = c("Species" = "Species"))
+
+str(leaf_licor_area)
+str(lf_NAs_fill)
+
+lf_NAs_fill$Date <- NA
+lf_NAs_fill$sample <- NA
+lf_NAs_fill <- lf_NAs_fill %>% 
+  mutate(total.leaf.area = lf_avg) %>% 
+  select(
+    sample,
+    total.leaf.area,
+    Date,
+    Plant_ID,
+    Species
+  )
+
+leaf_licor_area <- rbind(leaf_licor_area, lf_NAs_fill)
+
 # merge with licor leaf area
 licor2 <- left_join(licor,leaf_licor_area,by=c("Plant_ID" = "Plant_ID"))
 
@@ -1995,20 +2047,6 @@ licor.na <- licor2 %>%
     , Plant_ID
   )
 
-unique(licor.na$Plant_ID)
-licor2[which(licor2$Plant_ID == "E4.PHATAN.2-E2"),]
-# C6.PHATAN.1 is missing, no photo
-# H1.AVEBAR.1 is missing, no photo
-# G8.VICSAT.2 is missing, no photo
-# A2.BROMAD.2 is missing, no photo
-# H1.BROMAD.2 is missing, no photo
-# C7.ESCCAL.2 is missing, no photo
-# D4.TRIHIR.2 is missing, no photo
-# C4.TRIHIR.1 is missing, no photo
-# A6.STIPUL.2 is missing, no photo
-# D7.CORFIL.2 is missing, no photo
-# Come back to this
-
 # multiply focal data by leaf area fraction
 licor2$leaf_ratio <- 6/licor2$total.leaf.area
 licor2 <- licor2 %>% 
@@ -2021,18 +2059,14 @@ licor2 <- licor2 %>%
 str(licor2)
 
 # remove licor data with gsw below threshold
-licor2[which(licor2$gsw_adj < 0.03),]
-
-# There are values from September 2020???? investigate
-# Weirdly this file 2023-04-30-0922_BRODIA_39.csv has the date at Sep 2020, some glitch. will need to fix
-# September 23, 2020
+# licor2 2315
+licor2_b <- licor2[-which(licor2$gsw_adj < 0.03),]
 
 # test for licor outliers by species, population, and treatment
-
-
+# Maybe I do this later though? Because what if an outlier in photosynthetic rate goes with a reproductive outlier?
 
 # average licor data by plant_id
-licor3 <- licor2 %>% 
+licor3 <- licor2_b %>% 
   group_by(Plant_ID) %>% 
   summarise(A_adj_av = mean(A_adj, na.rm=TRUE),
             WUE_adj_av= mean(WUE_adj, na.rm = TRUE),
@@ -2045,9 +2079,13 @@ licor3$Sp_Code <- substr(licor3$Plant_ID,4,9)
 licor3$Plot <- substr(licor3$Plant_ID,1,2)
 
 # merge with plot and species info
+plots <- read_csv(here::here("data/Plot_info.csv"))
 licor4 <- left_join(licor3,plots, by = join_by(Plot))
+spp <- read_csv(here::here("data/Species Codes.csv"))
 licor5 <- left_join(licor4,spp, by = join_by(Sp_Code))
 ```
+
+
 
 ### Explore licor
 ```{r}
@@ -2064,7 +2102,90 @@ p <- ggplot(licor5, aes(x=Rating, y=A_adj_av)) +
                  geom="pointrange", color="red") + theme(axis.text.x = element_text(angle=90,hjust = 1, size=14, color="black") )
 p
 
+p <- ggplot(licor5, aes(x=Native_Status, y=A_adj_av)) +
+  geom_violin() + stat_summary(fun.data=mean_sdl, mult=1, 
+                 geom="pointrange", color="red") + theme(axis.text.x = element_text(angle=90,hjust = 1, size=14, color="black") )
+p
+
 ```
 
+At some point I need to do a correlation table with all the traits.
+
+## Leaf Mass Area
+```{r}
+lf_area <- read_csv(here::here("data/LMA_lfarea_all.csv"))
+# There may be errors in this -- not sure how to check
+
+## Extract plant id, species, plot
+lf_area$Date <- as.Date(substr(lf_area$sample, start=11, stop=18), "%Y%m%d")
+
+# separate plant ID from same and add periods to plant id
+lf_area$Plant_ID <- substr(lf_area$sample, start=1,stop=9)
+lf_area$Plant_ID <- paste0(
+  substr(lf_area$Plant_ID, 1, 2),
+  ".",
+  substr(lf_area$Plant_ID, 3, nchar(lf_area$Plant_ID))
+)
+lf_area$Plant_ID
+
+lf_area$Plant_ID <- paste0(
+  substr(lf_area$Plant_ID, 1, 9),
+  ".",
+  substr(lf_area$Plant_ID, 10, nchar(lf_area$Plant_ID))
+)
+lf_area$Plant_ID
+
+lf_area$Sp_Code <- substr(lf_area$Plant_ID,4,9)
+lf_area$Plot <- substr(lf_area$Plant_ID,1,2)
+
+# merge with plot and species info
+lf_area2 <- left_join(lf_area,plots, by = join_by(Plot))
+lf_area3 <- left_join(lf_area2,spp, by = join_by(Sp_Code))
+
+# Now merge with leaf mass and calculate LMA
+mass <- read_csv(here::here("data/Leaf Mass_2023_20231009.csv"))
+head(mass)
+
+LMA <- left_join(lf_area3,mass, by = join_by(Plant_ID))
+# LMA is measured in g/m^2
+
+LMA$area_m2 <- LMA$total.leaf.area/10000
+LMA$lma_g_m2 <- LMA$area_m2/LMA$Dry_leaf_mass_g
+
+## Who are these NAs?
+
+```
+
+### Explore LMA
+```{r}
+summary(LMA)
+# okay some things are way off with WUE, and others -- will need to deal with outliers at some point
+
+ggplot(LMA, aes(x=Sp_Code, y=lma_g_m2)) +
+  geom_violin() + stat_summary(fun.data=mean_sdl, mult=1, 
+                 geom="pointrange", color="red") + theme(axis.text.x = element_text(angle=90,hjust = 1, size=14, color="black") )
+
+
+ggplot(LMA, aes(x=Rating, y=lma_g_m2)) +
+  geom_violin() + stat_summary(fun.data=mean_sdl, mult=1, 
+                 geom="pointrange", color="red") + theme(axis.text.x = element_text(angle=90,hjust = 1, size=14, color="black") )
+
+```
+
+## Leaf Area
+```{r}
+lf_area3
+
+summary(lf_area3)
+
+ggplot(lf_area3, aes(x=Sp_Code, y=total.leaf.area)) +
+  geom_violin() + stat_summary(fun.data=mean_sdl, mult=1, 
+                 geom="pointrange", color="red") + theme(axis.text.x = element_text(angle=90,hjust = 1, size=14, color="black") )
+
+ggplot(lf_area3, aes(x=Rating, y=total.leaf.area)) +
+  geom_violin() + stat_summary(fun.data=mean_sdl, mult=1, 
+                 geom="pointrange", color="red") + theme(axis.text.x = element_text(angle=90,hjust = 1, size=14, color="black") )
+
+```
 
 
