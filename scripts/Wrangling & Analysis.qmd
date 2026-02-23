@@ -2208,7 +2208,8 @@ elycap<-elycap$summary
 erobot = run.ij(set.directory = "/Users/brookewainwright/Documents/GitHub_Projects/repro-grow/data/LMA Leaf Images/EROBOT",
               distance.pixel = 355,
               known.distance = 3,
-              log = TRUE)
+              log = TRUE,
+              low.size = 0.005)
 erobot<-erobot$summary
 
 erocic = run.ij(set.directory = "/Users/brookewainwright/Documents/GitHub_Projects/repro-grow/data/LMA Leaf Images/EROCIC",
@@ -2350,7 +2351,7 @@ write_csv(lma_lf_area, here::here("data/LMA_lf_area.csv"))
 
 
 ```{r}
-lf_area <- read_csv(here::here("data/LMA_lfarea_all.csv"))
+lf_area <- read_csv(here::here("data/LMA_lf_area.csv"))
 # There may be errors in this -- not sure how to check
 
 ## Extract plant id, species, plot
@@ -2373,38 +2374,86 @@ lf_area$Plant_ID <- paste0(
 lf_area$Plant_ID
 
 lf_area$Sp_Code <- substr(lf_area$Plant_ID,4,9)
-lf_area$Plot <- substr(lf_area$Plant_ID,1,2)
+
 
 # merge with plot and species info
-lf_area2 <- left_join(lf_area,plots, by = join_by(Plot))
-lf_area3 <- left_join(lf_area2,spp, by = join_by(Sp_Code))
+#lf_area2 <- left_join(lf_area,plots, by = join_by(Plot))
+#lf_area3 <- left_join(lf_area2,spp, by = join_by(Sp_Code))
 
 # Now merge with leaf mass and calculate LMA
 mass <- read_csv(here::here("data/Leaf Mass_2023_20231009.csv"))
 head(mass)
 
-LMA <- left_join(lf_area3,mass, by = join_by(Plant_ID))
+# Remove perennials
+mass_a <- mass %>% 
+  filter(!Sp_Code %in% c("CORFIL","ESCCAL","STIPUL","DANCAL"))
+
+# 696 masses
+# 691 leaf areas
+
+# I want to know how many observations per species for each dataset, start there
+
+library(dplyr)
+ct_area <- lf_area %>% count(Sp_Code)
+ct_mass <- mass_a %>% count(Sp_Code)
+
+join_check <- full_join(lf_area,mass_a,by=join_by("Plant_ID"))
+join_check %>% filter(is.na(total.leaf.area))
+join_check %>% filter(is.na(Dry_leaf_mass_g))
+# Missing:
+# H1.AVEBAR.2 area
+# H3.BRODIA.2 Mass
+# G8.VICSAT.2 area
+
+str(lf_area)
+str(mass_a)
+
+LMA <- full_join(lf_area,mass_a, by = join_by(Plant_ID, Sp_Code == Sp_Code))
 # LMA is measured in g/m^2
 
 LMA$area_m2 <- LMA$total.leaf.area/10000
 LMA$lma_g_m2 <- LMA$area_m2/LMA$Dry_leaf_mass_g
 
 summary(LMA)
-list <- LMA[which(is.na(LMA$Dry_leaf_mass_g)),"Plant_ID"]
-# 24 don't have masses
+LMA[which(is.na(LMA$Dry_leaf_mass_g)),"Plant_ID"]
+LMA[which(is.na(LMA$total.leaf.area)),"Plant_ID"]
 # interpolate LMA based on spp x population averages
+# First make sure they are NA so they don't effect averages
+LMA$lma_g_m2[which(LMA$Plant_ID == "H1.AVEBAR.2")] <- NA
+LMA$lma_g_m2[which(LMA$Plant_ID == "H3.BRODIA.2")] <- NA
+LMA$lma_g_m2[which(LMA$Plant_ID == "G8.VICSAT.2")] <- NA
+# H1.AVEBAR.2 area
+# H3.BRODIA.2 Mass
+# G8.VICSAT.2 area
+LMA[which(is.na(LMA$lma_g_m2)),"Plant_ID"]
+
+# merge with plot and species info
+LMA$Plot <- substr(LMA$Plant_ID,1,2)
+LMA2 <- left_join(LMA,plots, by = join_by(Plot))
+LMA <- left_join(LMA2,spp, by = join_by(Sp_Code))
+
+pop_spp_avg <- LMA %>% 
+  group_by(Sp_Code,Population) %>% 
+  summarise(avg_lma = mean(lma_g_m2,na.rm = TRUE))
+
+pop <- LMA[which(LMA$Plant_ID == "H1.AVEBAR.2"),"Population"]
+avg <- pop_spp_avg[which(pop_spp_avg$Sp_Code == "AVEBAR" & pop_spp_avg$Population == "SEDG"),"avg_lma"]
+LMA[which(LMA$Plant_ID == "H1.AVEBAR.2"),"lma_g_m2"] <- avg
+
+pop <- LMA[which(LMA$Plant_ID == "H3.BRODIA.2"),"Population"]
+avg <- pop_spp_avg[which(pop_spp_avg$Sp_Code == "BRODIA" & pop_spp_avg$Population == "WWP"),"avg_lma"]
+LMA[which(LMA$Plant_ID == "H3.BRODIA.2"),"lma_g_m2"] <- avg
+
+pop <- LMA[which(LMA$Plant_ID == "G8.VICSAT.2"),"Population"]
+avg <- pop_spp_avg[which(pop_spp_avg$Sp_Code == "VICSAT" & pop_spp_avg$Population == "BORR"),"avg_lma"]
+LMA[which(LMA$Plant_ID == "G8.VICSAT.2"),"lma_g_m2"] <- avg
+
+LMA[which(is.na(LMA$lma_g_m2)),"Plant_ID"]
 
 # Check for duplicates
-# C6 AMSMEN 2 is listed twice
-LMA[which(duplicated(LMA$sample)),]
-
-# A mess, start from scratch with run.ij
+LMA[which(duplicated(LMA$Plant_ID)),]
 
 
-
-
-
-## Check for gaps and discrepancies -- maybe by species
 ```
 
 ### Explore LMA
@@ -2425,15 +2474,18 @@ ggplot(LMA, aes(x=Rating, y=lma_g_m2)) +
 
 ## Leaf Area
 ```{r}
-lf_area3
+#| eval: false
+### do not evaluate yet
+## Need to input the single leaf entries for MICCAL, GALPAR, etc.
 
-summary(lf_area3)
 
-ggplot(lf_area3, aes(x=Sp_Code, y=total.leaf.area)) +
+summary(lf_area)
+
+ggplot(lf_area, aes(x=Sp_Code, y=total.leaf.area)) +
   geom_violin() + stat_summary(fun.data=mean_sdl, mult=1, 
                  geom="pointrange", color="red") + theme(axis.text.x = element_text(angle=90,hjust = 1, size=14, color="black") )
 
-ggplot(lf_area3, aes(x=Rating, y=total.leaf.area)) +
+ggplot(lf_area, aes(x=Rating, y=total.leaf.area)) +
   geom_violin() + stat_summary(fun.data=mean_sdl, mult=1, 
                  geom="pointrange", color="red") + theme(axis.text.x = element_text(angle=90,hjust = 1, size=14, color="black") )
 
