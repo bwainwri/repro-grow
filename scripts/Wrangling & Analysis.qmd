@@ -2033,6 +2033,8 @@ lf_NAs_fill <- lf_NAs_fill %>%
   )
 
 leaf_licor_area <- rbind(leaf_licor_area, lf_NAs_fill)
+### Should I have actually done this by species x population
+
 
 # merge with licor leaf area
 licor2 <- left_join(licor,leaf_licor_area,by=c("Plant_ID" = "Plant_ID"))
@@ -2113,6 +2115,241 @@ At some point I need to do a correlation table with all the traits.
 
 ## Leaf Mass Area
 ```{r}
+#| eval: false
+acmpar = run.ij(set.directory = "/Users/brookewainwright/Documents/GitHub_Projects/repro-grow/data/LMA Leaf Images/ACMPAR",
+              distance.pixel = 355,
+              known.distance = 3,
+              log = TRUE,
+              low.size = 0.005)
+acmpar<-acmpar$summary
+
+aircar = run.ij(set.directory = "/Users/brookewainwright/Documents/GitHub_Projects/repro-grow/data/LMA Leaf Images/AIRCAR",
+              distance.pixel = 355,
+              known.distance = 3,
+              log = TRUE,
+              low.size = 0.005)
+aircar<-aircar$summary
+
+amsmen = run.ij(set.directory = "/Users/brookewainwright/Documents/GitHub_Projects/repro-grow/data/LMA Leaf Images/AMSMEN",
+              distance.pixel = 355,
+              known.distance = 3,
+              log = TRUE)
+amsmen<-amsmen$summary
+
+avebar = run.ij(set.directory = "/Users/brookewainwright/Documents/GitHub_Projects/repro-grow/data/LMA Leaf Images/AVEBAR",
+              distance.pixel = 355,
+              known.distance = 3,
+              log = TRUE)
+avebar<-avebar$summary
+
+broare = run.ij(set.directory = "/Users/brookewainwright/Documents/GitHub_Projects/repro-grow/data/LMA Leaf Images/BROARE",
+              distance.pixel = 355,
+              known.distance = 3,
+              log = TRUE)
+broare<-broare$summary
+
+brodia = run.ij(set.directory = "/Users/brookewainwright/Documents/GitHub_Projects/repro-grow/data/LMA Leaf Images/BRODIA",
+              distance.pixel = 355,
+              known.distance = 3,
+              log = TRUE)
+brodia<-brodia$summary
+
+brohor = run.ij(set.directory = "/Users/brookewainwright/Documents/GitHub_Projects/repro-grow/data/LMA Leaf Images/BROHOR",
+              distance.pixel = 355,
+              known.distance = 3,
+              log = TRUE)
+brohor<-brohor$summary
+
+bromad = run.ij(set.directory = "/Users/brookewainwright/Documents/GitHub_Projects/repro-grow/data/LMA Leaf Images/BROMAD",
+              distance.pixel = 355,
+              known.distance = 3,
+              log = TRUE,
+              low.size = 0.005)
+bromad<-bromad$summary
+
+calmen = run.ij(set.directory = "/Users/brookewainwright/Documents/GitHub_Projects/repro-grow/data/LMA Leaf Images/CALMEN",
+              distance.pixel = 355,
+              known.distance = 3,
+              log = TRUE,
+              low.size = 0.005)
+calmen<-calmen$summary
+
+caucou = run.ij(set.directory = "/Users/brookewainwright/Documents/GitHub_Projects/repro-grow/data/LMA Leaf Images/CAUCOU",
+              distance.pixel = 355,
+              known.distance = 3,
+              log = TRUE)
+caucou<-caucou$summary
+
+cenmel = run.ij(set.directory = "/Users/brookewainwright/Documents/GitHub_Projects/repro-grow/data/LMA Leaf Images/CENMEL",
+              distance.pixel = 355,
+              known.distance = 3,
+              log = TRUE)
+cenmel<-cenmel$summary
+
+clapur = run.ij(set.directory = "/Users/brookewainwright/Documents/GitHub_Projects/repro-grow/data/LMA Leaf Images/CLAPUR",
+              distance.pixel = 355,
+              known.distance = 3,
+              log = TRUE,
+              low.size = 0.005)
+clapur<-clapur$summary
+
+daupus = run.ij(set.directory = "/Users/brookewainwright/Documents/GitHub_Projects/repro-grow/data/LMA Leaf Images/DAUPUS",
+              distance.pixel = 355,
+              known.distance = 3,
+              log = TRUE)
+daupus<-daupus$summary
+
+elycap = run.ij(set.directory = "/Users/brookewainwright/Documents/GitHub_Projects/repro-grow/data/LMA Leaf Images/ELYCAP",
+              distance.pixel = 355,
+              known.distance = 3,
+              log = TRUE)
+elycap<-elycap$summary
+
+erobot = run.ij(set.directory = "/Users/brookewainwright/Documents/GitHub_Projects/repro-grow/data/LMA Leaf Images/EROBOT",
+              distance.pixel = 355,
+              known.distance = 3,
+              log = TRUE)
+erobot<-erobot$summary
+
+erocic = run.ij(set.directory = "/Users/brookewainwright/Documents/GitHub_Projects/repro-grow/data/LMA Leaf Images/EROCIC",
+              distance.pixel = 355,
+              known.distance = 3,
+              log = TRUE,
+              low.size = 0.005)
+erocic<-erocic$summary
+
+galpar = run.ij(set.directory = "/Users/brookewainwright/Documents/GitHub_Projects/repro-grow/data/LMA Leaf Images/GALPAR", 
+                distance.pixel = 355, 
+                known.distance = 3,
+                low.size = 0.005,
+                log = TRUE)
+          #      save.image = TRUE)
+galpar<-galpar$summary
+
+gerdis = run.ij(set.directory = "/Users/brookewainwright/Documents/GitHub_Projects/repro-grow/data/LMA Leaf Images/GERDIS",
+              distance.pixel = 355,
+              known.distance = 3,
+              log = TRUE)
+gerdis<-gerdis$summary
+
+holvir = run.ij(set.directory = "/Users/brookewainwright/Documents/GitHub_Projects/repro-grow/data/LMA Leaf Images/HOLVIR", 
+                distance.pixel = 355, 
+                known.distance = 3, 
+                low.size = 0.005,
+                log = TRUE)
+                # save.image = TRUE)
+holvir<-holvir$summary
+
+hypgla = run.ij(set.directory = "/Users/brookewainwright/Documents/GitHub_Projects/repro-grow/data/LMA Leaf Images/HYPGLA",
+              distance.pixel = 355,
+              known.distance = 3,
+              log = TRUE)
+hypgla<-hypgla$summary
+
+lupbic = run.ij(set.directory = "/Users/brookewainwright/Documents/GitHub_Projects/repro-grow/data/LMA Leaf Images/LUPBIC",
+              distance.pixel = 355,
+              known.distance = 3,
+              log = TRUE,
+              low.size = 0.005)
+lupbic<-lupbic$summary
+
+lupmic = run.ij(set.directory = "/Users/brookewainwright/Documents/GitHub_Projects/repro-grow/data/LMA Leaf Images/LUPMIC",
+              distance.pixel = 355,
+              known.distance = 3,
+              log = TRUE)
+lupmic<-lupmic$summary
+
+lupsuc = run.ij(set.directory = "/Users/brookewainwright/Documents/GitHub_Projects/repro-grow/data/LMA Leaf Images/LUPSUC",
+              distance.pixel = 355,
+              known.distance = 3,
+              log = TRUE)
+lupsuc<-lupsuc$summary
+
+madgra = run.ij(set.directory = "/Users/brookewainwright/Documents/GitHub_Projects/repro-grow/data/LMA Leaf Images/MADGRA",
+              distance.pixel = 355,
+              known.distance = 3,
+              log = TRUE)
+madgra<-madgra$summary
+
+miccal = run.ij(set.directory = "/Users/brookewainwright/Documents/GitHub_Projects/repro-grow/data/LMA Leaf Images/MICCAL", 
+                distance.pixel = 355, 
+                known.distance = 3, 
+                low.size = 0.005,
+                log = TRUE)
+             #   save.image = TRUE)
+miccal<-miccal$summary
+
+phatan = run.ij(set.directory = "/Users/brookewainwright/Documents/GitHub_Projects/repro-grow/data/LMA Leaf Images/PHATAN",
+              distance.pixel = 355,
+              known.distance = 3,
+              log = TRUE)
+phatan<-phatan$summary
+
+plaere = run.ij(set.directory = "/Users/brookewainwright/Documents/GitHub_Projects/repro-grow/data/LMA Leaf Images/PLAERE",
+              distance.pixel = 355,
+              known.distance = 3,
+              log = TRUE,
+              low.size = 0.005)
+plaere<-plaere$summary
+
+torarv = run.ij(set.directory = "/Users/brookewainwright/Documents/GitHub_Projects/repro-grow/data/LMA Leaf Images/TORARV",
+              distance.pixel = 355,
+              known.distance = 3,
+              log = TRUE)
+torarv<-torarv$summary
+
+trihir = run.ij(set.directory = "/Users/brookewainwright/Documents/GitHub_Projects/repro-grow/data/LMA Leaf Images/TRIHIR",
+              distance.pixel = 355,
+              known.distance = 3,
+              log = TRUE,
+              low.size = 0.005)
+trihir<-trihir$summary
+
+vicsat = run.ij(set.directory = "/Users/brookewainwright/Documents/GitHub_Projects/repro-grow/data/LMA Leaf Images/VICSAT",
+              distance.pixel = 355,
+              known.distance = 3,
+              log = TRUE)
+vicsat<-vicsat$summary
+
+# missing galpar, miccal, holvir
+lma_lf_area <- rbind(acmpar,
+                         aircar,
+                         amsmen,
+                         avebar,
+                         broare,
+                         brodia,
+                         brohor,
+                         bromad,
+                         calmen,
+                         caucou,
+                         cenmel,
+                         clapur,
+                         daupus,
+                         elycap,
+                         erobot,
+                         erocic,
+                         galpar,
+                         gerdis,
+                         holvir,
+                         hypgla,
+                         lupbic,
+                         lupmic,
+                         lupsuc,
+                         madgra,
+                         miccal,
+                         phatan,
+                         plaere,
+                         torarv,
+                         trihir,
+                         vicsat)
+
+write_csv(lma_lf_area, here::here("data/LMA_lf_area.csv"))
+
+
+```
+
+
+```{r}
 lf_area <- read_csv(here::here("data/LMA_lfarea_all.csv"))
 # There may be errors in this -- not sure how to check
 
@@ -2152,8 +2389,22 @@ LMA <- left_join(lf_area3,mass, by = join_by(Plant_ID))
 LMA$area_m2 <- LMA$total.leaf.area/10000
 LMA$lma_g_m2 <- LMA$area_m2/LMA$Dry_leaf_mass_g
 
-## Who are these NAs?
+summary(LMA)
+list <- LMA[which(is.na(LMA$Dry_leaf_mass_g)),"Plant_ID"]
+# 24 don't have masses
+# interpolate LMA based on spp x population averages
 
+# Check for duplicates
+# C6 AMSMEN 2 is listed twice
+LMA[which(duplicated(LMA$sample)),]
+
+# A mess, start from scratch with run.ij
+
+
+
+
+
+## Check for gaps and discrepancies -- maybe by species
 ```
 
 ### Explore LMA
