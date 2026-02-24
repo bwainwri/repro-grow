@@ -18,9 +18,12 @@ These data come from a common garden drought experiment in Davis, California inv
 -   Photosynthetic Rate
 -   Leaf Mass Area
 -   Leaf Area
--   WUE Height
+-   WUE 
+-   Height
 -   Leaf Nitrogen
 -   Date of first flower
+
+Limited Data:
 -   Mid season biomass partial
 -   Root biomass partial
 -   Root:shoot ratio partial
@@ -2473,22 +2476,246 @@ ggplot(LMA, aes(x=Rating, y=lma_g_m2)) +
 ```
 
 ## Leaf Area
+
 ```{r}
 #| eval: false
-### do not evaluate yet
-## Need to input the single leaf entries for MICCAL, GALPAR, etc.
 
+galpar = run.ij(set.directory = "/Users/brookewainwright/Documents/GitHub_Projects/repro-grow/data/Single Leaf Area/GALPAR", 
+                distance.pixel = 355, 
+                known.distance = 3, 
+                low.size = 0.005,
+                log = TRUE)
+             #   save.image = TRUE)
+galpar<-galpar$summary
+
+holvir = run.ij(set.directory = "/Users/brookewainwright/Documents/GitHub_Projects/repro-grow/data/Single Leaf Area/HOLVIR", 
+                distance.pixel = 355, 
+                known.distance = 3, 
+                low.size = 0.005,
+                log = TRUE)
+             #   save.image = TRUE)
+holvir<-holvir$summary
+
+miccal = run.ij(set.directory = "/Users/brookewainwright/Documents/GitHub_Projects/repro-grow/data/Single Leaf Area/MICCAL", 
+                distance.pixel = 355, 
+                known.distance = 3, 
+                low.size = 0.005,
+                log = TRUE)
+             #   save.image = TRUE)
+miccal<-miccal$summary
+
+singles <- rbind(galpar,holvir,miccal)
+
+lf_area_rm <- lf_area %>% 
+  filter(!Sp_Code %in% c("GALPAR","HOLVIR","MICCAL"))
+
+str(lf_area_rm)
+str(singles)
+
+## Extract plant id, species, plot
+singles$Date <- as.Date(substr(singles$sample, start=11, stop=18), "%Y%m%d")
+
+# separate plant ID from same and add periods to plant id
+singles$Plant_ID <- substr(singles$sample, start=1,stop=9)
+singles$Plant_ID <- paste0(
+  substr(singles$Plant_ID, 1, 2),
+  ".",
+  substr(singles$Plant_ID, 3, nchar(singles$Plant_ID))
+)
+singles$Plant_ID
+
+singles$Plant_ID <- paste0(
+  substr(singles$Plant_ID, 1, 9),
+  ".",
+  substr(singles$Plant_ID, 10, nchar(singles$Plant_ID))
+)
+singles$Plant_ID
+
+singles$Sp_Code <- substr(singles$Plant_ID,4,9)
+
+lf_area <- rbind(lf_area_rm,singles)
+
+lf_area$Plot <- substr(lf_area$Plant_ID,1,2)
+
+write_csv(lf_area,here::here("data/single_lf_area.csv"))
+
+```
+
+
+```{r}
+lf_area <- read_csv(here::here("data/single_lf_area.csv"))
 
 summary(lf_area)
 
 ggplot(lf_area, aes(x=Sp_Code, y=total.leaf.area)) +
   geom_violin() + stat_summary(fun.data=mean_sdl, mult=1, 
                  geom="pointrange", color="red") + theme(axis.text.x = element_text(angle=90,hjust = 1, size=14, color="black") )
+```
 
-ggplot(lf_area, aes(x=Rating, y=total.leaf.area)) +
+## WUE
+
+I believe we can get WUE from Licor and from the CN data. 
+
+```{r}
+
+summary(licor5)
+
+WUE <- licor5 %>% 
+  select(Plant_ID,
+         WUE_adj_av,
+         Sp_Code,
+         Plot,
+         Block,
+         Shelter,
+         Plot_number,
+         Population,
+         Treatment,
+         Scientific_Name,
+         Native_Status,
+         Growth_Habit,
+         Growth_2,
+         Perenniality,
+         Rating,
+         Rating_2,
+         Source)
+
+summary(WUE)
+
+ggplot(WUE, aes(x=Sp_Code, y=WUE_adj_av)) +
   geom_violin() + stat_summary(fun.data=mean_sdl, mult=1, 
                  geom="pointrange", color="red") + theme(axis.text.x = element_text(angle=90,hjust = 1, size=14, color="black") )
 
+# Bizarre outliers for DANCAL and AIRCAR
+
+### Look up in plant physiology book
+
+# What are normal ranges for short and long term WUE?
+
 ```
 
+## Leaf Nitrogen
+```{r}
+cn <- read_csv(here::here("data/CN_2023.csv"))
+
+summary(cn)
+unique(cn$Error)
+
+cn2 <- cn %>% 
+  filter(is.na(Error) | Error == "new")
+
+# break out species from sample ID
+cn2$Sp_Code <- substr(cn2$Sample_ID,4,9)
+
+ct_cn <- cn2 %>% count(Sp_Code)
+
+cn2$Plant_ID <- substr(cn2$Sample_ID, start=1,stop=11)
+cn2$Plant_ID <- paste0(
+  substr(cn2$Plant_ID, 1, 2),
+  ".",
+  substr(cn2$Plant_ID, 4, 9),
+  ".",
+  substr(cn2$Plant_ID, 11, 11)
+)
+cn2$Plant_ID
+
+cn2$Plot <- substr(cn2$Plant_ID, 1, 2)
+cn2$Plot
+
+```
+
+## Height
+```{r}
+rgr <- read_csv(here::here("data/Relative Growth Rate 2023.csv"))
+plots <- read_csv(here::here("data/Plot_info.csv"))
+str(rgr)
+summary(rgr)
+head(rgr)
+unique(rgr$Month)
+
+# All IDs from May and June are missing ".1" at the end
+# Extract species code from ID
+# Extract plot, shelter letter from ID, add in block and population
+rgr2 <- rgr %>% 
+  mutate(Plant_ID = if_else(Month == "May" | Month == "June", true = paste0(Plant_ID, ".1"), false = Plant_ID),
+         Sp_Code = substring(Plant_ID, 4,9),
+         Plot = substring(Plant_ID, 1,2),) %>% 
+  left_join(plots,by = join_by(Plot))
+str(rgr2)  
+
+unique(rgr2$Sp_Code)
+unique(rgr2$Shelter)
+unique(rgr2$Plot)
+
+head(rgr2)
+rgr_h <- rgr2 %>% 
+  select(
+    Plant_ID,
+    Month,
+    Height_cm,
+    Sp_Code,
+    Plot,
+    Block,
+    Shelter,
+    Plot_number,
+    Population,
+    Treatment
+  )
+
+rgr_max_h <- rgr_h %>% 
+  group_by(Plant_ID) %>% 
+  summarise(h_max = max(Height_cm, na.rm = TRUE),
+            Sp_Code = Sp_Code,
+            Plot = Plot,
+            Population = Population,
+            Treatment = Treatment
+            ) 
+rgr_max_h <- rgr_max_h[-which(duplicated(rgr_max_h)),]
+
+
+rgr_max_h2 <- left_join(rgr_max_h,plots, by = join_by(Plot))
+rgr_max_h3 <- left_join(rgr_max_h2,spp, by = join_by(Sp_Code))
+
+ggplot(rgr_max_h3, aes(x=Sp_Code, y=h_max)) +
+  geom_violin() + stat_summary(fun.data=mean_sdl, mult=1, 
+                 geom="pointrange", color="red") + theme(axis.text.x = element_text(angle=90,hjust = 1, size=14, color="black") )
+
+ggplot(rgr_max_h3, aes(x=Rating, y=h_max)) +
+  geom_violin() + stat_summary(fun.data=mean_sdl, mult=1, 
+                 geom="pointrange", color="red") + theme(axis.text.x = element_text(angle=90,hjust = 1, size=14, color="black") )
+
+
+
+```
+
+## Date of First Flower
+
+```{r}
+pheno <- read_csv(here::here("data/Phenology_2023.csv"))
+
+# Check distribution of species
+
+
+# Change date to date format
+str(pheno)
+pheno$Flower_Date <- as.Date(pheno$Flower_Date, tryFormats = "%m/%d/%y")
+
+# Change date into DOY
+pheno$doy <- day_of_year(pheno$Flower_Date)
+
+# Extract plot
+pheno$Plot <- substr(pheno$Plant_ID,1,2)
+pheno$Sp_Code <- pheno$Species
+
+# merge plot info and species info
+pheno2 <- left_join(pheno, plots, by=join_by("Plot"))
+pheno3 <- left_join(pheno2, spp, by=join_by("Sp_Code"))
+
+ggplot(pheno3, aes(x=Sp_Code, y=doy)) +
+  geom_violin() + stat_summary(fun.data=mean_sdl, mult=1, 
+                 geom="pointrange", color="red") + theme(axis.text.x = element_text(angle=90,hjust = 1, size=14, color="black") )
+
+ggplot(pheno3, aes(x=Rating, y=doy)) +
+  geom_violin() + stat_summary(fun.data=mean_sdl, mult=1, 
+                 geom="pointrange", color="red") + theme(axis.text.x = element_text(angle=90,hjust = 1, size=14, color="black") )
+```
 
