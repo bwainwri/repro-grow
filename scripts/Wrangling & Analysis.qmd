@@ -22,6 +22,7 @@ These data come from a common garden drought experiment in Davis, California inv
 -   Height
 -   Leaf Nitrogen
 -   Date of first flower
+-   Seed Mass
 
 Limited Data:
 -   Mid season biomass partial
@@ -30,6 +31,11 @@ Limited Data:
 -   Root diameter partial
 -   Specific root length partial
 -   Root nitrogen partial
+
+Q1: How much variation is there among annual California grassland plant in their allometric vegetative and reproductive scaling relationship?
+Q2: Does growth habit, native status, or home site climate affect the reproductive scaling of annual grassland.
+Q3: How do fitness measures of abovegrond biomass compare to floral investment measures of fitness?
+Q4: How do aboveground traits associate with reproductive allocation and reproductive scaling?
 
 ## To-do list
 - Check for effects of drought treatment
@@ -1235,9 +1241,11 @@ First read in all the traits we need and clean them up
 -   Photosynthetic Rate
 -   Leaf Mass Area
 -   Leaf Area
--   WUE Height
+-   WUE 
+-   Height
 -   Leaf Nitrogen
 -   Date of first flower
+-   Seed Mass
 -   Mid season biomass partial
 -   Root biomass partial
 -   Root:shoot ratio partial
@@ -1435,6 +1443,10 @@ We have height, leaf number, area, and volume
 
 ```{r}
 rgr_hlv2 <- read_csv(here::here("data/RGR_clean.csv"))
+
+head(rgr_hlv2)
+str(rgr_hlv2)
+
 
 rgr_hlv2_long <- rgr_hlv2 %>% 
   pivot_longer(cols = c("rgr_h_FM":"rgr_v_MJ"),
@@ -2621,6 +2633,10 @@ cn2$Plant_ID
 cn2$Plot <- substr(cn2$Plant_ID, 1, 2)
 cn2$Plot
 
+str(cn2)
+cn2$N_per <- (cn2$Total_N_µg/(cn2$Sample_Weight_mg_from_Sample_List*1000))*100
+
+
 ```
 
 ## Height
@@ -2647,7 +2663,7 @@ unique(rgr2$Shelter)
 unique(rgr2$Plot)
 
 head(rgr2)
-rgr_h <- rgr2 %>% 
+rgr_max_h <- rgr2 %>% 
   select(
     Plant_ID,
     Month,
@@ -2659,9 +2675,10 @@ rgr_h <- rgr2 %>%
     Plot_number,
     Population,
     Treatment
-  )
+  ) %>% 
+  filter(!is.na(Height_cm))
 
-rgr_max_h <- rgr_h %>% 
+rgr_max_h2 <- rgr_max_h %>% 
   group_by(Plant_ID) %>% 
   summarise(h_max = max(Height_cm, na.rm = TRUE),
             Sp_Code = Sp_Code,
@@ -2669,21 +2686,21 @@ rgr_max_h <- rgr_h %>%
             Population = Population,
             Treatment = Treatment
             ) 
-rgr_max_h <- rgr_max_h[-which(duplicated(rgr_max_h)),]
+rgr_max_h2 <- rgr_max_h2[-which(duplicated(rgr_max_h2)),]
 
 
-rgr_max_h2 <- left_join(rgr_max_h,plots, by = join_by(Plot))
-rgr_max_h3 <- left_join(rgr_max_h2,spp, by = join_by(Sp_Code))
+rgr_max_h3 <- left_join(rgr_max_h2,plots, by = join_by(Plot))
+rgr_max_h4 <- left_join(rgr_max_h3,spp, by = join_by(Sp_Code))
 
-ggplot(rgr_max_h3, aes(x=Sp_Code, y=h_max)) +
+rgr_max_h4[which(rgr_max_h4$Sp_Code == "PHATAN"),]
+
+ggplot(rgr_max_h4, aes(x=Sp_Code, y=h_max)) +
   geom_violin() + stat_summary(fun.data=mean_sdl, mult=1, 
                  geom="pointrange", color="red") + theme(axis.text.x = element_text(angle=90,hjust = 1, size=14, color="black") )
 
-ggplot(rgr_max_h3, aes(x=Rating, y=h_max)) +
+ggplot(rgr_max_h4, aes(x=Rating, y=h_max)) +
   geom_violin() + stat_summary(fun.data=mean_sdl, mult=1, 
                  geom="pointrange", color="red") + theme(axis.text.x = element_text(angle=90,hjust = 1, size=14, color="black") )
-
-
 
 ```
 
@@ -2691,24 +2708,33 @@ ggplot(rgr_max_h3, aes(x=Rating, y=h_max)) +
 
 ```{r}
 pheno <- read_csv(here::here("data/Phenology_2023.csv"))
+str(pheno)
+
 
 # Check distribution of species
-
+pheno_narm <- pheno %>% 
+  filter(!is.na(Flower_Date))
+ct_ph <- pheno_narm %>% count(Species, na.rm = TRUE)
+# These should line up with reproductive allocation IDs
 
 # Change date to date format
-str(pheno)
-pheno$Flower_Date <- as.Date(pheno$Flower_Date, tryFormats = "%m/%d/%y")
+str(pheno_narm)
+pheno_narm$Flower_Date <- as.Date(pheno_narm$Flower_Date, tryFormats = "%m/%d/%y")
 
 # Change date into DOY
-pheno$doy <- day_of_year(pheno$Flower_Date)
+pheno_narm$doy <- day_of_year(pheno_narm$Flower_Date)
 
 # Extract plot
-pheno$Plot <- substr(pheno$Plant_ID,1,2)
-pheno$Sp_Code <- pheno$Species
+pheno_narm$Plot <- substr(pheno_narm$Plant_ID,1,2)
+pheno_narm$Sp_Code <- pheno_narm$Species
 
 # merge plot info and species info
-pheno2 <- left_join(pheno, plots, by=join_by("Plot"))
+pheno2 <- left_join(pheno_narm, plots, by=join_by("Plot"))
 pheno3 <- left_join(pheno2, spp, by=join_by("Sp_Code"))
+
+# check for duplicates
+pheno3[which(duplicated(pheno3$Plant_ID)),]
+
 
 ggplot(pheno3, aes(x=Sp_Code, y=doy)) +
   geom_violin() + stat_summary(fun.data=mean_sdl, mult=1, 
@@ -2718,4 +2744,337 @@ ggplot(pheno3, aes(x=Rating, y=doy)) +
   geom_violin() + stat_summary(fun.data=mean_sdl, mult=1, 
                  geom="pointrange", color="red") + theme(axis.text.x = element_text(angle=90,hjust = 1, size=14, color="black") )
 ```
+
+## Seed Mass
+```{r}
+#| warning: false
+
+seed <- read_csv(here::here("data/Seed inventory_weight.csv"))
+
+str(seed)
+
+seed <- seed %>% 
+  select(
+    Sp_Code,
+    seed_mass_avg
+  ) %>% 
+  filter(!is.na(Sp_Code)
+  ) %>% 
+  filter(!is.na(seed_mass_avg))
+
+
+
+ggplot(seed, aes(x=Sp_Code, y=seed_mass_avg)) +
+  geom_violin() + stat_summary(fun.data=mean_sdl, mult=1, 
+                 geom="pointrange", color="red") + theme(axis.text.x = element_text(angle=90,hjust = 1, size=14, color="black") )
+
+
+
+```
+
+## PCA
+Datasets:
+repro_fill_hi_n_narm
+rgr_h
+rgr_l
+rgr_v
+licor5
+LMA
+lf_area
+cn2
+rgr_max_h3
+pheno3
+seed
+
+```{r}
+## Each dataset should remove problem samples and perennials
+## not sure how best to fill in gaps, after merging
+
+# merge and scale
+str(repro_fill_hi_n_narm)
+repro <- repro_fill_hi_n_narm %>% 
+  select(
+    Plant_ID,
+    Sp_Code,
+    Flower_Count,
+    Veg_Mass,
+    fl_average,
+    total_fl_mass,
+    Veg_Mass_ln,
+    total_fl_mass_ln,
+    RV
+  ) %>% 
+  mutate(Plant_ID = substr(Plant_ID,1,9)) %>% 
+  filter(!is.na(Flower_Count)) %>% 
+  filter(!Sp_Code %in% c("ESCCAL","DANCAL","STIPUL","CORFIL","SANBIP","MIRMUL","CLAPUR","HOLVIR"))
+
+which(rgr_h$rate == "Inf")
+rgrh <- rgr_h %>% 
+  select(
+    Plant_ID,
+    Sp_Code,
+    var_mo,
+    rate
+  ) %>% 
+  filter(!is.na(rate)) %>% 
+  filter(!Sp_Code %in% c("ESCCAL","DANCAL","STIPUL","CORFIL","SANBIP","MIRMUL","CLAPUR","HOLVIR")) %>% 
+  group_by(Plant_ID) %>% 
+  summarise(max_rate_ht = max(rate,na.rm= TRUE)) %>% 
+  mutate(Plant_ID = substr(Plant_ID,1,9))
+
+rgr_l[which(rgr_l$rate == "Inf"),"rate"] <- NA
+rgrl <- rgr_l %>% 
+  select(
+    Plant_ID,
+    Sp_Code,
+    var_mo,
+    rate
+  ) %>% 
+  filter(!is.na(rate)) %>% 
+  filter(!Sp_Code %in% c("ESCCAL","DANCAL","STIPUL","CORFIL","SANBIP","MIRMUL","CLAPUR","HOLVIR")) %>% 
+  group_by(Plant_ID) %>% 
+  summarise(max_rate_lf = max(rate,na.rm= TRUE)) %>% 
+  mutate(Plant_ID = substr(Plant_ID,1,9))
+
+rgr_v[which(rgr_v$rate == "Inf"),"rate"] <- NA
+rgrv <- rgr_v %>% 
+  select(
+    Plant_ID,
+    Sp_Code,
+    var_mo,
+    rate
+  ) %>% 
+  filter(!is.na(rate)) %>% 
+  filter(!Sp_Code %in% c("ESCCAL","DANCAL","STIPUL","CORFIL","SANBIP","MIRMUL","CLAPUR","HOLVIR")) %>%
+    mutate(rate =
+    case_when(rate == "Inf" ~ NA)
+  ) %>% 
+  group_by(Plant_ID) %>% 
+  summarise(max_rate_vol = max(rate,na.rm= TRUE)) %>% 
+  mutate(Plant_ID = substr(Plant_ID,1,9))
+
+str(licor5)
+licor <- licor5 %>% 
+  select(
+    Plant_ID,
+    A_adj_av,
+    WUE_adj_av,
+    E_adj_av,
+    gsw_adj_av,
+    Sp_Code
+  ) %>% 
+  filter(!Sp_Code %in% c("ESCCAL","DANCAL","STIPUL","CORFIL","SANBIP","MIRMUL","CLAPUR","HOLVIR")) %>%
+  mutate(Plant_ID = substr(Plant_ID,1,9))
+
+str(LMA)
+lma <- LMA %>% 
+  select(
+    Plant_ID,
+    Sp_Code,
+    lma_g_m2
+  ) %>% 
+  filter(!Sp_Code %in% c("ESCCAL","DANCAL","STIPUL","CORFIL","SANBIP","MIRMUL","CLAPUR","HOLVIR")) %>%
+  mutate(Plant_ID = substr(Plant_ID,1,9))
+
+str(lf_area)
+lf_area <- lf_area %>% 
+  select(
+    Plant_ID,
+    Sp_Code,
+    total.leaf.area
+  ) %>% 
+  filter(!Sp_Code %in% c("ESCCAL","DANCAL","STIPUL","CORFIL","SANBIP","MIRMUL","CLAPUR","HOLVIR")) %>%
+  mutate(Plant_ID = substr(Plant_ID,1,9))
+
+str(cn2)
+cn <- cn2 %>% 
+  select(
+    Plant_ID,
+    Sp_Code,
+    N_per
+  ) %>%
+  filter(!Sp_Code %in% c("ESCCAL","DANCAL","STIPUL","CORFIL","SANBIP","MIRMUL","CLAPUR","HOLVIR")) %>%
+  mutate(Plant_ID = substr(Plant_ID,1,9))
+
+str(rgr_max_h4)
+ht <- rgr_max_h4 %>% 
+  select(
+    Plant_ID,
+    Sp_Code,
+    h_max
+  ) %>% 
+  filter(!Sp_Code %in% c("ESCCAL","DANCAL","STIPUL","CORFIL","SANBIP","MIRMUL","CLAPUR","HOLVIR")) %>%
+  mutate(Plant_ID = substr(Plant_ID,1,9))
+
+str(pheno3)
+pheno <- pheno3 %>% 
+  select(
+    Plant_ID,
+    Sp_Code,
+    doy
+  ) %>%
+  filter(!Sp_Code %in% c("ESCCAL","DANCAL","STIPUL","CORFIL","SANBIP","MIRMUL","CLAPUR","HOLVIR")) %>%
+  mutate(Plant_ID = substr(Plant_ID,1,9))
+
+str(seed)
+seed_a <- seed %>% 
+  filter(!Sp_Code %in% c("ESCCAL","DANCAL","STIPUL","CORFIL","SANBIP","MIRMUL","CLAPUR","HOLVIR"))
+
+str(repro)
+str(rgrh)
+full <- full_join(repro,rgrh,by=join_by(Plant_ID))
+
+full2 <- full_join(full,rgrl,by=join_by(Plant_ID))
+
+full3 <- full_join(full2,rgrv,by=join_by(Plant_ID))
+
+full4 <- full_join(full3,licor,by=join_by(Plant_ID,Sp_Code))
+
+full5 <- full_join(full4,lma,by=join_by(Plant_ID,Sp_Code))
+
+full6 <- full_join(full5,lf_area,by=join_by(Plant_ID,Sp_Code))
+
+full7 <- full_join(full6,cn,by=join_by(Plant_ID,Sp_Code))
+
+full7[487,]
+ht[which(ht$Plant_ID == "E2.PHATAN"),]
+
+ht[556,]
+full7[which(full7$Plant_ID == "I3.EROCIC"),]
+full8 <- full_join(full7,ht,by=join_by(Plant_ID,Sp_Code))
+
+
+full9 <- full_join(full8,pheno,by=join_by(Plant_ID,Sp_Code))
+
+full <- full_join(full9,seed_a,by=join_by(Sp_Code))
+
+# Remove duplicates and error pls
+full <- full %>% 
+  filter(!duplicated(Plant_ID)) %>% 
+  filter(!Plant_ID %in% c("D4.AVEFAT","D4.AVEBAR","H4.AVEBAR","H4.AVEFAT","D7.AVEFAT"))
+
+# Duplicates of E2.PHATAN in ht -- investigate
+# Duplicates of I3.EROCIC in CN
+
+```
+
+```{r}
+## not sure how best to fill in gaps
+
+which(!complete.cases(full$doy))
+
+# 301 total incomplete cases
+# 200 Flower Count, Veg Mass etc
+# 105 for max rate ht,lf,vol
+# 215 for licor
+# 203 for lma
+# 204 for leaf area
+# 256 for N
+# 222 for pheno
+colnames(full)
+
+incomplete_rows_2 <- full[!complete.cases(full),]
+incomplete_rows_2 <- incomplete_rows_2[rowSums(is.na(incomplete_rows_2)) < 6,] 
+
+
+
+```
+
+### Correlation Table
+
+### PCA and/or NMDS
+
+```{r}
+full6[which(is.na(full6$total_fl_mass)),]
+
+full6_narm <- full6 %>% 
+  filter(!is.na(total_fl_mass))
+
+full6_narm$h_max_cm
+# There are -Inf values in this column
+# force them to be NAs
+full6_narm[which(full6_narm$h_max_cm == "-Inf"), "h_max_cm"] <- NA
+
+full6_narm$h_max_cm
+
+full6_anon <- full6_narm %>% 
+  select(
+    !Plant_ID
+  )
+
+library(missMDA)
+nb <- estim_ncpPCA(full6_anon)
+full_imputed <- imputePCA(full6_anon, ncp = nb$ncp)$completeObs
+
+full_scaled <- scale(full_imputed)
+
+pca <- prcomp(full_scaled, center = TRUE, scale. = TRUE)
+
+# View summary
+summary(pca)
+
+# View loadings
+pca$rotation
+
+loadings_pc1 <- pca$rotation[, 1]
+loadings_pc1
+sort(abs(loadings_pc1), decreasing = TRUE)
+contrib_pc1 <- loadings_pc1^2
+sort(contrib_pc1, decreasing = TRUE)
+
+loadings_pc2 <- pca$rotation[, 2]
+loadings_pc2
+contrib_pc2 <- loadings_pc2^2
+sort(contrib_pc2, decreasing = TRUE)
+
+loadings_pc3 <- pca$rotation[, 3]
+loadings_pc3
+contrib_pc3 <- loadings_pc3^2
+sort(contrib_pc3, decreasing = TRUE)
+
+
+1/17
+biplot(pca)
+
+pca_scores <- as.data.frame(pca$x)
+pca_scores$Plant_ID <- full6_narm$Plant_ID   
+# Add grouping variable
+pca_scores$Sp_Code <- substr(pca_scores$Plant_ID,4,9)
+pca_scores_2 <- left_join(pca_scores,spp, by=join_by("Sp_Code"))
+
+ggplot(pca_scores_2, aes(PC1, PC2, color = Native_Status)) +
+  geom_point(size = 3, alpha = 0.8) +
+  theme_minimal() +
+  labs(title = "PCA of Iris Dataset",
+       x = paste0("PC1 (", round(summary(pca)$importance[2,1] * 100, 1), "% variance)"),
+       y = paste0("PC2 (", round(summary(pca)$importance[2,2] * 100, 1), "% variance)"))
+
+
+# Install devtools if needed
+library(ggbiplot)
+
+ggbiplot(pca, groups = pca_scores_2$Native_Status, ellipse = TRUE, circle = TRUE) +
+  scale_color_discrete(name = "") +
+  theme_minimal()
+
+ggsave("pca_native.jpg")
+
+ggbiplot(pca, groups = pca_scores_2$Growth_Habit, ellipse = TRUE, circle = TRUE) +
+  scale_color_discrete(name = "") +
+  theme_minimal()
+
+ggbiplot(pca, groups = pca_scores_2$Growth2, ellipse = TRUE, circle = TRUE) +
+  scale_color_discrete(name = "") +
+  theme_minimal()
+
+ggsave("pca_growth.jpg")
+
+# Need to improve plots and reduce variables
+# Make points smaller
+
+
+# need to figure out if PCAs are used to model reproductive allocation and how to do that. How does a PCA interact with a dependent variable
+
+```
+
 
