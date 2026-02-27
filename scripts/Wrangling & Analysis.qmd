@@ -722,9 +722,9 @@ Find and add in SPEI
 
 ```{r}
 #| eval: false
-install.packages("devtools")
+# install.packages("devtools")
 require(devtools)
-devtools::install_github('seschaub/getSpei')
+# devtools::install_github('seschaub/getSpei')
 require(getSpei)
 
 workdir <- getwd()
@@ -1273,7 +1273,10 @@ rgr2 <- rgr %>%
   mutate(Plant_ID = if_else(Month == "May" | Month == "June", true = paste0(Plant_ID, ".1"), false = Plant_ID),
          Sp_Code = substring(Plant_ID, 4,9),
          Plot = substring(Plant_ID, 1,2),) %>% 
+  filter(!Plant_ID == "E2.PHATAN.1B") %>% 
   left_join(plots,by = join_by(Plot))
+rgr[which(rgr$Plant_ID == "E2.PHATAN.1B"),]
+rgr2[which(rgr2$Plant_ID == "E2.PHATAN.1B"),]
 str(rgr2)  
 
 unique(rgr2$Sp_Code)
@@ -2654,7 +2657,8 @@ unique(rgr$Month)
 rgr2 <- rgr %>% 
   mutate(Plant_ID = if_else(Month == "May" | Month == "June", true = paste0(Plant_ID, ".1"), false = Plant_ID),
          Sp_Code = substring(Plant_ID, 4,9),
-         Plot = substring(Plant_ID, 1,2),) %>% 
+         Plot = substring(Plant_ID, 1,2),) %>%
+  filter(!Plant_ID == "E2.PHATAN.1B") %>% 
   left_join(plots,by = join_by(Plot))
 str(rgr2)  
 
@@ -2756,6 +2760,7 @@ str(seed)
 seed <- seed %>% 
   select(
     Sp_Code,
+    Population,
     seed_mass_avg
   ) %>% 
   filter(!is.na(Sp_Code)
@@ -2796,6 +2801,7 @@ repro <- repro_fill_hi_n_narm %>%
   select(
     Plant_ID,
     Sp_Code,
+    Population,
     Flower_Count,
     Veg_Mass,
     fl_average,
@@ -2809,10 +2815,12 @@ repro <- repro_fill_hi_n_narm %>%
   filter(!Sp_Code %in% c("ESCCAL","DANCAL","STIPUL","CORFIL","SANBIP","MIRMUL","CLAPUR","HOLVIR"))
 
 which(rgr_h$rate == "Inf")
+str(rgr_h)
 rgrh <- rgr_h %>% 
   select(
     Plant_ID,
     Sp_Code,
+    Population,
     var_mo,
     rate
   ) %>% 
@@ -2827,6 +2835,7 @@ rgrl <- rgr_l %>%
   select(
     Plant_ID,
     Sp_Code,
+    Population,
     var_mo,
     rate
   ) %>% 
@@ -2841,14 +2850,12 @@ rgrv <- rgr_v %>%
   select(
     Plant_ID,
     Sp_Code,
+    Population,
     var_mo,
     rate
   ) %>% 
   filter(!is.na(rate)) %>% 
-  filter(!Sp_Code %in% c("ESCCAL","DANCAL","STIPUL","CORFIL","SANBIP","MIRMUL","CLAPUR","HOLVIR")) %>%
-    mutate(rate =
-    case_when(rate == "Inf" ~ NA)
-  ) %>% 
+  filter(!Sp_Code %in% c("ESCCAL","DANCAL","STIPUL","CORFIL","SANBIP","MIRMUL","CLAPUR","HOLVIR")) %>% 
   group_by(Plant_ID) %>% 
   summarise(max_rate_vol = max(rate,na.rm= TRUE)) %>% 
   mutate(Plant_ID = substr(Plant_ID,1,9))
@@ -2857,6 +2864,7 @@ str(licor5)
 licor <- licor5 %>% 
   select(
     Plant_ID,
+    Population,
     A_adj_av,
     WUE_adj_av,
     E_adj_av,
@@ -2871,6 +2879,7 @@ lma <- LMA %>%
   select(
     Plant_ID,
     Sp_Code,
+    Population,
     lma_g_m2
   ) %>% 
   filter(!Sp_Code %in% c("ESCCAL","DANCAL","STIPUL","CORFIL","SANBIP","MIRMUL","CLAPUR","HOLVIR")) %>%
@@ -2928,12 +2937,17 @@ full2 <- full_join(full,rgrl,by=join_by(Plant_ID))
 
 full3 <- full_join(full2,rgrv,by=join_by(Plant_ID))
 
-full4 <- full_join(full3,licor,by=join_by(Plant_ID,Sp_Code))
+str(full3)
+str(licor)
+full4 <- full_join(full3,licor,by=join_by(Plant_ID,Sp_Code,Population))
 
-full5 <- full_join(full4,lma,by=join_by(Plant_ID,Sp_Code))
+str(lma)
+full5 <- full_join(full4,lma,by=join_by(Plant_ID,Sp_Code,Population))
 
+str(lf_area)
 full6 <- full_join(full5,lf_area,by=join_by(Plant_ID,Sp_Code))
 
+str(cn)
 full7 <- full_join(full6,cn,by=join_by(Plant_ID,Sp_Code))
 
 full7[487,]
@@ -2941,20 +2955,39 @@ ht[which(ht$Plant_ID == "E2.PHATAN"),]
 
 ht[556,]
 full7[which(full7$Plant_ID == "I3.EROCIC"),]
+
+str(ht)
 full8 <- full_join(full7,ht,by=join_by(Plant_ID,Sp_Code))
 
+full8[124,]
+pheno[which(pheno$Plant_ID == "G3.AVEFAT"),]
 
+pheno[230,]
+full8[which(full8$Plant_ID == "E2.EROCIC"),]
+
+str(pheno)
 full9 <- full_join(full8,pheno,by=join_by(Plant_ID,Sp_Code))
 
-full <- full_join(full9,seed_a,by=join_by(Sp_Code))
+# Actually need to join seed mass by Species and population
+
+str(full9)
+str(seed_a)
+full <- full_join(full9,seed_a,by=join_by(Sp_Code,Population))
+
+
 
 # Remove duplicates and error pls
 full <- full %>% 
   filter(!duplicated(Plant_ID)) %>% 
   filter(!Plant_ID %in% c("D4.AVEFAT","D4.AVEBAR","H4.AVEBAR","H4.AVEFAT","D7.AVEFAT"))
 
-# Duplicates of E2.PHATAN in ht -- investigate
-# Duplicates of I3.EROCIC in CN
+# Duplicates of E2.PHATAN in ht -- investigate, choose A. It's not E4.PHATAN.1-E2. Removed E2.PHATAN.1B
+# Duplicates of I3.EROCIC in CN, chose A
+# 3 duplicates of E2.EROCIC in full8 -- 2 E2.EROCIC in CN, plus a rando from RGR
+
+# Fill in NA gaps
+# Go get seed masses
+# Go get phenology
 
 ```
 
