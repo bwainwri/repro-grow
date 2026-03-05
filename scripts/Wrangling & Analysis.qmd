@@ -353,6 +353,10 @@ repro_full$Sp_Code <- repro_full$Species
 # merge with species data
 repro_full <- left_join(repro_full,spp,by = join_by(Sp_Code))
 
+# Remove perennials
+repro_full <- repro_full %>% 
+  filter(!Sp_Code %in% c("ESCCAL","STIPUL"))
+
 # clean up dataset and re-order
 repro_full <- repro_full %>% 
   select(
@@ -900,6 +904,74 @@ rm(
 It's interesting that the three most widespread species are significant and low. And the arguable invasive native is the other significant.
 
 ## Q2: Growth Native Population
+
+Need to show that there's a difference in the scaling relationship between forbs and grasses which leads us to two distinct models.
+
+Can I use the same frameworks that I did for species.
+
+```{r}
+str(repro_fill_hi_n_narm)
+unique(repro_fill_hi_n_narm$Sp_Code)
+unique(repro_fill_hi_n_narm$Scientific_Name)
+
+repro_fill_hi_n_narm[which(is.na(repro_fill_hi_n_narm$Scientific_Name)),]
+
+library(lme4)
+
+model <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*Growth_Habit +
+              (1 | Sp_Code) +
+              (1 | Plot),
+              data = repro_fill_hi_n_narm)
+
+summary(model)
+anova(model)
+
+model <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*Growth_Habit +
+              (1 + Veg_Mass_ln | Scientific_Name) +
+              (1 | Plot),
+              data = repro_fill_hi_n_narm)
+summary(model)
+
+m0 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + Growth_Habit + (1 + Veg_Mass_ln | Scientific_Name) + (1 | Plot), data = repro_fill_hi_n_narm)
+
+anova(m0, model)
+
+# Consider including phylogenetics in model
+# Tried it using phyr but 29 out of 30 species were not found in the phylogeny
+
+library(DHARMa)
+
+sim_res <- simulateResiduals(model)
+plot(sim_res)
+
+testDispersion(sim_res)
+testOutliers(sim_res)
+testUniformity(sim_res)
+
+plot(fitted(model), resid(model))
+abline(h = 0)
+
+qqnorm(resid(model))
+qqline(resid(model))
+
+plot(model)
+
+library(influence.ME)
+
+infl <- influence(model, group="Scientific_Name")
+plot(infl)
+
+qqnorm(ranef(model)$Scientific_Name[,1])
+qqline(ranef(model)$Scientific_Name[,1])
+
+isSingular(model)
+
+library(DHARMa)
+sim_res <- simulateResiduals(model)
+plot(sim_res)
+
+```
+
 
 #### Model: RV
 Model looking at what creates the ratio of log r and log v. Use species as random effect, and use that to determine best graph
