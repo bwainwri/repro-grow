@@ -80,6 +80,8 @@ library(emmeans)
 library(here)
 #install.packages("DHARMa")
 library(DHARMa)
+install.packages("patchwork")
+library(patchwork)
 ```
 
 ## CA Map and Plant Comp
@@ -1103,7 +1105,7 @@ m3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln * spei_c +
            (1 | Scientific_Name) +
            (1 | Plot), data = repro_g)
 
-anova(m0, m1, m2, m3,m4)
+anova(m0, m1, m2, m3)
 
 m10 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + spei_c +
            (1 + Veg_Mass_ln | Scientific_Name) +
@@ -1117,6 +1119,7 @@ m4 <- lmer(total_fl_mass_ln ~ spei_c +
            (1 | Plot), data = repro_g)
 
 anova(m4,m3)
+anova(m0, m1, m2, m3,m4)
 
 m5 <- lmer(total_fl_mass_ln ~ spei_c +
                            Veg_Mass_ln * Rating_2 +
@@ -1230,18 +1233,139 @@ pred_spei <- as.data.frame(pred_spei) %>%
 pred_all <- bind_rows(pred_status, pred_spei)
 
 library(ggplot2)
+str(repro_g)
+str(pred_spei)
 
-ggplot(pred_all,
-       aes(x = x, y = predicted, color = group)) +
-  geom_line(size = 1.2) +
-  geom_ribbon(aes(ymin = conf.low, ymax = conf.high, fill = group),
-              alpha = 0.2, color = NA) +
-  facet_wrap(~panel) +
-  labs(x = "Ln(Vegetative Biomass)",
-       y = "Predicted ln(reproductive biomass)",
-       color = "",
-       fill = "") +
-  theme_classic()
+pred_spei$spei_c <-as.numeric(pred_spei$group) 
+pred_spei <- pred_spei %>% 
+  mutate(spei_c =
+    case_when(
+      spei_c == 1 ~ -1,
+      spei_c == 2 ~ 0,
+      spei_c == 3 ~ 1
+    )
+  )
+
+p <- ggplot() +
+
+  # Raw data points
+  geom_point(
+    data = repro_g,
+    aes(x = Veg_Mass_ln,
+        y = total_fl_mass_ln,
+        color = spei_c),
+    alpha = 0.3
+  ) +
+
+  # Confidence bands
+  geom_ribbon(
+    data = pred_spei,
+    aes(x = x,
+        ymin = conf.low,
+        ymax = conf.high,
+        fill = spei_c,
+        group = spei_c),
+    alpha = 0.2,
+    color = NA
+  ) +
+
+  # Predicted lines
+  geom_line(
+    data = pred_spei,
+    aes(x = x,
+        y = predicted,
+        color = spei_c,
+        group = spei_c),
+    linewidth = 1.2
+  ) +
+
+  # Shared continuous scale
+  scale_color_viridis_c(
+    name = "SPEI",
+    option = "D"
+  ) +
+  scale_fill_viridis_c(
+    name = "SPEI",
+    option = "D",
+    guide = "none"   # prevents duplicate legend
+  ) +
+
+  labs(
+    x = "Ln(Vegetative Biomass)",
+    y = "Predicted ln(Reproductive Biomass)"
+  ) +
+
+  theme_classic() +
+  theme(legend.position = "bottom")
+
+p
+
+repro_g$group <- repro_g$Rating_2
+
+p2 <- ggplot() +
+
+  # Raw data points
+  geom_point(
+    data = repro_g,
+    aes(x = Veg_Mass_ln,
+        y = total_fl_mass_ln,
+        color = group),
+    alpha = 0.3
+  ) +
+
+  # Confidence bands
+  geom_ribbon(
+    data = pred_status,
+    aes(x = x,
+        ymin = conf.low,
+        ymax = conf.high,
+        fill = group,
+        group = group),
+    alpha = 0.2,
+    color = NA
+  ) +
+
+  # Predicted lines
+  geom_line(
+    data = pred_status,
+    aes(x = x,
+        y = predicted,
+        color = group,
+        group = group),
+    linewidth = 1.2
+  ) +
+
+  # Shared continuous scale
+  scale_color_manual(
+    name = "Invasive Status",
+    values = c(
+    "Non-native" = "#3B528BFF",
+    "Invasive" = "#5DC863FF"
+  )) +
+    scale_fill_manual(
+      name = "Invasive Status",
+      values = c(
+    "Non-native" = "#3B528BFF",
+    "Invasive" = "#5DC863FF"
+  )) +
+
+  labs(
+    x = "Ln(Vegetative Biomass)",
+    y = "Predicted ln(Reproductive Biomass)"
+  ) +
+
+  theme_classic() +
+  theme(legend.position = "bottom")
+
+p2
+
+p3 <- p2 | p
+p3
+
+# Go back and make another map of CA SPEI, maybe even side by side with precip
+
+ggsave(here::here("figs/grass_model_slopes.jpg"),p3, width = 7, height = 4)
+
 
 
 
