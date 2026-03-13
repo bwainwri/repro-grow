@@ -1833,19 +1833,19 @@ abline(h = 0, lty = 2)
 plot(fitted(mV), resid(mV))
 abline(h = 0)
 
-boxplot(resid(m_speip_growthx) ~ spei_avg,
-        data = repro_fill_hi_n_narm)
+#boxplot(resid(m_speip_growthx) ~ spei_avg,
+#        data = repro_fill_hi_n_narm)
 
-boxplot(resid(m_speip_growthx) ~ Growth_Habit,
-        data = repro_fill_hi_n_narm)
+#boxplot(resid(m_speip_growthx) ~ Growth_Habit,
+#        data = repro_fill_hi_n_narm)
 # No funnel shape but forbs have a larger spread
 
 # 4 independence
-boxplot(resid(m_speip_growthx) ~ Plot,
-        data = repro_fill_hi_n_narm,
-        las = 2,
-        outline = FALSE)
-abline(h = 0, lty = 2)
+#boxplot(resid(m_speip_growthx) ~ Plot,
+#        data = repro_fill_hi_n_narm,
+#        las = 2,
+#        outline = FALSE)
+#abline(h = 0, lty = 2)
 # no clear structure
 
 # 5 Random effects are normally distributed
@@ -1879,7 +1879,7 @@ summary(mV)
 # Plot:Shelter:Block is 0
 
 # 8 no severe multicollinearity
-car::vif(lm(total_fl_mass_ln ~ Veg_Mass_ln, data = repro_fill_hi_n_narm_f))
+# car::vif(lm(total_fl_mass_ln ~ Veg_Mass_ln, data = repro_fill_hi_n_narm_f))
 # all good because all less than 3
 
 # 9 no influential points
@@ -2048,19 +2048,19 @@ abline(h = 0, lty = 2)
 plot(fitted(m_speip), resid(m_speip))
 abline(h = 0)
 
-boxplot(resid(m_speip) ~ spei_avg,
-        data = repro_fill_hi_n_narm)
+#boxplot(resid(m_speip) ~ spei_avg,
+#        data = repro_fill_hi_n_narm)
 
-boxplot(resid(m_speip) ~ Growth_Habit,
-        data = repro_fill_hi_n_narm)
+#boxplot(resid(m_speip) ~ Growth_Habit,
+#        data = repro_fill_hi_n_narm)
 # No funnel shape but forbs have a larger spread
 
 # 4 independence
-boxplot(resid(m_speip_growthx) ~ Plot,
-        data = repro_fill_hi_n_narm,
-        las = 2,
-        outline = FALSE)
-abline(h = 0, lty = 2)
+#boxplot(resid(m_speip_growthx) ~ Plot,
+#        data = repro_fill_hi_n_narm,
+#        las = 2,
+#        outline = FALSE)
+#abline(h = 0, lty = 2)
 # no clear structure
 
 # 5 Random effects are normally distributed
@@ -3672,19 +3672,20 @@ seed <- read_csv(here::here("data/Seed inventory_weight.csv"))
 
 str(seed)
 
-seed <- seed %>% 
+seed <- seed %>%
+  mutate(seed_mass = seed_mass_avg) %>% 
   select(
     Sp_Code,
     Population,
-    seed_mass_avg
+    seed_mass
   ) %>% 
   filter(!is.na(Sp_Code)
   ) %>% 
-  filter(!is.na(seed_mass_avg))
+  filter(!is.na(seed_mass))
 
 
 
-ggplot(seed, aes(x=Sp_Code, y=seed_mass_avg)) +
+ggplot(seed, aes(x=Sp_Code, y=seed_mass)) +
   geom_violin() + stat_summary(fun.data=mean_sdl, mult=1, 
                  geom="pointrange", color="red") + theme(axis.text.x = element_text(angle=90,hjust = 1, size=14, color="black") )
 
@@ -3890,12 +3891,23 @@ str(seed_a)
 full <- full_join(full9,seed_a,by=join_by(Sp_Code,Population))
 
 full[which(is.na(full$Population)),]
+# 124 plats are NA for species and population
 
 # Remove duplicates and error pls
 full <- full %>% 
   filter(!duplicated(Plant_ID)) %>% 
-  filter(!Plant_ID %in% c("D4.AVEFAT","D4.AVEBAR","H4.AVEBAR","H4.AVEFAT","D7.AVEFAT")) %>% 
-  filter(!rowSums(is.na(full)) > 10)
+  filter(!Plant_ID %in% c("D4.AVEFAT","D4.AVEBAR","H4.AVEBAR","H4.AVEFAT","D7.AVEFAT")) 
+
+pheno_gaps <- full[which(!complete.cases(full$doy)),c("Plant_ID","Flower_Count","doy")]
+pheno_gaps <- pheno_gaps[!c(rowSums(is.na(pheno_gaps)) > 1),]
+
+write_csv(pheno_gaps,here::here("data/phenology_gaps.csv"))
+
+seed_gaps <- full[which(!complete.cases(full$seed_mass)),c("Plant_ID","Sp_Code","Population","seed_mass")]
+seed_gaps <- seed_gaps[!c(rowSums(is.na(seed_gaps)) > 1),]
+# So many that didn't get properly assigned species and population info
+
+full <- full[!c(rowSums(is.na(full)) > 10),]
 
 # Duplicates of E2.PHATAN in ht -- investigate, choose A. It's not E4.PHATAN.1-E2. Removed E2.PHATAN.1B
 # Duplicates of I3.EROCIC in CN, chose A
@@ -3904,21 +3916,13 @@ full <- full %>%
 # Fill in NA gaps
 # Go get seed masses
 # Go get phenology
+# Add C:N
+# Add C13 WUE
 
 ```
 
 ```{r}
 ## not sure how best to fill in gaps
-pheno_gaps <- full[which(!complete.cases(full$doy)),c("Plant_ID","Flower_Count","doy")]
-write_csv(pheno_gaps,here::here("data/phenology_gaps.csv"))
-
-seed_gaps <- full[which(!complete.cases(full$seed_mass_avg)),c("Sp_Code","Population","seed_mass_avg")]
-
-seed_gaps$sppop <- paste0(seed_gaps$Sp_Code,seed_gaps$Population)
-
-seed_gaps <- seed_gaps %>% 
-  filter(!duplicated(sppop))
-
 # 301 total incomplete cases
 # 200 Flower Count, Veg Mass etc
 # 105 for max rate ht,lf,vol
@@ -3928,6 +3932,7 @@ seed_gaps <- seed_gaps %>%
 # 256 for N
 # 222 for pheno
 colnames(full)
+unique(full$Sp_Code)
 
 incomplete_rows_2 <- full[!complete.cases(full),]
 
@@ -3944,15 +3949,49 @@ full_avgs <- full %>%
             total.leaf.area = mean(total.leaf.area, na.rm = TRUE),
             N_per = mean(N_per, na.rm = TRUE),
             h_max = mean(h_max, na.rm = TRUE),
-            doy = mean(doy, na.rm = TRUE))
+            doy = mean(doy, na.rm = TRUE),
+            seed_mass = mean(seed_mass, na.rm = TRUE))
 
-incomplete_max_rate_ht <- full[is.na(full$max_rate_ht),c("Plant_ID","Sp_Code","Population")]
+trait_cols <- c("max_rate_ht"
+                ,"max_rate_lf"
+                ,"max_rate_vol"
+                ,"A_adj_av"
+                ,"WUE_adj_av"
+                ,"E_adj_av"
+                ,"gsw_adj_av"
+                ,"lma_g_m2"
+                ,"total.leaf.area"
+                ,"N_per"
+                ,"h_max"
+                ,"doy"
+                ,"seed_mass")
 
-full_rate_avgs <- full_avgs[,c("Sp_Code","Population","max_rate_ht","max_rate_lf","max_rate_vol")]
+full_filled <- full %>% 
+  left_join(full_avgs, by = c("Sp_Code","Population"),suffix = c("","_avg")) %>% 
+  mutate(
+    across(all_of(trait_cols),
+           ~ ifelse(is.na(.),
+                    get(paste0(cur_column(),"_avg")),
+                    .))
+  ) %>% 
+  select(-ends_with("_avg"))
 
-rate_refill <- left_join(incomplete_max_rate_ht,full_rate_avgs,by = join_by(Sp_Code,Population))
+colnames(full_filled) 
+# It worked! Now just some NaNs
+which(full_filled$Flower_Count == "NaN" | is.na(full_filled$Flower_Count))
+which(full_filled$Veg_Mass == "NaN" | is.na(full_filled$Veg_Mass))
+which(full_filled$fl_average == "NaN" | is.na(full_filled$fl_average))
+which(full_filled$max_rate_ht == "NaN" | is.na(full_filled$max_rate_ht))
+which(full_filled$A_adj_av == "NaN" | is.na(full_filled$A_adj_av))
+which(full_filled$lma_g_m2 == "NaN" | is.na(full_filled$lma_g_m2))
+which(full_filled$N_per == "NaN" | is.na(full_filled$N_per))
+# 25 with NaN
+which(full_filled$h_max == "NaN" | is.na(full_filled$h_max))
+which(full_filled$doy == "NaN" | is.na(full_filled$doy))
+which(full_filled$seed_mass == "NaN" | is.na(full_filled$seed_mass))
+# 72 with missing seed mass
 
-
+# Need to fill in missing seed mass and look into missing leaf N
 ```
 
 ### Correlation Table
