@@ -8,7 +8,7 @@ execute:
 
 ## Background
 
-These data come from a common garden drought experiment in Davis, California investigating the functional trait strategies of California grassland plants from five different grassland communities spanning California's latitudinal precipitation gradient. There 10-12 species per community or provenance, each provenance has 16 plots (8 drought, 8 control) across 10 shelters (5 drought, 5 control). In 2022-2023, we focused on collecting whole plant traits, including reproductive investment. This study focuses on how these traits relate to reproductive investment depending on native status, growth habit or provenance. This document will clean and wrangle the many datasets and images associated with this study.
+These data come from a common garden drought experiment in Davis, California investigating the functional trait strategies of California grassland plants from five different grassland communities spanning California's latitudinal precipitation gradient. There 10-12 species per community or provenance, each provenance has 16 plots (8 drought, 8 control) across 10 shelters (5 drought, 5 control). In 2022-2023, we focused on collecting whole plant traits, including reproductive investment. This study focuses on how these traits relate to reproductive investment depending on native status, growth habit or provenance. This document will clean and wrangle the many datasets and images associated with this study as well as carry out analysis and ceration of figures.
 
 ## Traits & Objectives
 
@@ -33,8 +33,8 @@ Limited Data:
 -   Root nitrogen partial
 
 Q1: How much variation is there among annual California grassland plant in their allometric vegetative and reproductive scaling relationship?
-Q2: Does growth habit, native status, or home site climate affect the reproductive scaling of annual grassland.
-Q3: How do fitness measures of abovegrond biomass compare to floral investment measures of fitness?
+Q2: Is there a difference in reproductive allometric scaling between annual forbs and grasses?
+Q3: Does native status or provenance have an effect on reproductive scaling of forbs and grasse, separately?
 Q4: How do aboveground traits associate with reproductive allocation and reproductive scaling?
 
 ## To-do list
@@ -80,8 +80,18 @@ library(emmeans)
 library(here)
 #install.packages("DHARMa")
 library(DHARMa)
-install.packages("patchwork")
+#install.packages("patchwork")
 library(patchwork)
+install.packages("magick")
+library(magick)
+# install.packages("devtools")
+require(devtools)
+# devtools::install_github('seschaub/getSpei')
+require(getSpei)
+library(influence.ME)
+# install.packages("MuMIn")
+library(MuMIn)
+library(ggeffects)
 ```
 
 ## CA Map and Plant Comp
@@ -92,6 +102,7 @@ Precip data from WorlClim
 
 ```{r}
 #| eval: false
+#| echo: false
 # ----- climate data -----
 ppt <- worldclim_global(var = "prec", res = 2.5, path = "data/")
 ppt_annual <- sum(ppt)
@@ -304,6 +315,25 @@ rm(ca,
    PlList_2023,
    ppt_df)
 ```
+
+```{r}
+#| label: fig-plot
+#| include: TRUE
+#| echo: FALSE
+#| eval: TRUE
+#| warning: FALSE
+#| message: FALSE
+#| fig.width: 12
+#| fig.height: 8 
+#| fig.cap: "plot"
+
+# save image as ggplot
+my_plot_ggplot <- image_read(here::here("figs/CA_precip_comp_map.jpg")) %>% 
+  image_ggplot(interpolate = TRUE)
+my_plot_ggplot
+```
+Figure 1. Plant composition of 12 most dominant species in 5 grasslands along latitudinal precipitation gradient in California. Colors in pie chart reflect distinct species. 
+
 ## Reproductive allocation & End of Season biomass
 
 Read in data, find outliers, fill in missing data
@@ -311,6 +341,7 @@ Read in data, find outliers, fill in missing data
 ```{r}
 #| eval: false
 #| warning: false
+#| echo: false
 ## Read in Data
 repro <- read_csv(here::here("data/Reproductive Allocation_2023.csv"))
 str(repro)
@@ -321,10 +352,11 @@ head(repro)
 
 ### Clean up and create variables
 
-Remove rows that have NA in the Flower Count row and in the Veg Mass Row. 
+Removed rows that have NA in the Flower Count row and in the Veg Mass Row. 
 
 ```{r}
 #| eval: false
+#| echo: false
 # Remove individuals with no veg mass and no flower count
 repro_narm <- repro %>% 
   drop_na(Flower_Count) %>% 
@@ -409,10 +441,10 @@ repro_full <- repro_full %>%
 
 rm(repro,repro_narm)
 ```
-
-Now check for outliers
+Checked for outliers
 ```{r}
 #| eval: false
+#| echo: false
 # Make a dataset so we can average flower mass per species x population x treatment and then find outliers
 
 repro_outliers_vg <- repro_full %>% 
@@ -637,13 +669,13 @@ rm(repro_outliers_fl,
    repro_full_2,
    repro_full_3)
 ```
-
 Now flower outliers have been removed, veg outliers have been checked.
 
-Now fill in average flower mass for for each Species x population x treatment and fill in for individuals with no flower masses. 
+Then filled in average flower mass for for each Species x population x treatment and fill in for individuals with no flower masses. 
 
 ```{r}
 #| eval: false
+#| echo: false
 # Average flower masses for each individual
 firstfl = which(colnames(repro_full)=="Flower_1_g")
 lastfl = which(colnames(repro_full)=="Flower_10_g")
@@ -686,7 +718,7 @@ rm(repro_full,
    avg_fls)
 
 ```
-Now remove species with low data, less than three observations
+Kept species with low data
 
 ```{r}
 #| eval: false
@@ -724,14 +756,11 @@ rm(summary,
    )
 ```
 
-Find and add in SPEI
+Founnd and added in SPEI using package `getSPEI`
 
 ```{r}
 #| eval: false
-# install.packages("devtools")
-require(devtools)
-# devtools::install_github('seschaub/getSpei')
-require(getSpei)
+
 
 workdir <- getwd()
 setwd(workdir)
@@ -751,6 +780,8 @@ write.csv(d1, "SPEI_Pop.csv")
 
 ```{r}
 #| eval: false
+#| echo: false
+
 spei <- read_csv(here::here("data/SPEI_Pop.csv"))
 spei <- spei %>% 
   filter(month > 2 & month < 6)
@@ -797,34 +828,58 @@ write.csv(repro_fill_hi_n_narm, here::here("data/repro_fill_hi_n_narm.csv"))
 
 ```
 
-We did it! Now graph and analyze. Use "repro_fill_hi_n_narm" for reproductive allocation.
+Reproductive dataset is ready to go. Use "repro_fill_hi_n_narm" for reproductive allocation.
 
-Read in cleaned dataset to reduce computing power
+Read in cleaned dataset to reduce computing power.
 ```{r}
+#| warning: false
+#| message: false
 repro_fill_hi_n_narm <- read_csv(here::here("data/repro_fill_hi_n_narm.csv"))
+
+# remove Lupinus succulentus because only 1 datapoint
+# Remove three grass individuals because they were doubles or mis-identified
+repro_fill_hi_n_narm <- repro_fill_hi_n_narm %>% 
+  filter(!Sp_Code == "LUPSUC") %>% 
+   filter(!Plant_ID %in% c("I8.BRODIA"
+                          ,"B2.AVEBAR.1"
+                          ,"C1.AVEBAR"
+                          ))
 ```
 
 ## Q1: 1:1
 
+Q1: How much variation is there among annual California grassland plant in their allometric vegetative and reproductive scaling relationship?
+
+Does this group of species have different allometric scaling slopes?
+
 ```{r}
 anova(lm(total_fl_mass_ln ~ Veg_Mass_ln*Scientific_Name, data = repro_fill_hi_n_narm))
+```
 
+Yes, species identity has a significant effect on reproductive allometric scaling (p-value = 0.01211).
+
+Herbaceous species are thought to have a 1:1 scaling relationship between vegetative biomass and reproductive biomass because their lack of woody tissue. Do any species have slopes significantly diffferent than 1?
+
+```{r}
 mod <- lm(total_fl_mass_ln ~ Veg_Mass_ln * Scientific_Name, 
           data = repro_fill_hi_n_narm)
 
-
 slopes <- emtrends(mod, ~ Scientific_Name, var = "Veg_Mass_ln")
-slopes
 
 slopes.df <- summary(slopes) %>% 
   arrange(desc(Veg_Mass_ln.trend))
 
+# Test is any slopes are different than 1
 test_slopes_vs1 <- summary(slopes, infer = TRUE, null = 1)
 test_slopes_vs1[which(test_slopes_vs1$p.value<0.05),]
+```
+
+Yes, four species have slopes significantly different than 1, one greater than and three less than.
+
+```{r}
+#| echo: false
 
 level_order <- unique(as.factor(slopes.df$Scientific_Name))
-
-
 # Graph a bar plot of each species in order of slope with standard error bars and line at 1
 
 #("ANGELO" = "#440154FF", "MCL" = "#3B528BFF", "BORR" = "#21908CFF", "SEDG" = "#5DC863FF", "WWP" = "#FDE725FF")) + 
@@ -866,7 +921,14 @@ ggplot(slopes.df, aes(x = factor(Scientific_Name, level=c(level_order)), y = Veg
        fill = "")
 
 ggsave(here::here("figs/Q1_slopes_spp.jpg"))
+```
 
+Fig 2. Reproductive scaling slopes of 28 annual grassland species. Black dotted line indicates slope of 1 or a 1:1 relationship of vegetative to reproductive biomass. Teal bars indicate species slope is not significantly different than 1. Purple bars indicate slopes significantly different than 1.  
+```{r}
+#| echo: false
+#| eval: false
+
+# This creates a graph for presentations
 
 ggplot(slopes.df, aes(x = factor(Scientific_Name, level=c(level_order)), y = Veg_Mass_ln.trend
                        , fill = columnColor
@@ -893,101 +955,112 @@ ggplot(slopes.df, aes(x = factor(Scientific_Name, level=c(level_order)), y = Veg
        fill = "")
 
 ggsave(here::here("figs/Q1_slopes_spp_prez.jpg"), width = 7,height = 3.5)
+```
+
+```{r}
+#| echo: false
 
 rm(
   mod
   , slopes
   , slopes.df
   , test_slopes_vs1
+  , level_order
+  , my_plot_ggplot
 )
-
 ```
 
 It's interesting that the three most widespread species are significant and low. And the arguable invasive native is the other significant.
 
-## Q2: Growth Native Population
+## Q2: Grass vs Forb Scaling
 
-Need to show that there's a difference in the scaling relationship between forbs and grasses which leads us to two distinct models.
-
-Can I use the same frameworks that I did for species.
+Q2: Is there a difference in reproductive allometric scaling between annual forbs and grasses?
 
 ```{r}
-str(repro_fill_hi_n_narm)
-unique(repro_fill_hi_n_narm$Sp_Code)
-unique(repro_fill_hi_n_narm$Scientific_Name)
-
-repro_fill_hi_n_narm[which(is.na(repro_fill_hi_n_narm$Scientific_Name)),]
-
-library(lme4)
-
+# Use a mixed effects linear regression to reflect experimental structure
 model <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*Growth_Habit +
               (1 | Sp_Code) +
               (1 | Plot),
               data = repro_fill_hi_n_narm)
 
 summary(model)
-anova(model)
 
+# This model better accounts for the variation in slopes among species 
 model <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*Growth_Habit +
               (1 + Veg_Mass_ln | Scientific_Name) +
               (1 | Plot),
               data = repro_fill_hi_n_narm)
 summary(model)
 
+# Create simpler models to test the interaction against
 m0 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + Growth_Habit + (1 + Veg_Mass_ln | Scientific_Name) + (1 | Plot), data = repro_fill_hi_n_narm)
 
+# even simpler
+m00 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + (1 + Veg_Mass_ln | Scientific_Name) + (1 | Plot), data = repro_fill_hi_n_narm)
+
+# test interactive model against nullest model
+# not sure using lrtest is actually appropriate since it's for likelihood ratios for generalized models (non normal distributions)
+# lrtest(m00,model)
+
+anova(m00, model)
 anova(m0, model)
+```
 
-# Consider including phylogenetics in model
-# Tried it using phyr but 29 out of 30 species were not found in the phylogeny
+This shows that there is a significant effect of growth habit on allometric scaling, where forbs have a steeper slope than grasses.
 
-library(DHARMa)
+Considered including phylogenetics in model but tried using phyr but 29 out of 30 species were not found in the phylogeny
+
+```{r}
+# Check assumptions of model
 
 sim_res <- simulateResiduals(model)
 plot(sim_res)
 
 testDispersion(sim_res)
+# good on dispersion, p-value high
 testOutliers(sim_res)
+# good on outliers, p-value high
 testUniformity(sim_res)
+# Poor on normality but data is robust, as good as it gets
 
+# Check for funnel shape (bad), we want constant variance
 plot(fitted(model), resid(model))
 abline(h = 0)
+# good
 
+# check for dramatic S-shape (bad)
 qqnorm(resid(model))
 qqline(resid(model))
+# for the most part hugs the line but is a bit skewy
 
+# not sure what this does
 plot(model)
 
-library(influence.ME)
-
+# determine influential points
 infl <- influence(model, group="Scientific_Name")
-plot(infl)
 
+# normal across groups, can also do it for plot etc
 qqnorm(ranef(model)$Scientific_Name[,1])
 qqline(ranef(model)$Scientific_Name[,1])
 
+#check for singularity
 isSingular(model)
 
-library(DHARMa)
 sim_res <- simulateResiduals(model)
 plot(sim_res)
 
 ```
 
-Native comparison for forbs
+# Q3a: Forbs
+
+Native and provenance comparison for forbs
 
 ```{r}
-str(repro_fill_hi_n_narm)
-unique(repro_fill_hi_n_narm$Sp_Code)
-unique(repro_fill_hi_n_narm$Scientific_Name)
-
-repro_fill_hi_n_narm[which(is.na(repro_fill_hi_n_narm$Scientific_Name)),]
-
-library(lme4)
-
+# create dataset of only forbs
 repro_f <- repro_fill_hi_n_narm %>% 
   filter(Growth_Habit == "Forb")
 
+# Does native status matter for forbs?
 model <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*Native_Status +
               (1 | Sp_Code) +
               (1 | Plot),
@@ -996,25 +1069,28 @@ model <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*Native_Status +
 summary(model)
 anova(model)
 
-model <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*Native_Status +
+model_n <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*Native_Status +
               (1 | Scientific_Name) +
               (1 | Plot),
               data = repro_f)
-summary(model)
+summary(model_n)
 
 m0 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + Native_Status + (1 | Scientific_Name) + (1 | Plot), data = repro_f)
 
-anova(m0, model)
+anova(m0, model_n)
 
 m00 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + (1 | Scientific_Name) + (1 | Plot), data = repro_f)
 
 anova(m0,m00)
+anova(m00, model_n)
+```
 
-# Consider including phylogenetics in model
-# Tried it using phyr but 29 out of 30 species were not found in the phylogeny
+Native Status is not a useful predictor for reproductive scaling in forbs. Native status does not effect the slope or the intercept.
 
-library(DHARMa)
+Note: Tried same process above for Growth_2, Rating, and Rating_2
 
+```{r}
+# check assumptions
 sim_res <- simulateResiduals(m00)
 plot(sim_res)
 
@@ -1037,8 +1113,6 @@ qqline(resid(m00))
 
 plot(m00)
 
-library(influence.ME)
-
 infl <- influence(m00, group="Scientific_Name")
 plot(infl)
 
@@ -1048,17 +1122,45 @@ qqline(ranef(m00)$Scientific_Name[,1])
 isSingular(m00)
 # model is singular
 
-library(DHARMa)
 sim_res <- simulateResiduals(m00)
 plot(sim_res)
 
 ```
 
-Now graph
+Does provenance matter for forbs?
+```{r}
+
+# Does native status matter for forbs?
+model <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*Population +
+              (1 | Sp_Code) +
+              (1 | Plot),
+              data = repro_f)
+
+summary(model)
+anova(model)
+
+model <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*Population +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = repro_f)
+summary(model)
+
+m0 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + Population + (1 | Scientific_Name) + (1 | Plot), data = repro_f)
+
+anova(m0, model)
+
+m00 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + (1 | Scientific_Name) + (1 | Plot), data = repro_f)
+
+anova(m0,m00)
+anova(model,m00)
+AIC(model, m0, m00)
+```
+
+Similarly, spei does not matter. However Veg Mass + Population was weakly significant against null model. But under AIC, m00 is the best.
 
 ```{r}
 
-slopes <- emtrends(model, ~ Native_Status, var = "Veg_Mass_ln")
+slopes <- emtrends(model_n, ~ Native_Status, var = "Veg_Mass_ln")
 slopes
 
 slopes.df <- summary(slopes)
@@ -1076,16 +1178,16 @@ ggplot(slopes.df, aes(x = Native_Status, y = Veg_Mass_ln.trend
 ggsave(here::here("figs/Forb_Native_slopes.jpg"))
 
 ```
+# Q3b: Grasses
 
-Now grasses
+Does degree of invasiveness or provenance affect reproductive scaling of grasses?
+
 ```{r}
+# filter for grasses
 repro_g <- repro_fill_hi_n_narm %>% 
-  filter(Growth_Habit == "Grass") %>% 
-  filter(!Plant_ID %in% c("I8.BRODIA"
-                          ,"B2.AVEBAR.1"
-                          ,"C1.AVEBAR"
-                          ))
+  filter(Growth_Habit == "Grass")
 
+# scale spei
 repro_g$spei_c <- scale(repro_g$spei_avg, center = TRUE, scale = FALSE)
 
 m0 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln +
@@ -1126,12 +1228,9 @@ m5 <- lmer(total_fl_mass_ln ~ spei_c +
            (1 + Veg_Mass_ln | Scientific_Name) +
            (1 | Plot), data = repro_g)
 
+anova(m4,m5)
 AIC(m4,m5)
 
-# m5 is the best model, now run diagnostics
-
-install.packages("MuMIn")
-library(MuMIn)
 model.sel(m4, m5)
 
 m6 <- lmer(total_fl_mass_ln ~ spei_c +
@@ -1140,27 +1239,27 @@ m6 <- lmer(total_fl_mass_ln ~ spei_c +
            (1 | Plot), data = repro_g)
 
 anova(m5,m6)
+anova(m1,m5)
+anova(m0,m5)
 
-library(ggeffects)
-
+# m5 is the best model, now run diagnostics
 plot(ggpredict(m5, terms = c("Veg_Mass_ln", "Rating_2")))
 plot(ggpredict(m5, terms = c("Veg_Mass_ln", "spei_c [-1,0,1]")))
-
-library(DHARMa)
 
 sim_res <- simulateResiduals(m5)
 plot(sim_res)
 
 testDispersion(sim_res)
+# good
 testOutliers(sim_res)
 # significant outlier test
+testUniformity(sim_res)
 
 outlier_index <- which(sim_res$scaledResiduals < 0.025 | sim_res$scaledResiduals > 0.975)
 
 repro_g[outlier_index, ]
 sim_res$scaledResiduals[outlier_index]
 plotResiduals(sim_res, repro_g$Veg_Mass_ln)
-
 
 testUniformity(sim_res)
 
@@ -1172,10 +1271,8 @@ qqline(resid(m5))
 
 plot(m5)
 
-library(influence.ME)
 
 infl <- influence(m5, group="Scientific_Name")
-plot(infl)
 
 qqnorm(ranef(m5)$Scientific_Name[,1])
 qqline(ranef(m5)$Scientific_Name[,1])
@@ -1183,7 +1280,6 @@ qqline(ranef(m5)$Scientific_Name[,1])
 isSingular(m5)
 # model is singular
 
-library(DHARMa)
 sim_res <- simulateResiduals(m5)
 plot(sim_res)
 
@@ -1192,11 +1288,10 @@ unique(repro_g$Sp_Code)
 outlier_index <- which(sim_res$scaledResiduals < 0.025 |
                        sim_res$scaledResiduals > 0.975)
 
+## LEFT OFF HERE TRYING TO FIGURE OUT OUTLIERS
+
 table(repro_g$Scientific_Name[outlier_index])
 table(repro_g$Plot[outlier_index])
-
-
-library(ggplot2)
 
 ggplot(repro_g, aes(Veg_Mass_ln, total_fl_mass_ln, color = Scientific_Name)) +
   geom_point() +
@@ -1206,8 +1301,6 @@ m_no_outliers <- update(m5, data = repro_g[-outlier_index, ])
 
 summary(m5)
 summary(m_no_outliers)
-
-# M5 is the winner!
 
 ```
 
