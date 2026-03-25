@@ -838,12 +838,15 @@ repro_fill_hi_n_narm <- read_csv(here::here("data/repro_fill_hi_n_narm.csv"))
 
 # remove Lupinus succulentus because only 1 datapoint
 # Remove three grass individuals because they were doubles or mis-identified
+# Remove two grass individuals because they are outliers with high influential, likely weeds
 repro_fill_hi_n_narm <- repro_fill_hi_n_narm %>% 
   filter(!Sp_Code == "LUPSUC") %>% 
    filter(!Plant_ID %in% c("I8.BRODIA"
                           ,"B2.AVEBAR.1"
                           ,"C1.AVEBAR"
-                          ))
+                          )) %>% 
+  filter(!Plant_ID %in% c("J5.BRODIA.1"
+                          ,"F5.BROHOR.1"))
 ```
 
 ## Q1: 1:1
@@ -1184,69 +1187,78 @@ Does degree of invasiveness or provenance affect reproductive scaling of grasses
 
 ```{r}
 # filter for grasses
+# J5.BRODIA.1 and F5.BROHOR.1 have high residuals and hig influence. try removing
 repro_g <- repro_fill_hi_n_narm %>% 
-  filter(Growth_Habit == "Grass")
+  filter(Growth_Habit == "Grass") 
 
 # scale spei
 repro_g$spei_c <- scale(repro_g$spei_avg, center = TRUE, scale = FALSE)
 
 m0 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln +
-           (1 + Veg_Mass_ln | Scientific_Name) +
+           (1 | Scientific_Name) +
            (1 | Plot), data = repro_g)
 
-m1 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln * spei_c +
-           (1 + Veg_Mass_ln | Scientific_Name) +
+m_s <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + spei_c +
+           (1 | Scientific_Name) +
            (1 | Plot), data = repro_g)
 
-m2 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln * Rating +
-           (1 + Veg_Mass_ln | Scientific_Name) +
-           (1 | Plot), data = repro_g)
+anova(m0,m_s)
+# spei is a signficant predictor compared to the null model
 
-m3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln * spei_c +
+mxs <- lmer(total_fl_mass_ln ~ Veg_Mass_ln * spei_c +
+           (1 | Scientific_Name) +
+           (1 | Plot), data = repro_g)
+anova(m_s,mxs)
+# spei is not a significant interactive predictor
+
+m_r <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + Rating +
+           (1 | Scientific_Name) +
+           (1 | Plot), data = repro_g)
+anova(m0,m_r)
+
+m_r2 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + Rating_2 +
+           (1 | Scientific_Name) +
+           (1 | Plot), data = repro_g)
+anova(m0,m_r2)
+
+mxr <- lmer(total_fl_mass_ln ~ Veg_Mass_ln * Rating +
+           (1 | Scientific_Name) +
+           (1 | Plot), data = repro_g)
+anova(m_r,mxr)
+
+mxr2 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln * Rating_2 +
+           (1 | Scientific_Name) +
+           (1 | Plot), data = repro_g)
+anova(m_r2,mxr2)
+
+mxr_s <- lmer(total_fl_mass_ln ~ spei_c +
                            Veg_Mass_ln * Rating +
            (1 | Scientific_Name) +
            (1 | Plot), data = repro_g)
 
-anova(m0, m1, m2, m3)
+anova(mxr,mxr_s)
+anova(m0, m_r, mxr, mxr_s)
 
-m10 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + spei_c +
-           (1 + Veg_Mass_ln | Scientific_Name) +
-           (1 | Plot), data = repro_g)
-
-anova(m1,m10)
-
-m4 <- lmer(total_fl_mass_ln ~ spei_c +
-                           Veg_Mass_ln * Rating +
-           (1 + Veg_Mass_ln | Scientific_Name) +
-           (1 | Plot), data = repro_g)
-
-anova(m4,m3)
-anova(m0, m1, m2, m3,m4)
-
-m5 <- lmer(total_fl_mass_ln ~ spei_c +
+mxr2_s <- lmer(total_fl_mass_ln ~ spei_c +
                            Veg_Mass_ln * Rating_2 +
-           (1 + Veg_Mass_ln | Scientific_Name) +
+           (1 | Scientific_Name) +
            (1 | Plot), data = repro_g)
+anova(m0, m_r2, mxr2, mxr2_s)
 
-anova(m4,m5)
-AIC(m4,m5)
+AIC(mxr_s,mxr2_s)
 
-model.sel(m4, m5)
-
-m6 <- lmer(total_fl_mass_ln ~ spei_c +
+m_r2_s <- lmer(total_fl_mass_ln ~ spei_c +
                            Veg_Mass_ln + Rating_2 +
-           (1 + Veg_Mass_ln | Scientific_Name) +
+           (1 | Scientific_Name) +
            (1 | Plot), data = repro_g)
 
-anova(m5,m6)
-anova(m1,m5)
-anova(m0,m5)
+anova(m_r2_s,mxr2_s)
 
-# m5 is the best model, now run diagnostics
-plot(ggpredict(m5, terms = c("Veg_Mass_ln", "Rating_2")))
-plot(ggpredict(m5, terms = c("Veg_Mass_ln", "spei_c [-1,0,1]")))
+# mxr2_s is the best model, now run diagnostics
+plot(ggpredict(mxr2_s, terms = c("Veg_Mass_ln", "Rating_2")))
+plot(ggpredict(mxr2_s, terms = c("Veg_Mass_ln", "spei_c [-1,0,1]")))
 
-sim_res <- simulateResiduals(m5)
+sim_res <- simulateResiduals(mxr2_s)
 plot(sim_res)
 
 testDispersion(sim_res)
@@ -1257,30 +1269,55 @@ testUniformity(sim_res)
 
 outlier_index <- which(sim_res$scaledResiduals < 0.025 | sim_res$scaledResiduals > 0.975)
 
-repro_g[outlier_index, ]
+outliers <- repro_g[outlier_index, "Plant_ID"]
 sim_res$scaledResiduals[outlier_index]
+outliers$resid <- sim_res$scaledResiduals[outlier_index]
+
 plotResiduals(sim_res, repro_g$Veg_Mass_ln)
 
-testUniformity(sim_res)
-
-plot(fitted(m5), resid(m5))
+plot(fitted(mxr2_s), resid(mxr2_s))
 abline(h = 0)
 
-qqnorm(resid(m5))
-qqline(resid(m5))
+qqnorm(resid(mxr2_s))
+qqline(resid(mxr2_s))
 
-plot(m5)
+plot(mxr2_s)
 
+# 9 no influential points
 
-infl <- influence(m5, group="Scientific_Name")
+#influence.ME::influence(m5, obs = TRUE)
+infl <- influence(mxr2_s, obs = TRUE)
+cd <- cooks.distance(infl)
+cd_df <- data.frame(
+  row = seq_along(cd),
+  cooks_d = cd
+)
+p <- length(fixef(m5))   # number of fixed effects
+n <- nobs(m5)
 
-qqnorm(ranef(m5)$Scientific_Name[,1])
-qqline(ranef(m5)$Scientific_Name[,1])
+cd_thresh <- 4 / (n - p)
 
-isSingular(m5)
-# model is singular
+high_infl <- cd_df[cd_df$cooks_d > cd_thresh, ]
+high_infl_2 <- cd_df[order(-cd_df$cooks_d), ][1:20, ]
 
-sim_res <- simulateResiduals(m5)
+high_infl_m <- merge(
+  high_infl,
+  repro_g,
+  by.x = "row",
+  by.y = "row.names"
+)
+high_infl_m <- high_infl_m[,c("cooks_d","Plant_ID")]
+mer <- full_join(outliers,high_infl_m,by=join_by("Plant_ID"))
+# J5.BRODIA.1 and F5.BROHOR.1 have high residuals and hig influence. try removing
+# Try removing plants with high influence
+
+qqnorm(ranef(mxr2_s)$Scientific_Name[,1])
+qqline(ranef(mxr2_s)$Scientific_Name[,1])
+
+isSingular(mxr2_s)
+# model is not singular
+
+sim_res <- simulateResiduals(mxr2_s)
 plot(sim_res)
 
 unique(repro_g$Sp_Code)
@@ -1288,19 +1325,12 @@ unique(repro_g$Sp_Code)
 outlier_index <- which(sim_res$scaledResiduals < 0.025 |
                        sim_res$scaledResiduals > 0.975)
 
-## LEFT OFF HERE TRYING TO FIGURE OUT OUTLIERS
-
 table(repro_g$Scientific_Name[outlier_index])
 table(repro_g$Plot[outlier_index])
 
 ggplot(repro_g, aes(Veg_Mass_ln, total_fl_mass_ln, color = Scientific_Name)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE)
-
-m_no_outliers <- update(m5, data = repro_g[-outlier_index, ])
-
-summary(m5)
-summary(m_no_outliers)
 
 ```
 
@@ -1310,10 +1340,10 @@ Now make two graphs using predicted values, faceted. First facet is Rating_2 and
 library(ggeffects)
 
 # Status predictions (2 lines)
-pred_status <- ggpredict(m5, terms = c("Veg_Mass_ln", "Rating_2"))
+pred_status <- ggpredict(mxr2_s, terms = c("Veg_Mass_ln", "Rating_2"))
 
 # SPEI predictions (3 lines: low, mean, high)
-pred_spei <- ggpredict(m5, terms = c("Veg_Mass_ln", "spei_c [-1,0,1]"))
+pred_spei <- ggpredict(mxr2_s, terms = c("Veg_Mass_ln", "spei_c [-1,0,1]"))
 
 library(dplyr)
 
@@ -1391,7 +1421,7 @@ p <- ggplot() +
   theme_classic() +
   theme(legend.position = "bottom")
 
-p
+# p
 
 repro_g$group <- repro_g$Rating_2
 
@@ -1450,7 +1480,7 @@ p2 <- ggplot() +
   theme_classic() +
   theme(legend.position = "bottom")
 
-p2
+# p2
 
 p3 <- p2 | p
 p3
@@ -1458,791 +1488,11 @@ p3
 # Go back and make another map of CA SPEI, maybe even side by side with precip
 
 ggsave(here::here("figs/grass_model_slopes.jpg"),p3, width = 7, height = 4)
-
-
-
-
 ```
 
+## Q4: Traits
 
-#### Model: RV
-Model looking at what creates the ratio of log r and log v. Use species as random effect, and use that to determine best graph
-
-```{r}
-str(repro_fill_hi_n_narm)
-
-repro_fill_hi_n_narm <- repro_fill_hi_n_narm %>% 
-  mutate(rating.n = (
-    case_when(
-      Rating == "Native" ~ 1
-      , Rating == "Non-native" ~ 2
-      , Rating == "Limited" ~ 3
-      , Rating == "Moderate" ~ 4
-      , Rating == "High" ~ 5
-    )
-  ))
-
-m0 <- glm(RV ~ 1, family = gaussian, data = repro_fill_hi_n_narm)
-
-m1 <- glmer(RV ~ 1 + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
-
-m2 <- glmer(RV ~ 1 + (1|Block/Shelter/Plot), family = gaussian, data = repro_fill_hi_n_narm)
-
-m3 <- glmer(RV ~ 1 + (1|Block) + (1|Treatment), family = gaussian, data = repro_fill_hi_n_narm)
-
-m4 <- glmer(RV ~ 1 + (1|Block/Shelter/Plot) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
-
-m5 <- glmer(RV ~ 1 + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
-
-m6 <- glmer(RV ~ 1 + (1|Block) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
-
-ICtab(m0,m1,m2,m3,m4,m5,m6)
-
-m5 <- glmer(RV ~ 1 + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
-
-m_ratingxpop <- glmer(RV ~ Rating*Population + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm)
-
-ICtab(m5
-      ,m_ratingxpop)
-lrtest(m_ratingxpop, m5)
-Anova(m_ratingxpop)
-summary(m_ratingxpop)
-
-# try additive terms
-
-repro_sub <- repro_fill_hi_n_narm %>% 
-  select(
-    RV,
-    Native_Status,
-    Rating,
-    Rating_2,
-    rating.n,
-    Growth_Habit,
-    Growth_2,
-    Population,
-    Precip_mm,
-    precip_dif,
-    spei_avg
-  )
-
-# Initialize an empty model
-forward_model <- lm(RV ~ ., data = repro_sub)
-
-# Forward stepwise regression
-forward_model <- step(forward_model, direction = "forward", scope = formula(~ .))
-
-# Initialize a model with all predictors
-backward_model <- lm(RV ~ ., data = repro_sub)
-
-# Backward stepwise regression
-#backward_model <- step(backward_model, direction = "backward")
-
-# Initialize a model with all predictors
-#both_model <- lm(RV ~ ., data = repro_sub)
-
-# Both-direction stepwise regression
-#both_model <- step(both_model, direction = "both")
-
-# Check for overdispersion
-# deviance/residual df
-
-
-### Come back to this
-### Kind of a mess
-
-```
-
-#### Model: Fl Mass
-
-This is kind of a mess. The best models are speip, speip_growthp, growthp, and speip_growthx.
-Growthp gets the closest to being "normal". repro_fill_hi_n_narm_i has three influential observations removed
-
-```{r}
-str(repro_fill_hi_n_narm)
-
-repro_fill_hi_n_narm_i <- repro_fill_hi_n_narm
-
-m0 <- glm(total_fl_mass_ln ~ 1, family = gaussian, data = repro_fill_hi_n_narm_i)
-
-m1 <- glmer(total_fl_mass_ln ~ 1 + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm_i)
-
-m2 <- glmer(total_fl_mass_ln ~ 1 + (1|Plot), family = gaussian, data = repro_fill_hi_n_narm_i)
-
-m3 <- glmer(total_fl_mass_ln ~ 1 + (1|Block) + (1|Treatment), family = gaussian, data = repro_fill_hi_n_narm_i)
-
-m4 <- glmer(total_fl_mass_ln ~ 1 + (1|Plot) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm_i)
-
-m5 <- glmer(total_fl_mass_ln ~ 1 + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm_i)
-
-m6 <- glmer(total_fl_mass_ln ~ 1 + (1|Block) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm_i)
-
-m7 <- glmer(total_fl_mass_ln ~ 1 + (1|Block) + (1|Treatment) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm_i)
-
-m8 <- glmer(total_fl_mass_ln ~ 1 + (1|Plot) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm_i)
-
-ICtab(m0,m1,m2,m3,m4,m5,m6,m7,m8)
-
-mV <- glmer(total_fl_mass_ln ~ Veg_Mass_ln + (1|Plot) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm_i)
-
-m_native <- glmer(total_fl_mass_ln ~ Native_Status*Veg_Mass_ln + (1|Plot) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm_i)
-
-m_rating <- glmer(total_fl_mass_ln ~ Rating*Veg_Mass_ln + (1|Plot) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm_i)
-  
-m_growth <- glmer(total_fl_mass_ln ~ Growth_Habit*Veg_Mass_ln + (1|Plot) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm_i)
-
-m_rating.n <- glmer(total_fl_mass_ln ~ rating.n*Veg_Mass_ln + (1|Plot) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm_i)
-
-m_growth2 <- glmer(total_fl_mass_ln ~ Growth_2*Veg_Mass_ln + (1|Plot) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm_i)
-
-m_rating2 <- glmer(total_fl_mass_ln ~ Growth_2*Veg_Mass_ln + (1|Plot) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm_i)
-
-m_nativexgrowth <- glmer(total_fl_mass_ln ~ Native_Status*Growth_Habit*Veg_Mass_ln + (1|Plot) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm_i)
-
-m_ratingxgrowth <- glmer(total_fl_mass_ln ~ Rating*Growth_Habit*Veg_Mass_ln + (1|Plot) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm_i)
-
-m_rating.nxgrowth <- glmer(total_fl_mass_ln ~ rating.n*Growth_Habit*Veg_Mass_ln + (1|Plot) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm_i)
-
-m_rating2xgrowth <- glmer(total_fl_mass_ln ~ Rating_2*Growth_Habit*Veg_Mass_ln + (1|Plot) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm_i)
-
-m_rating2xgrowth2 <- glmer(total_fl_mass_ln ~ Rating_2*Growth_2*Veg_Mass_ln + (1|Plot) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm_i)
-
-m_nativexgrowth2 <- glmer(total_fl_mass_ln ~ Native_Status*Growth_2*Veg_Mass_ln + (1|Plot) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm_i)
-
-m_nativepgrowth <- glmer(total_fl_mass_ln ~ Native_Status + Growth_Habit + Veg_Mass_ln + (1|Plot) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm_i)
-
-m_nativep <- glmer(total_fl_mass_ln ~ Native_Status + Veg_Mass_ln + (1|Plot) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm_i)
-
-m_growthp <- glmer(total_fl_mass_ln ~ Growth_Habit + Veg_Mass_ln + (1|Plot) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm_i)
-
-m_popp <- glmer(total_fl_mass_ln ~ Population + Veg_Mass_ln + (1|Plot) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm_i)
-
-m_popx <- glmer(total_fl_mass_ln ~ Population*Veg_Mass_ln + (1|Plot) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm_i)
-
-m_precipp <- glmer(total_fl_mass_ln ~ Precip_mm + Veg_Mass_ln + (1|Plot) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm_i)
-
-m_precipx <- glmer(total_fl_mass_ln ~ Precip_mm*Veg_Mass_ln + (1|Plot) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm_i)
-
-m_pdifp <- glmer(total_fl_mass_ln ~ precip_dif + Veg_Mass_ln + (1|Plot) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm_i)
-
-m_pdifx <- glmer(total_fl_mass_ln ~ precip_dif*Veg_Mass_ln + (1|Plot) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm_i)
-
-m_speip <- glmer(total_fl_mass_ln ~ spei_avg + Veg_Mass_ln + (1|Plot) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm_i)
-
-m_speix <- glmer(total_fl_mass_ln ~ spei_avg*Veg_Mass_ln + (1|Plot) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm_i)
-
-m_speip_growthx <- glmer(total_fl_mass_ln ~ spei_avg + Growth_Habit*Veg_Mass_ln + (1|Plot) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm_i)
-
-m_speip_growthp <- glmer(total_fl_mass_ln ~ spei_avg + Growth_Habit + Veg_Mass_ln + (1|Plot) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm_i)
-
-ICtab(m8
-      ,mV
-      ,m_native
-      ,m_rating
-      ,m_growth
-      ,m_rating.n
-      ,m_growth2
-      ,m_rating2
-      ,m_nativexgrowth
-      ,m_ratingxgrowth
-      ,m_rating.nxgrowth
-      ,m_rating2xgrowth
-      ,m_rating2xgrowth2
-      ,m_nativexgrowth2
-      ,m_nativepgrowth
-      ,m_nativep
-      ,m_growthp
-      ,m_popp
-      ,m_popx
-      ,m_precipp
-      ,m_precipx
-      ,m_pdifp
-      ,m_pdifx
-      ,m_speip
-      ,m_speix
-      ,m_speip_growthx
-      ,m_speip_growthp)
-anova(m_speip_growthx, mV)
-anova(m_speip, mV)
-anova(m_native, mV)
-Anova(m_speip_growthx)
-summary(m_speip_growthx)
-
-#mall
-
-# Check assumptions
-# 1 Correct mean structure
-
-# 2 Normally distributed residuals
-res <- resid(m_speip_growthx)
-qqnorm(res)
-qqline(res)
-
-library(DHARMa)
-
-sim_res <- simulateResiduals(m_speip_growthx)
-plot(sim_res)
-testUniformity(sim_res)
-
-
-plot(fitted(m_speip_growthx), resid(m_speip_growthx))
-abline(h = 0, lty = 2)
-
-# kind of a strong s shape...
-
-# 3 Homescedascity
-plot(fitted(m_speip_growthx), resid(m_speip_growthx))
-abline(h = 0)
-
-boxplot(resid(m_speip_growthx) ~ spei_avg,
-        data = repro_fill_hi_n_narm)
-
-boxplot(resid(m_speip_growthx) ~ Growth_Habit,
-        data = repro_fill_hi_n_narm)
-# No funnel shape but forbs have a larger spread
-
-# 4 independence
-boxplot(resid(m_speip_growthx) ~ Plot,
-        data = repro_fill_hi_n_narm,
-        las = 2,
-        outline = FALSE)
-abline(h = 0, lty = 2)
-# no clear structure
-
-# 5 Random effects are normally distributed
-ranef_vals <- ranef(m_speip, condVar = TRUE)
-qqnorm(ranef_vals$Scientific_Name[,1])
-qqline(ranef_vals$Scientific_Name[,1])
-# quite skewy
-
-#qqnorm(ranef_vals$Block[,1])
-#qqline(ranef_vals$Block[,1])
-
-#qqnorm(ranef_vals$Shelter[,1])
-#qqline(ranef_vals$Shelter[,1])
-# a bit skewy?
-
-qqnorm(ranef_vals$Plot[,1])
-qqline(ranef_vals$Plot[,1])
-
-#qqnorm(ranef_vals$Population[,1])
-#qqline(ranef_vals$Population[,1])
-# skewy
-
-# 6 Random effects independent of fixed effects
-## species aren't systematically related to veg mass ln (I think they are)
-# May need random slopes?
-
-# 7 No singularity
-isSingular(m_speip_growthx)
-# it's true because one or more variance components = 0
-summary(m_speip_growthx)
-# Plot:Shelter:Block is 0
-
-# 8 no severe multicollinearity
-car::vif(lm(total_fl_mass_ln ~ spei_avg + Growth_Habit*Veg_Mass_ln, data = repro_fill_hi_n_narm_i))
-# all good because all less than 3
-
-# 9 no influential points
-library(influence.ME)
-#influence.ME::influence(m_speip_growthp, obs = TRUE)
-#infl <- influence(m_speip, obs = TRUE)
-#cd <- cooks.distance(infl)
-#cd_df <- data.frame(
-#  row = seq_along(cd),
-#  cooks_d = cd
-#)
-#p <- length(fixef(m_speip))   # number of fixed effects
-#n <- nobs(m_speip)
-
-#cd_thresh <- 4 / (n - p)
-
-#high_infl <- cd_df[cd_df$cooks_d > cd_thresh, ]
-#high_infl_2 <- cd_df[order(-cd_df$cooks_d), ][1:20, ]
-
-#high_infl_m <- merge(
-#  high_infl,
-#  repro_fill_hi_n_narm,
- # by.x = "row",
-#  by.y = "row.names"
-#)
-# This gives us 14 plants with high influence
-# Try removing plants with high influence
-
-#high_infl_m <- high_infl_m %>% 
-#  filter(cooks_d > 0.099)
-
-#repro_fill_hi_n_narm_i <- repro_fill_hi_n_narm %>% 
-#  filter(!Plant_ID %in% high_infl_m$Plant_ID)
-
-slopes <- emtrends(m_growth, ~ Growth_Habit, var = "Veg_Mass_ln")
-slopes
-
-slopes.df <- summary(slopes)
-
-ggplot(slopes.df, aes(x = Growth_Habit, y = Veg_Mass_ln.trend
-                      )) + 
-  geom_bar(position = position_dodge(), stat = "identity", fill = "#21908CFF") +
-  # geom_hline(yintercept = 1, linetype = "dashed") +
-  geom_errorbar(aes(ymin=Veg_Mass_ln.trend-SE, ymax=Veg_Mass_ln.trend+SE), width=0.3, colour="#FDE725FF", alpha=0.9, size=1.3, position = position_dodge(0.9)) +
-  theme_classic() +
-  labs(x = "Growth Habit",
-       y = "RV Slope",
-       fill = "")
-
-#ggsave(here::here("figs/slopes_growth_pred.jpg"))
-
-```
-
-Best to stop here and come back to it. Now work on bringing in functional traits and cleaning those up then working on PCA.
-
-Maybe I could divide it up between non-native grasses and forbs, the lack of variation in the groups could be effecting things. I wonder if native status would hold any weight for forbs. and grasses maybe degree of invasiveness would play a bigger role?
-
-#### Forbs
-```{r}
-str(repro_fill_hi_n_narm)
-
-repro_fill_hi_n_narm_f <- repro_fill_hi_n_narm %>% 
-  filter(Growth_Habit == "Forb")
-
-m0 <- glm(total_fl_mass_ln ~ 1, family = gaussian, data = repro_fill_hi_n_narm_f)
-
-m1 <- glmer(total_fl_mass_ln ~ 1 + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm_f)
-
-m2 <- glmer(total_fl_mass_ln ~ 1 + (1|Plot), family = gaussian, data = repro_fill_hi_n_narm_f)
-
-m3 <- glmer(total_fl_mass_ln ~ 1 + (1|Block) + (1|Treatment), family = gaussian, data = repro_fill_hi_n_narm_f)
-
-m4 <- glmer(total_fl_mass_ln ~ 1 + (1|Plot) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm_f)
-
-m5 <- glmer(total_fl_mass_ln ~ 1 + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm_f)
-
-m6 <- glmer(total_fl_mass_ln ~ 1 + (1|Block) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm_f)
-
-m7 <- glmer(total_fl_mass_ln ~ 1 + (1|Block) + (1|Treatment) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm_f)
-
-m8 <- glmer(total_fl_mass_ln ~ 1 + (1|Plot) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm_f)
-
-ICtab(m0,m1,m2,m3,m4,m5,m6,m7,m8)
-
-mV <- glmer(total_fl_mass_ln ~ Veg_Mass_ln + (1|Plot) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm_f)
-
-m_native <- glmer(total_fl_mass_ln ~ Native_Status*Veg_Mass_ln + (1|Plot) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm_f)
-
-m_rating <- glmer(total_fl_mass_ln ~ Rating*Veg_Mass_ln + (1|Plot) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm_f)
-  
-m_rating.n <- glmer(total_fl_mass_ln ~ rating.n*Veg_Mass_ln + (1|Plot) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm_f)
-
-m_growth2 <- glmer(total_fl_mass_ln ~ Growth_2*Veg_Mass_ln + (1|Plot) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm_f)
-
-m_rating2 <- glmer(total_fl_mass_ln ~ Rating_2*Veg_Mass_ln + (1|Plot) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm_f)
-
-m_nativexgrowth <- glmer(total_fl_mass_ln ~ Native_Status*Growth_2*Veg_Mass_ln + (1|Plot) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm_f)
-
-m_ratingxgrowth <- glmer(total_fl_mass_ln ~ Rating*Growth_2*Veg_Mass_ln + (1|Plot) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm_f)
-
-m_rating.nxgrowth <- glmer(total_fl_mass_ln ~ rating.n*Growth_2*Veg_Mass_ln + (1|Plot) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm_f)
-
-m_rating2xgrowth <- glmer(total_fl_mass_ln ~ Rating_2*Growth_2*Veg_Mass_ln + (1|Plot) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm_f)
-
-m_nativepgrowth <- glmer(total_fl_mass_ln ~ Native_Status + Growth_2 + Veg_Mass_ln + (1|Plot) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm_f)
-
-m_nativep <- glmer(total_fl_mass_ln ~ Native_Status + Veg_Mass_ln + (1|Plot) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm_f)
-
-m_growthp <- glmer(total_fl_mass_ln ~ Growth_2 + Veg_Mass_ln + (1|Plot) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm_f)
-
-m_popp <- glmer(total_fl_mass_ln ~ Population + Veg_Mass_ln + (1|Plot) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm_f)
-
-m_popx <- glmer(total_fl_mass_ln ~ Population*Veg_Mass_ln + (1|Plot) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm_f)
-
-m_precipp <- glmer(total_fl_mass_ln ~ Precip_mm + Veg_Mass_ln + (1|Plot) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm_f)
-
-m_precipx <- glmer(total_fl_mass_ln ~ Precip_mm*Veg_Mass_ln + (1|Plot) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm_f)
-
-m_pdifp <- glmer(total_fl_mass_ln ~ precip_dif + Veg_Mass_ln + (1|Plot) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm_f)
-
-m_pdifx <- glmer(total_fl_mass_ln ~ precip_dif*Veg_Mass_ln + (1|Plot) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm_f)
-
-m_speip <- glmer(total_fl_mass_ln ~ spei_avg + Veg_Mass_ln + (1|Plot) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm_f)
-
-m_speix <- glmer(total_fl_mass_ln ~ spei_avg*Veg_Mass_ln + (1|Plot) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm_f)
-
-m_speip_growthx <- glmer(total_fl_mass_ln ~ spei_avg + Growth_2*Veg_Mass_ln + (1|Plot) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm_f)
-
-m_speip_growthp <- glmer(total_fl_mass_ln ~ spei_avg + Growth_2 + Veg_Mass_ln + (1|Plot) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm_f)
-
-ICtab(m8
-      ,mV
-      ,m_native
-      ,m_rating
-      ,m_rating.n
-      ,m_growth2
-      ,m_rating2
-      ,m_nativexgrowth
-      ,m_ratingxgrowth
-      ,m_rating.nxgrowth
-      ,m_rating2xgrowth
-      ,m_nativepgrowth
-      ,m_nativep
-      ,m_growthp
-      ,m_popp
-      ,m_popx
-      ,m_precipp
-      ,m_precipx
-      ,m_pdifp
-      ,m_pdifx
-      ,m_speip
-      ,m_speix
-      ,m_speip_growthx
-      ,m_speip_growthp)
-anova(m_growthp, mV)
-anova(m_speip, mV)
-anova(m_native, mV)
-Anova(m_speip_growthx)
-summary(m_speip_growthx)
-
-#mall
-
-# Check assumptions
-# 1 Correct mean structure
-
-# 2 Normally distributed residuals
-res <- resid(mV)
-qqnorm(res)
-qqline(res)
-
-library(DHARMa)
-
-sim_res <- simulateResiduals(mV)
-plot(sim_res)
-testUniformity(sim_res)
-
-
-plot(fitted(mV), resid(mV))
-abline(h = 0, lty = 2)
-
-# kind of a strong s shape...
-
-# 3 Homescedascity
-plot(fitted(mV), resid(mV))
-abline(h = 0)
-
-#boxplot(resid(m_speip_growthx) ~ spei_avg,
-#        data = repro_fill_hi_n_narm)
-
-#boxplot(resid(m_speip_growthx) ~ Growth_Habit,
-#        data = repro_fill_hi_n_narm)
-# No funnel shape but forbs have a larger spread
-
-# 4 independence
-#boxplot(resid(m_speip_growthx) ~ Plot,
-#        data = repro_fill_hi_n_narm,
-#        las = 2,
-#        outline = FALSE)
-#abline(h = 0, lty = 2)
-# no clear structure
-
-# 5 Random effects are normally distributed
-ranef_vals <- ranef(mV, condVar = TRUE)
-qqnorm(ranef_vals$Scientific_Name[,1])
-qqline(ranef_vals$Scientific_Name[,1])
-# quite skewy
-
-#qqnorm(ranef_vals$Block[,1])
-#qqline(ranef_vals$Block[,1])
-
-#qqnorm(ranef_vals$Shelter[,1])
-#qqline(ranef_vals$Shelter[,1])
-# a bit skewy?
-
-qqnorm(ranef_vals$Plot[,1])
-qqline(ranef_vals$Plot[,1])
-
-#qqnorm(ranef_vals$Population[,1])
-#qqline(ranef_vals$Population[,1])
-# skewy
-
-# 6 Random effects independent of fixed effects
-## species aren't systematically related to veg mass ln (I think they are)
-# May need random slopes?
-
-# 7 No singularity
-isSingular(mV)
-# it's true because one or more variance components = 0
-summary(mV)
-# Plot:Shelter:Block is 0
-
-# 8 no severe multicollinearity
-# car::vif(lm(total_fl_mass_ln ~ Veg_Mass_ln, data = repro_fill_hi_n_narm_f))
-# all good because all less than 3
-
-# 9 no influential points
-library(influence.ME)
-influence.ME::influence(mV, obs = TRUE)
-infl <- influence(mV, obs = TRUE)
-cd <- cooks.distance(infl)
-cd_df <- data.frame(
-  row = seq_along(cd),
-  cooks_d = cd
-)
-p <- length(fixef(mV))   # number of fixed effects
-n <- nobs(mV)
-
-cd_thresh <- 4 / (n - p)
-
-high_infl <- cd_df[cd_df$cooks_d > cd_thresh, ]
-high_infl_2 <- cd_df[order(-cd_df$cooks_d), ][1:20, ]
-
-high_infl_m <- merge(
-  high_infl,
-  repro_fill_hi_n_narm_f,
-  by.x = "row",
-  by.y = "row.names"
-)
-# This gives us 14 plants with high influence
-# Try removing plants with high influence
-
-#high_infl_m <- high_infl_m %>% 
-#  filter(cooks_d > 0.099)
-
-#repro_fill_hi_n_narm_i <- repro_fill_hi_n_narm %>% 
-#  filter(!Plant_ID %in% high_infl_m$Plant_ID)
-
-slopes <- emtrends(m_growth, ~ Growth_Habit, var = "Veg_Mass_ln")
-slopes
-
-slopes.df <- summary(slopes)
-
-ggplot(slopes.df, aes(x = Growth_Habit, y = Veg_Mass_ln.trend
-                      )) + 
-  geom_bar(position = position_dodge(), stat = "identity", fill = "#21908CFF") +
-  # geom_hline(yintercept = 1, linetype = "dashed") +
-  geom_errorbar(aes(ymin=Veg_Mass_ln.trend-SE, ymax=Veg_Mass_ln.trend+SE), width=0.3, colour="#FDE725FF", alpha=0.9, size=1.3, position = position_dodge(0.9)) +
-  theme_classic() +
-  labs(x = "Growth Habit",
-       y = "RV Slope",
-       fill = "")
-
-#ggsave(here::here("figs/slopes_growth_pred.jpg"))
-
-```
-
-#### Grasses
-```{r}
-str(repro_fill_hi_n_narm)
-
-repro_fill_hi_n_narm_g <- repro_fill_hi_n_narm %>% 
-  filter(Growth_Habit == "Grass") %>% 
-  filter(!Plant_ID %in% c("I8.BRODIA.1" # 2 pls
-                          ,"B2.AVEBAR.1" # 2 pls
-                          ,"C1.AVEBAR.1" # 2 pls
-                          #,"F5.BROHOR.1" # high influence
-                          #,"I4.AVEBAR.1" # high influence
-                          #,"A2.AVEBAR.1" # high influence
-                         # ,"J5.BRODIA.1" # high influence
-                          ))
-
-which(repro_fill_hi_n_narm_g$Plant_ID == "I8.BRODIA.1")
-which(repro_fill_hi_n_narm_g$Plant_ID == "B2.AVEBAR.1")
-which(repro_fill_hi_n_narm_g$Plant_ID == "C1.AVEBAR.1")
-
-m0 <- glm(total_fl_mass_ln ~ 1, family = gaussian, data = repro_fill_hi_n_narm_g)
-
-m1 <- glmer(total_fl_mass_ln ~ 1 + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm_g)
-
-m2 <- glmer(total_fl_mass_ln ~ 1 + (1|Plot), family = gaussian, data = repro_fill_hi_n_narm_g)
-
-m3 <- glmer(total_fl_mass_ln ~ 1 + (1|Block) + (1|Treatment), family = gaussian, data = repro_fill_hi_n_narm_g)
-
-m4 <- glmer(total_fl_mass_ln ~ 1 + (1|Plot) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm_g)
-
-m5 <- glmer(total_fl_mass_ln ~ 1 + (1|Block) + (1|Treatment) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm_g)
-
-m6 <- glmer(total_fl_mass_ln ~ 1 + (1|Block) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm_g)
-
-m7 <- glmer(total_fl_mass_ln ~ 1 + (1|Block) + (1|Treatment) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm_g)
-
-m8 <- glmer(total_fl_mass_ln ~ 1 + (1|Plot) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm_g)
-
-ICtab(m0,m1,m2,m3,m4,m5,m6,m7,m8)
-
-mV <- glmer(total_fl_mass_ln ~ Veg_Mass_ln + (1|Plot) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm_g)
-
-m_rating <- glmer(total_fl_mass_ln ~ Rating*Veg_Mass_ln + (1|Plot) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm_g)
-  
-m_rating.n <- glmer(total_fl_mass_ln ~ rating.n*Veg_Mass_ln + (1|Plot) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm_g)
-
-m_rating2 <- glmer(total_fl_mass_ln ~ Rating_2*Veg_Mass_ln + (1|Plot) + (1|Scientific_Name) + (1|Population), family = gaussian, data = repro_fill_hi_n_narm_g)
-
-m_popp <- glmer(total_fl_mass_ln ~ Population + Veg_Mass_ln + (1|Plot) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm_g)
-
-m_popx <- glmer(total_fl_mass_ln ~ Population*Veg_Mass_ln + (1|Plot) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm_g)
-
-m_precipp <- glmer(total_fl_mass_ln ~ Precip_mm + Veg_Mass_ln + (1|Plot) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm_g)
-
-m_precipx <- glmer(total_fl_mass_ln ~ Precip_mm*Veg_Mass_ln + (1|Plot) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm_g)
-
-m_pdifp <- glmer(total_fl_mass_ln ~ precip_dif + Veg_Mass_ln + (1|Plot) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm_g)
-
-m_pdifx <- glmer(total_fl_mass_ln ~ precip_dif*Veg_Mass_ln + (1|Plot) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm_g)
-
-m_speip <- glmer(total_fl_mass_ln ~ spei_avg + Veg_Mass_ln + (1|Plot) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm_g)
-
-m_speipxrating2 <- glmer(total_fl_mass_ln ~ spei_avg + Rating_2*Veg_Mass_ln + (1|Plot) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm_g)
-
-m_speipxrating <- glmer(total_fl_mass_ln ~ spei_avg + Rating*Veg_Mass_ln + (1|Plot) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm_g)
-
-m_speix <- glmer(total_fl_mass_ln ~ spei_avg*Veg_Mass_ln + (1|Plot) + (1|Scientific_Name), family = gaussian, data = repro_fill_hi_n_narm_g)
-
-ICtab(m8
-      ,mV
-      ,m_rating
-      ,m_rating.n
-      ,m_rating2
-      ,m_popp
-      ,m_popx
-      ,m_precipp
-      ,m_precipx
-      ,m_pdifp
-      ,m_pdifx
-      ,m_speip
-      ,m_speix
-      ,m_speipxrating2
-      ,m_speipxrating)
-anova(m_speipxrating2, mV)
-anova(m_speip, mV)
-```
-
-So the SPEI effect seems to be driven by the grasses. Whereas forbs are simply dependent on vegetative mass.
-
-```{r}
-#mall
-
-# Check assumptions
-# 1 Correct mean structure
-
-# 2 Normally distributed residuals
-res <- resid(m_speip)
-qqnorm(res)
-qqline(res)
-
-library(DHARMa)
-
-sim_res <- simulateResiduals(m_speip)
-plot(sim_res)
-testUniformity(sim_res)
-
-
-plot(fitted(m_speip), resid(m_speip))
-abline(h = 0, lty = 2)
-
-# kind of a strong s shape...
-
-# 3 Homescedascity
-plot(fitted(m_speip), resid(m_speip))
-abline(h = 0)
-
-#boxplot(resid(m_speip) ~ spei_avg,
-#        data = repro_fill_hi_n_narm)
-
-#boxplot(resid(m_speip) ~ Growth_Habit,
-#        data = repro_fill_hi_n_narm)
-# No funnel shape but forbs have a larger spread
-
-# 4 independence
-#boxplot(resid(m_speip_growthx) ~ Plot,
-#        data = repro_fill_hi_n_narm,
-#        las = 2,
-#        outline = FALSE)
-#abline(h = 0, lty = 2)
-# no clear structure
-
-# 5 Random effects are normally distributed
-ranef_vals <- ranef(m_speip, condVar = TRUE)
-qqnorm(ranef_vals$Scientific_Name[,1])
-qqline(ranef_vals$Scientific_Name[,1])
-# quite skewy
-
-#qqnorm(ranef_vals$Block[,1])
-#qqline(ranef_vals$Block[,1])
-
-#qqnorm(ranef_vals$Shelter[,1])
-#qqline(ranef_vals$Shelter[,1])
-# a bit skewy?
-
-qqnorm(ranef_vals$Plot[,1])
-qqline(ranef_vals$Plot[,1])
-
-#qqnorm(ranef_vals$Population[,1])
-#qqline(ranef_vals$Population[,1])
-# skewy
-
-# 6 Random effects independent of fixed effects
-## species aren't systematically related to veg mass ln (I think they are)
-# May need random slopes?
-
-# 7 No singularity
-isSingular(m_speip)
-# it's true because one or more variance components = 0
-summary(m_speip)
-# Plot:Shelter:Block is 0
-
-# 8 no severe multicollinearity
-car::vif(lm(total_fl_mass_ln ~ spei_avg + Veg_Mass_ln, data = repro_fill_hi_n_narm_g))
-# all good because all less than 3
-
-# 9 no influential points
-library(influence.ME)
-influence.ME::influence(m_speip, obs = TRUE)
-infl <- influence(m_speip, obs = TRUE)
-cd <- cooks.distance(infl)
-cd_df <- data.frame(
-  row = seq_along(cd),
-  cooks_d = cd
-)
-p <- length(fixef(m_speip))   # number of fixed effects
-n <- nobs(m_speip)
-
-cd_thresh <- 4 / (n - p)
-
-high_infl <- cd_df[cd_df$cooks_d > cd_thresh, ]
-high_infl_2 <- cd_df[order(-cd_df$cooks_d), ][1:20, ]
-
-high_infl_m <- merge(
-  high_infl,
-  repro_fill_hi_n_narm_g,
-  by.x = "row",
-  by.y = "row.names"
-)
-# This gives us 14 plants with high influence
-# Try removing plants with high influence
-
-#high_infl_m <- high_infl_m %>% 
-#  filter(cooks_d > 0.099)
-
-#repro_fill_hi_n_narm_i <- repro_fill_hi_n_narm %>% 
-#  filter(!Plant_ID %in% high_infl_m$Plant_ID)
-
-slopes <- emtrends(m_speip, ~ spei_avg, var = "Veg_Mass_ln")
-slopes
-
-slopes.df <- summary(slopes)
-
-ggplot(slopes.df, aes(x = spei_avg, y = Veg_Mass_ln.trend
-                      )) + 
-  geom_bar(position = position_dodge(), stat = "identity", fill = "#21908CFF") +
-  # geom_hline(yintercept = 1, linetype = "dashed") +
-  geom_errorbar(aes(ymin=Veg_Mass_ln.trend-SE, ymax=Veg_Mass_ln.trend+SE), width=0.3, colour="#FDE725FF", alpha=0.9, size=1.3, position = position_dodge(0.9)) +
-  theme_classic() +
-  labs(x = "Growth Habit",
-       y = "RV Slope",
-       fill = "")
-
-#ggsave(here::here("figs/slopes_growth_pred.jpg"))
-```
-
-
-
-## Q3: Traits
+Q4: How do aboveground traits associate with reproductive allocation and reproductive scaling?
 
 First read in all the traits we need and clean them up
 
@@ -2253,6 +1503,7 @@ First read in all the traits we need and clean them up
 -   WUE 
 -   Height
 -   Leaf Nitrogen
+-   C:N
 -   Date of first flower
 -   Seed Mass
 -   Mid season biomass partial
@@ -2265,9 +1516,9 @@ First read in all the traits we need and clean them up
 ## Relative Growth Rate
 
 ### Clean up dataset
-
 ```{r}
 #| eval: false
+#| echo: false
 rgr <- read_csv(here::here("data/Relative Growth Rate 2023.csv"))
 plots <- read_csv(here::here("data/Plot_info.csv"))
 str(rgr)
@@ -2367,7 +1618,6 @@ y_outliers <- rgr_avgs[which(rgr_avgs$canopy_y > rgr_avgs$y_max | rgr_avgs$canop
 ```
 
 ### Create variables
-
 ```{r}
 #| eval: false
 
@@ -2449,16 +1699,12 @@ rgr_hlv2 <- rgr_hlv %>%
 
 write_csv(rgr_hlv2,here::here("data/RGR_clean.csv"))
 ```
-
 ### Exploratory Graphs
+
 We have height, leaf number, area, and volume
 
 ```{r}
 rgr_hlv2 <- read_csv(here::here("data/RGR_clean.csv"))
-
-head(rgr_hlv2)
-str(rgr_hlv2)
-
 
 rgr_hlv2_long <- rgr_hlv2 %>% 
   pivot_longer(cols = c("rgr_h_FM":"rgr_v_MJ"),
@@ -2479,6 +1725,7 @@ Highest growth rate for volume is Feb-Mar (0.0957), then Mar-Apr (0.0827). For h
 Remember we didn't know who each grass was in February. So might need to throw those out OR separate by growth habit.
 
 ### Select Reference times
+
 One predictive variable of allometric slope might be relative growth rate timing and/or maximum relative growth rate. 
 
 ### Explore RGR
@@ -2590,7 +1837,12 @@ write_csv(rgr_v,here::here("data/RGR_volume.csv"))
 ```
 
 Start graphing, what do I want to see? growth rate by rating or native status across months
+
 ```{r}
+#| message: false
+#| warning: false
+#| eval: false
+#| echo: false
 # Order Invasive rating: Native, Non-native, Limited, Moderate, High
 # Order Month rates
 rgr_h <- read_csv(here::here("data/RGR_height.csv"))
@@ -2625,9 +1877,14 @@ ggplot(rgr_v, aes(x=var_mo, y=rate, fill=Native_Status)) +
 
 
 ```
+
 Should almost look at each of these graphs by population, so it's limited to community. It's possible an invasive from Angelo has the same growth rate as a native from santa barbara.
 
 ```{r}
+#| warning: false
+#| message: false
+#| echo: false
+#| eval: false
 rgr_h_ACR <- rgr_h %>% 
   filter(Population == "ANGELO")
 
@@ -2683,6 +1940,7 @@ Remember we didn't know who each grass was in February. So might need to throw t
 
 ```{r}
 #| eval: false
+#| echo: false
 #| warning: false
 #| message: false
 # how to tell it the header and which rows to skip
@@ -2719,6 +1977,7 @@ GALPAR, Holvir, miccal not working -- fixed, just needed to adjust minimum size.
 
 ```{r}
 #| eval: false
+#| echo: false
 acmpar = run.ij(set.directory = "/Users/brookewainwright/Documents/GitHub_Projects/repro-grow/data/Licor Leaf Area/ACMPAR",
               distance.pixel = 355,
               known.distance = 3,
@@ -2978,6 +2237,8 @@ Double check that the numbers of values per species aligns with number of images
 Then merge with Licor dataset by plant ID.
 
 ```{r}
+#| eval: false
+
 # Separate date from plant ID, make in date format
 leaf_licor_area <- read_csv(here::here("data/leaf_licor_area.csv"))
 head(leaf_licor_area)
@@ -3076,11 +2337,15 @@ licor.na <- licor2 %>%
     , Plant_ID
   )
 
+licor2$E_mmol <- licor2$E*1000
+
+licor2$WUE_new <- licor2$A/licor2$E_mmol
+
 # multiply focal data by leaf area fraction
 licor2$leaf_ratio <- 6/licor2$total.leaf.area
 licor2 <- licor2 %>% 
   filter(!is.na(total.leaf.area)) %>% # filter NAs for now
-  mutate(WUE_adj = leaf_ratio*WUE,
+  mutate(WUE_adj = leaf_ratio*WUE_new,
          E_adj = leaf_ratio*as.numeric(E),
          A_adj = leaf_ratio*as.numeric(A),
          Ci_adj = leaf_ratio*as.numeric(Ci),
@@ -3112,13 +2377,28 @@ plots <- read_csv(here::here("data/Plot_info.csv"))
 licor4 <- left_join(licor3,plots, by = join_by(Plot))
 spp <- read_csv(here::here("data/Species Codes.csv"))
 licor5 <- left_join(licor4,spp, by = join_by(Sp_Code))
+
+write_csv(licor5,here::here("data/licor5.csv"))
 ```
 
-
-
 ### Explore licor
+
 ```{r}
+#| echo: false
+#| message: false
+#| warning: false
+
+licor5 <- read_csv(here::here("data/licor5.csv"))
+
 summary(licor5)
+hist(licor5$WUE_adj_av)
+licor5[which(licor5$WUE_adj_av > 50),"Plant_ID"]
+
+licor5b <- licor5 %>% 
+  filter(!WUE_adj_av > 50)
+
+licor5 <- licor5b
+
 # okay some things are way off with WUE, and others -- will need to deal with outliers at some point
 
 p <- ggplot(licor5, aes(x=Sp_Code, y=A_adj_av)) +
@@ -3143,6 +2423,7 @@ At some point I need to do a correlation table with all the traits.
 ## Leaf Mass Area
 ```{r}
 #| eval: false
+#| echo: false
 acmpar = run.ij(set.directory = "/Users/brookewainwright/Documents/GitHub_Projects/repro-grow/data/LMA Leaf Images/ACMPAR",
               distance.pixel = 355,
               known.distance = 3,
@@ -3378,6 +2659,7 @@ write_csv(lma_lf_area, here::here("data/LMA_lf_area.csv"))
 
 
 ```{r}
+
 lf_area <- read_csv(here::here("data/LMA_lf_area.csv"))
 # There may be errors in this -- not sure how to check
 
@@ -3485,6 +2767,7 @@ LMA[which(duplicated(LMA$Plant_ID)),]
 
 ### Explore LMA
 ```{r}
+#| warning: false
 summary(LMA)
 # okay some things are way off with WUE, and others -- will need to deal with outliers at some point
 
@@ -3604,17 +2887,18 @@ WUE <- licor5 %>%
          Source)
 
 summary(WUE)
+hist(WUE$WUE_adj_av)
 
 ggplot(WUE, aes(x=Sp_Code, y=WUE_adj_av)) +
   geom_violin() + stat_summary(fun.data=mean_sdl, mult=1, 
                  geom="pointrange", color="red") + theme(axis.text.x = element_text(angle=90,hjust = 1, size=14, color="black") )
 
-# Bizarre outliers for DANCAL and AIRCAR
+# Bizarre outliers for DANCAL, AIRCAR, STIPUL
 
 ### Look up in plant physiology book
 
 # What are normal ranges for short and long term WUE?
-
+# Ask Jen
 ```
 
 ## Leaf Nitrogen
@@ -3648,10 +2932,42 @@ cn2$Plot
 str(cn2)
 cn2$N_per <- (cn2$Total_N_µg/(cn2$Sample_Weight_mg_from_Sample_List*1000))*100
 
+cn2$CN_ratio <- cn2$Total_C_µg/cn2$Total_N_µg
+
+# calculate intrinsic WUE
+
+# discrimination during diffusion, assume 4.4
+a <- 4.4
+
+# discrimination by rubisco, assume 27
+b <- 27
+
+# reference C02 carbon 13, assume -8 
+delta_air <- -8
+
+# ambinet CO2
+C_a <- 420  # µmol/mol
+str(cn2)
+
+cn2 <- cn2 %>%
+  mutate(
+    # Step 1: carbon isotope discrimination
+    Delta = (delta_air - δ13CVPDB_permil) / (1 + δ13CVPDB_permil / 1000),
+    
+    # Step 2: estimate Ci/Ca
+    Ci_Ca = (Delta - a) / (b - a),
+    
+    # Step 3: estimate intrinsic WUE (µmol CO2 / mol H2O)
+    iWUE = C_a * (1 - Ci_Ca) / 1.6
+  )
+
+
 ```
 
 ## Height
 ```{r}
+#| message: false
+#| warning: false
 rgr <- read_csv(here::here("data/Relative Growth Rate 2023.csv"))
 plots <- read_csv(here::here("data/Plot_info.csv"))
 str(rgr)
@@ -3719,6 +3035,8 @@ ggplot(rgr_max_h4, aes(x=Rating, y=h_max)) +
 ## Date of First Flower
 
 ```{r}
+#| message: false
+#| warning: false
 pheno <- read_csv(here::here("data/Phenology_2023.csv"))
 str(pheno)
 
@@ -3774,9 +3092,10 @@ seed <- seed %>%
   ) %>% 
   filter(!is.na(Sp_Code)
   ) %>% 
-  filter(!is.na(seed_mass))
+  filter(!is.na(seed_mass)) %>% 
+  filter(!Sp_Code == "LUPSUC")
 
-
+seed$seed_mass <- as.numeric(seed$seed_mass)
 
 ggplot(seed, aes(x=Sp_Code, y=seed_mass)) +
   geom_violin() + stat_summary(fun.data=mean_sdl, mult=1, 
@@ -3909,7 +3228,9 @@ cn <- cn2 %>%
   select(
     Plant_ID,
     Sp_Code,
-    N_per
+    N_per,
+    CN_ratio,
+    iWUE
   ) %>%
   filter(!Sp_Code %in% c("ESCCAL","DANCAL","STIPUL","CORFIL","SANBIP","MIRMUL","CLAPUR","HOLVIR")) %>%
   mutate(Plant_ID = substr(Plant_ID,1,9))
@@ -4009,8 +3330,6 @@ full <- full[!c(rowSums(is.na(full)) > 10),]
 # Fill in NA gaps
 # Go get seed masses
 # Go get phenology
-# Add C:N
-# Add C13 WUE
 
 ```
 
@@ -4041,6 +3360,8 @@ full_avgs <- full %>%
             lma_g_m2 = mean(lma_g_m2, na.rm = TRUE),
             total.leaf.area = mean(total.leaf.area, na.rm = TRUE),
             N_per = mean(N_per, na.rm = TRUE),
+            CN_ratio = mean(CN_ratio, na.rm = TRUE),
+            iWUE = mean(iWUE, na.rm = TRUE),
             h_max = mean(h_max, na.rm = TRUE),
             doy = mean(doy, na.rm = TRUE),
             seed_mass = mean(seed_mass, na.rm = TRUE))
@@ -4055,6 +3376,8 @@ trait_cols <- c("max_rate_ht"
                 ,"lma_g_m2"
                 ,"total.leaf.area"
                 ,"N_per"
+                ,"CN_ratio"
+                ,"iWUE"
                 ,"h_max"
                 ,"doy"
                 ,"seed_mass")
@@ -4071,20 +3394,13 @@ full_filled <- full %>%
 
 colnames(full_filled) 
 # It worked! Now just some NaNs
-which(full_filled$Flower_Count == "NaN" | is.na(full_filled$Flower_Count))
-which(full_filled$Veg_Mass == "NaN" | is.na(full_filled$Veg_Mass))
-which(full_filled$fl_average == "NaN" | is.na(full_filled$fl_average))
-which(full_filled$max_rate_ht == "NaN" | is.na(full_filled$max_rate_ht))
-which(full_filled$A_adj_av == "NaN" | is.na(full_filled$A_adj_av))
-which(full_filled$lma_g_m2 == "NaN" | is.na(full_filled$lma_g_m2))
 which(full_filled$N_per == "NaN" | is.na(full_filled$N_per))
 # 25 with NaN
-which(full_filled$h_max == "NaN" | is.na(full_filled$h_max))
-which(full_filled$doy == "NaN" | is.na(full_filled$doy))
 which(full_filled$seed_mass == "NaN" | is.na(full_filled$seed_mass))
 # 72 with missing seed mass
 
 # Need to fill in missing seed mass and look into missing leaf N
+# Why don't I have any leaf N for AMSMEN?
 ```
 
 ### Correlation Table
@@ -4092,26 +3408,33 @@ which(full_filled$seed_mass == "NaN" | is.na(full_filled$seed_mass))
 ### PCA and/or NMDS
 
 ```{r}
-full6[which(is.na(full6$total_fl_mass)),]
-
-full6_narm <- full6 %>% 
-  filter(!is.na(total_fl_mass))
-
-full6_narm$h_max_cm
-# There are -Inf values in this column
+# There are NaN values in this column
 # force them to be NAs
-full6_narm[which(full6_narm$h_max_cm == "-Inf"), "h_max_cm"] <- NA
+full_filled[which(full_filled$N_per == "NaN"), "N_per"] <- NA
 
-full6_narm$h_max_cm
+full_filled$N_per
 
-full6_anon <- full6_narm %>% 
+full_filled[which(full_filled$CN_ratio == "NaN"), "CN_ratio"] <- NA
+
+full_filled$CN_ratio
+
+full_filled[which(full_filled$iWUE == "NaN"), "iWUE"] <- NA
+
+full_filled$iWUE
+
+full_filled[which(full_filled$seed_mass == "NaN"), "seed_mass"] <- NA
+
+full_filled$seed_mass
+
+full_anon <- full_filled %>% 
   select(
-    !Plant_ID
-  )
+    !c(Plant_ID,Sp_Code,Population)
+  ) 
+str(full_anon)
 
 library(missMDA)
-nb <- estim_ncpPCA(full6_anon)
-full_imputed <- imputePCA(full6_anon, ncp = nb$ncp)$completeObs
+nb <- estim_ncpPCA(full_anon)
+full_imputed <- imputePCA(full_anon, ncp = nb$ncp)$completeObs
 
 full_scaled <- scale(full_imputed)
 
@@ -4139,12 +3462,10 @@ loadings_pc3
 contrib_pc3 <- loadings_pc3^2
 sort(contrib_pc3, decreasing = TRUE)
 
-
-1/17
 biplot(pca)
 
 pca_scores <- as.data.frame(pca$x)
-pca_scores$Plant_ID <- full6_narm$Plant_ID   
+pca_scores$Plant_ID <- full_filled$Plant_ID   
 # Add grouping variable
 pca_scores$Sp_Code <- substr(pca_scores$Plant_ID,4,9)
 pca_scores_2 <- left_join(pca_scores,spp, by=join_by("Sp_Code"))
@@ -4167,10 +3488,6 @@ ggbiplot(pca, groups = pca_scores_2$Native_Status, ellipse = TRUE, circle = TRUE
 ggsave("pca_native.jpg")
 
 ggbiplot(pca, groups = pca_scores_2$Growth_Habit, ellipse = TRUE, circle = TRUE) +
-  scale_color_discrete(name = "") +
-  theme_minimal()
-
-ggbiplot(pca, groups = pca_scores_2$Growth2, ellipse = TRUE, circle = TRUE) +
   scale_color_discrete(name = "") +
   theme_minimal()
 
