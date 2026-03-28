@@ -839,11 +839,12 @@ repro_fill_hi_n_narm <- read_csv(here::here("data/repro_fill_hi_n_narm.csv"))
 # remove Lupinus succulentus because only 1 datapoint
 # Remove three grass individuals because they were doubles or mis-identified
 # Remove two grass individuals because they are outliers with high influential, likely weeds
+
 repro_fill_hi_n_narm <- repro_fill_hi_n_narm %>% 
   filter(!Sp_Code == "LUPSUC") %>% 
-   filter(!Plant_ID %in% c("I8.BRODIA"
+   filter(!Plant_ID %in% c("I8.BRODIA.1"
                           ,"B2.AVEBAR.1"
-                          ,"C1.AVEBAR"
+                          ,"C1.AVEBAR.1"
                           )) %>% 
   filter(!Plant_ID %in% c("J5.BRODIA.1"
                           ,"F5.BROHOR.1"))
@@ -859,7 +860,7 @@ Does this group of species have different allometric scaling slopes?
 anova(lm(total_fl_mass_ln ~ Veg_Mass_ln*Scientific_Name, data = repro_fill_hi_n_narm))
 ```
 
-Yes, species identity has a significant effect on reproductive allometric scaling (p-value = 0.01211).
+No, the effect of vegetative mass on reproductive mass does not depend on species (p-value = 0.2807. Although species does effect the slope intercept (p-value = <2e-16).
 
 Herbaceous species are thought to have a 1:1 scaling relationship between vegetative biomass and reproductive biomass because their lack of woody tissue. Do any species have slopes significantly diffferent than 1?
 
@@ -981,42 +982,59 @@ Q2: Is there a difference in reproductive allometric scaling between annual forb
 
 ```{r}
 # Use a mixed effects linear regression to reflect experimental structure
-model <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*Growth_Habit +
-              (1 | Sp_Code) +
+mxg <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*Growth_Habit +
+              (1 | Scientific_Name) +
               (1 | Plot),
               data = repro_fill_hi_n_narm)
 
-summary(model)
+summary(mxg)
 
 # This model better accounts for the variation in slopes among species 
-model <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*Growth_Habit +
+mxgi <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*Growth_Habit +
               (1 + Veg_Mass_ln | Scientific_Name) +
               (1 | Plot),
               data = repro_fill_hi_n_narm)
-summary(model)
+summary(mxgi)
+# singular
 
 # Create simpler models to test the interaction against
-m0 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + Growth_Habit + (1 + Veg_Mass_ln | Scientific_Name) + (1 | Plot), data = repro_fill_hi_n_narm)
+m_g <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + Growth_Habit + (1 | Scientific_Name) + (1 | Plot), data = repro_fill_hi_n_narm)
 
 # even simpler
-m00 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + (1 + Veg_Mass_ln | Scientific_Name) + (1 | Plot), data = repro_fill_hi_n_narm)
+m0 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + (1 | Scientific_Name) + (1 | Plot), data = repro_fill_hi_n_narm)
 
 # test interactive model against nullest model
 # not sure using lrtest is actually appropriate since it's for likelihood ratios for generalized models (non normal distributions)
 # lrtest(m00,model)
 
-anova(m00, model)
-anova(m0, model)
+anova(m0, m_g)
+anova(m_g, mxg)
+
+# Use a mixed effects linear regression to reflect experimental structure
+mxg2 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*Growth_2 +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = repro_fill_hi_n_narm)
+
+summary(mxg2)
+
+# Create simpler models to test the interaction against
+m_g2 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + Growth_2 + (1 | Scientific_Name) + (1 | Plot), data = repro_fill_hi_n_narm)
+
+anova(m0, m_g2)
+anova(m_g2, mxg2)
+
+AIC(m0,m_g,m_g2)
 ```
 
-This shows that there is a significant effect of growth habit on allometric scaling, where forbs have a steeper slope than grasses.
+This shows that there is not a significant effect of growth habit on allometric scaling. They have similar slopes but growth habit determines intercept. This is true regardless of whether I use forb vs grass or forb vs grass vs Nfixer. Same AIC, go with lower df (forb vs grass).
 
 Considered including phylogenetics in model but tried using phyr but 29 out of 30 species were not found in the phylogeny
 
 ```{r}
 # Check assumptions of model
 
-sim_res <- simulateResiduals(model)
+sim_res <- simulateResiduals(m_g)
 plot(sim_res)
 
 testDispersion(sim_res)
@@ -1027,32 +1045,233 @@ testUniformity(sim_res)
 # Poor on normality but data is robust, as good as it gets
 
 # Check for funnel shape (bad), we want constant variance
-plot(fitted(model), resid(model))
+plot(fitted(m_g), resid(m_g))
 abline(h = 0)
 # good
 
 # check for dramatic S-shape (bad)
-qqnorm(resid(model))
-qqline(resid(model))
+qqnorm(resid(m_g))
+qqline(resid(m_g))
 # for the most part hugs the line but is a bit skewy
 
 # not sure what this does
-plot(model)
+plot(m_g)
 
 # determine influential points
-infl <- influence(model, group="Scientific_Name")
+infl <- influence(m_g, group="Scientific_Name")
 
 # normal across groups, can also do it for plot etc
-qqnorm(ranef(model)$Scientific_Name[,1])
-qqline(ranef(model)$Scientific_Name[,1])
+qqnorm(ranef(m_g)$Scientific_Name[,1])
+qqline(ranef(m_g)$Scientific_Name[,1])
 
 #check for singularity
-isSingular(model)
+isSingular(m_g)
 
-sim_res <- simulateResiduals(model)
+sim_res <- simulateResiduals(m_g)
 plot(sim_res)
 
 ```
+
+# Q2a: Else
+
+Is native status important?
+
+```{r}
+# Use a mixed effects linear regression to reflect experimental structure
+mxn <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*Native_Status +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = repro_fill_hi_n_narm)
+
+summary(mxn)
+
+# This model better accounts for the variation in slopes among species 
+mxni <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*Native_Status +
+              (1 + Veg_Mass_ln | Scientific_Name) +
+              (1 | Plot),
+              data = repro_fill_hi_n_narm)
+summary(mxni)
+# singular
+
+# Create simpler models to test the interaction against
+m_n <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + Native_Status + (1 | Scientific_Name) + (1 | Plot), data = repro_fill_hi_n_narm)
+
+# even simpler
+m0 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + (1 | Scientific_Name) + (1 | Plot), data = repro_fill_hi_n_narm)
+
+# test interactive model against nullest model
+# not sure using lrtest is actually appropriate since it's for likelihood ratios for generalized models (non normal distributions)
+# lrtest(m00,model)
+
+anova(m0, m_n)
+anova(m_n, mxn)
+
+# Use a mixed effects linear regression to reflect experimental structure
+mxr <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*Rating +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = repro_fill_hi_n_narm)
+
+summary(mxr)
+
+# Create simpler models to test the interaction against
+m_r <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + Rating + (1 | Scientific_Name) + (1 | Plot), data = repro_fill_hi_n_narm)
+
+anova(m0, m_r)
+anova(m_r, mxr)
+
+# Use a mixed effects linear regression to reflect experimental structure
+mxr2 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*Rating_2 +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = repro_fill_hi_n_narm)
+
+summary(mxr2)
+
+# Create simpler models to test the interaction against
+m_r2 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + Rating_2 + (1 | Scientific_Name) + (1 | Plot), data = repro_fill_hi_n_narm)
+
+anova(m0, m_r2)
+anova(m_r2, mxr2)
+
+AIC(m0,m_g,m_r2,mxr2)
+
+# m_g is the best so far
+```
+Is population important?
+
+```{r}
+# Use a mixed effects linear regression to reflect experimental structure
+mxp <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*Population +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = repro_fill_hi_n_narm)
+
+summary(mxp)
+
+# This model better accounts for the variation in slopes among species 
+mxpi <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*Population +
+              (1 + Veg_Mass_ln | Scientific_Name) +
+              (1 | Shelter),
+              data = repro_fill_hi_n_narm)
+summary(mxpi)
+# singular
+
+# Create simpler models to test the interaction against
+m_p <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + Population + (1 | Scientific_Name) + (1 | Shelter), data = repro_fill_hi_n_narm)
+
+# even simpler
+m0 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + (1 | Scientific_Name) + (1 | Shelter), data = repro_fill_hi_n_narm)
+
+# test interactive model against nullest model
+# not sure using lrtest is actually appropriate since it's for likelihood ratios for generalized models (non normal distributions)
+# lrtest(m00,model)
+
+anova(m0, m_p)
+anova(m_p, mxp)
+
+# m_p is significant
+
+# Use a mixed effects linear regression to reflect experimental structure
+mxs <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*spei_avg +
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = repro_fill_hi_n_narm)
+
+summary(mxs)
+
+# Create simpler models to test the interaction against
+m_s <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + spei_avg + (1 | Scientific_Name) + (1 | Shelter), data = repro_fill_hi_n_narm)
+
+anova(m0, m_s)
+anova(m_s, mxs)
+
+# Use a mixed effects linear regression to reflect experimental structure
+mxpp <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*Precip_mm +
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = repro_fill_hi_n_narm)
+
+summary(mxpp)
+
+# Create simpler models to test the interaction against
+m_pp <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + Precip_mm + (1 | Scientific_Name) + (1 | Shelter), data = repro_fill_hi_n_narm)
+
+anova(m0, m_pp)
+anova(m_pp, mxpp)
+
+AIC(m0,m_g,m_r2,mxr2,m_p,m_s,mxpp,m_pp)
+
+# m_s is the best so far
+# growth habit, rating_2, and spei might all be significant
+
+m_s_g <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + spei_avg + Growth_Habit + (1 | Scientific_Name) + (1 | Shelter), data = repro_fill_hi_n_narm)
+
+m_s_r2 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + spei_avg + Rating_2 + (1 | Scientific_Name) + (1 | Shelter), data = repro_fill_hi_n_narm)
+
+m_g_r2 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + Growth_Habit + Rating_2 + (1 | Scientific_Name) + (1 | Shelter), data = repro_fill_hi_n_narm)
+
+m_g_r2_s <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + Growth_Habit + Rating_2 + spei_avg + (1 | Scientific_Name) + (1 | Shelter), data = repro_fill_hi_n_narm)
+
+m_g <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + Growth_Habit + (1 | Scientific_Name) + (1 | Shelter), data = repro_fill_hi_n_narm)
+
+anova(m_s, m_s_g)
+anova(m_g, m_s_g)
+
+AIC(m_g,m_s, m_s_g)
+
+AIC(m0,m_g,m_r2,mxr2,m_p,m_s,mxpp,m_pp,m_s_g, m_s_r2, m_g_r2, m_g_r2_s)
+
+m_s_g_r2 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + spei_avg + Growth_Habit + Rating_2 + (1 | Scientific_Name) + (1 | Shelter), data = repro_fill_hi_n_narm)
+
+anova(m_s_g_r2, m_s_g)
+AIC(m0,m_g,m_r2,mxr2,m_p,m_s,mxpp,m_pp,m_s_g,m_s_g_r2)
+
+```
+
+```{r}
+# Check assumptions of model
+
+sim_res <- simulateResiduals(m_s_g)
+plot(sim_res)
+
+testDispersion(sim_res)
+# good on dispersion, p-value high
+testOutliers(sim_res)
+# good on outliers, p-value high
+testUniformity(sim_res)
+# Poor on normality but data is robust, as good as it gets
+
+# Check for funnel shape (bad), we want constant variance
+plot(fitted(m_s_g), resid(m_s_g))
+abline(h = 0)
+# good
+
+# check for dramatic S-shape (bad)
+qqnorm(resid(m_s_g))
+qqline(resid(m_s_g))
+# for the most part hugs the line but is a bit skewy
+
+# not sure what this does
+plot(m_s_g)
+
+# determine influential points
+infl <- influence(m_s_g, group="Scientific_Name")
+
+# normal across groups, can also do it for plot etc
+qqnorm(ranef(m_s_g)$Scientific_Name[,1])
+qqline(ranef(m_s_g)$Scientific_Name[,1])
+
+#check for singularity
+isSingular(m_s_g)
+
+sim_res <- simulateResiduals(m_s_g)
+plot(sim_res)
+
+```
+
+Follow Grass work flow
+
 
 # Q3a: Forbs
 
@@ -1292,8 +1511,8 @@ cd_df <- data.frame(
   row = seq_along(cd),
   cooks_d = cd
 )
-p <- length(fixef(m5))   # number of fixed effects
-n <- nobs(m5)
+p <- length(fixef(mxr2_s))   # number of fixed effects
+n <- nobs(mxr2_s)
 
 cd_thresh <- 4 / (n - p)
 
@@ -1841,7 +2060,6 @@ Start graphing, what do I want to see? growth rate by rating or native status ac
 ```{r}
 #| message: false
 #| warning: false
-#| eval: false
 #| echo: false
 # Order Invasive rating: Native, Non-native, Limited, Moderate, High
 # Order Month rates
@@ -2693,6 +2911,9 @@ lf_area$Sp_Code <- substr(lf_area$Plant_ID,4,9)
 mass <- read_csv(here::here("data/Leaf Mass_2023_20231009.csv"))
 head(mass)
 
+plots <- read_csv(here::here("data/Plot_info.csv"))
+spp <- read_csv(here::here("data/Species Codes.csv"))
+
 # Remove perennials
 mass_a <- mass %>% 
   filter(!Sp_Code %in% c("CORFIL","ESCCAL","STIPUL","DANCAL"))
@@ -3131,9 +3352,7 @@ repro <- repro_fill_hi_n_narm %>%
     Sp_Code,
     Population,
     Flower_Count,
-    Veg_Mass,
     fl_average,
-    total_fl_mass,
     Veg_Mass_ln,
     total_fl_mass_ln,
     RV
@@ -3195,7 +3414,6 @@ licor <- licor5 %>%
     Population,
     A_adj_av,
     WUE_adj_av,
-    E_adj_av,
     gsw_adj_av,
     Sp_Code
   ) %>% 
@@ -3355,7 +3573,6 @@ full_avgs <- full %>%
             max_rate_vol = mean(max_rate_vol, na.rm = TRUE),
             A_adj_av = mean(A_adj_av, na.rm = TRUE),
             WUE_adj_av = mean(WUE_adj_av, na.rm = TRUE),
-            E_adj_av = mean(E_adj_av, na.rm = TRUE),
             gsw_adj_av = mean(gsw_adj_av, na.rm = TRUE),
             lma_g_m2 = mean(lma_g_m2, na.rm = TRUE),
             total.leaf.area = mean(total.leaf.area, na.rm = TRUE),
@@ -3371,7 +3588,6 @@ trait_cols <- c("max_rate_ht"
                 ,"max_rate_vol"
                 ,"A_adj_av"
                 ,"WUE_adj_av"
-                ,"E_adj_av"
                 ,"gsw_adj_av"
                 ,"lma_g_m2"
                 ,"total.leaf.area"
@@ -3481,23 +3697,38 @@ ggplot(pca_scores_2, aes(PC1, PC2, color = Native_Status)) +
 # Install devtools if needed
 library(ggbiplot)
 
-ggbiplot(pca, groups = pca_scores_2$Native_Status, ellipse = TRUE, circle = TRUE) +
+ggbiplot(pca, groups = pca_scores_2$Rating_2, ellipse = TRUE, circle = TRUE) +
   scale_color_discrete(name = "") +
   theme_minimal()
 
-ggsave("pca_native.jpg")
+ggsave("pca_rating2.jpg")
 
-ggbiplot(pca, groups = pca_scores_2$Growth_Habit, ellipse = TRUE, circle = TRUE) +
+ggbiplot(pca, groups = pca_scores_2$Growth_2, ellipse = TRUE, circle = TRUE) +
   scale_color_discrete(name = "") +
   theme_minimal()
 
-ggsave("pca_growth.jpg")
+ggsave("pca_growth2.jpg")
 
-# Need to improve plots and reduce variables
+ggbiplot(pca, groups = pca_scores_2$Sp_Code, ellipse = TRUE, circle = TRUE) +
+  scale_color_discrete(name = "") +
+  theme_minimal()
+
+ggsave("pca_spp.jpg")
+
 # Make points smaller
+# how to report raw loadings
 
+# why doesn't AMSMEN have N?
+# Fill in seeds 
+# Fill in phenology
+
+# Try PCA by species x population averages and add slope -- does it change
+# Can we use that PCA to predict allometric scaling relationship
+# Try PCA by species averages
 
 # need to figure out if PCAs are used to model reproductive allocation and how to do that. How does a PCA interact with a dependent variable
+
+
 
 ```
 
