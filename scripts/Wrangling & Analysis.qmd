@@ -1141,6 +1141,9 @@ AIC(m0,m_g,m_r2,mxr2)
 Is population important?
 
 ```{r}
+# scale spei
+repro_fill_hi_n_narm$spei_c <- scale(repro_fill_hi_n_narm$spei_avg, center = TRUE, scale = FALSE)
+
 # Use a mixed effects linear regression to reflect experimental structure
 mxp <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*Population +
               (1 | Scientific_Name) +
@@ -1173,7 +1176,7 @@ anova(m_p, mxp)
 # m_p is significant
 
 # Use a mixed effects linear regression to reflect experimental structure
-mxs <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*spei_avg +
+mxs <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*spei_c +
               (1 | Scientific_Name) +
               (1 | Shelter),
               data = repro_fill_hi_n_narm)
@@ -1181,7 +1184,7 @@ mxs <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*spei_avg +
 summary(mxs)
 
 # Create simpler models to test the interaction against
-m_s <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + spei_avg + (1 | Scientific_Name) + (1 | Shelter), data = repro_fill_hi_n_narm)
+m_s <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + spei_c + (1 | Scientific_Name) + (1 | Shelter), data = repro_fill_hi_n_narm)
 
 anova(m0, m_s)
 anova(m_s, mxs)
@@ -1205,13 +1208,13 @@ AIC(m0,m_g,m_r2,mxr2,m_p,m_s,mxpp,m_pp)
 # m_s is the best so far
 # growth habit, rating_2, and spei might all be significant
 
-m_s_g <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + spei_avg + Growth_Habit + (1 | Scientific_Name) + (1 | Shelter), data = repro_fill_hi_n_narm)
+m_s_g <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + spei_c + Growth_Habit + (1 | Scientific_Name) + (1 | Shelter), data = repro_fill_hi_n_narm)
 
-m_s_r2 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + spei_avg + Rating_2 + (1 | Scientific_Name) + (1 | Shelter), data = repro_fill_hi_n_narm)
+m_s_r2 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + spei_c + Rating_2 + (1 | Scientific_Name) + (1 | Shelter), data = repro_fill_hi_n_narm)
 
 m_g_r2 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + Growth_Habit + Rating_2 + (1 | Scientific_Name) + (1 | Shelter), data = repro_fill_hi_n_narm)
 
-m_g_r2_s <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + Growth_Habit + Rating_2 + spei_avg + (1 | Scientific_Name) + (1 | Shelter), data = repro_fill_hi_n_narm)
+m_g_r2_s <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + Growth_Habit + Rating_2 + spei_c + (1 | Scientific_Name) + (1 | Shelter), data = repro_fill_hi_n_narm)
 
 m_g <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + Growth_Habit + (1 | Scientific_Name) + (1 | Shelter), data = repro_fill_hi_n_narm)
 
@@ -1222,7 +1225,7 @@ AIC(m_g,m_s, m_s_g)
 
 AIC(m0,m_g,m_r2,mxr2,m_p,m_s,mxpp,m_pp,m_s_g, m_s_r2, m_g_r2, m_g_r2_s)
 
-m_s_g_r2 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + spei_avg + Growth_Habit + Rating_2 + (1 | Scientific_Name) + (1 | Shelter), data = repro_fill_hi_n_narm)
+m_s_g_r2 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + spei_c + Growth_Habit + Rating_2 + (1 | Scientific_Name) + (1 | Shelter), data = repro_fill_hi_n_narm)
 
 anova(m_s_g_r2, m_s_g)
 AIC(m0,m_g,m_r2,mxr2,m_p,m_s,mxpp,m_pp,m_s_g,m_s_g_r2)
@@ -1270,8 +1273,161 @@ plot(sim_res)
 
 ```
 
-Follow Grass work flow
+Follow Grass work flow for graphing
 
+```{r}
+library(ggeffects)
+
+# Status predictions (2 lines)
+pred_habit <- ggpredict(m_s_g, terms = c("Veg_Mass_ln", "Growth_Habit"))
+
+# SPEI predictions (3 lines: low, mean, high)
+pred_spei <- ggpredict(m_s_g, terms = c("Veg_Mass_ln", "spei_c [-1,0,1]"))
+
+library(dplyr)
+
+pred_habit <- as.data.frame(pred_habit) %>%
+  mutate(panel = "Growth Habit")
+
+pred_spei <- as.data.frame(pred_spei) %>%
+  mutate(panel = "Aridity (SPEI)")
+
+pred_all <- bind_rows(pred_habit, pred_spei)
+
+library(ggplot2)
+str(repro_fill_hi_n_narm)
+str(pred_spei)
+
+pred_spei$spei_c <-as.numeric(pred_spei$group) 
+pred_spei <- pred_spei %>% 
+  mutate(spei_c =
+    case_when(
+      spei_c == 1 ~ -1,
+      spei_c == 2 ~ 0,
+      spei_c == 3 ~ 1
+    )
+  )
+
+p <- ggplot() +
+
+  # Raw data points
+  geom_point(
+    data = repro_fill_hi_n_narm,
+    aes(x = Veg_Mass_ln,
+        y = total_fl_mass_ln,
+        color = spei_c),
+    alpha = 0.3
+  ) +
+
+  # Confidence bands
+  geom_ribbon(
+    data = pred_spei,
+    aes(x = x,
+        ymin = conf.low,
+        ymax = conf.high,
+        fill = spei_c,
+        group = spei_c),
+    alpha = 0.2,
+    color = NA
+  ) +
+
+  # Predicted lines
+  geom_line(
+    data = pred_spei,
+    aes(x = x,
+        y = predicted,
+        color = spei_c,
+        group = spei_c),
+    linewidth = 1.2
+  ) +
+
+  # Shared continuous scale
+  scale_color_viridis_c(
+    name = "SPEI",
+    option = "D"
+  ) +
+  scale_fill_viridis_c(
+    name = "SPEI",
+    option = "D",
+    guide = "none"   # prevents duplicate legend
+  ) +
+
+  labs(
+    x = "Ln(Vegetative Biomass)",
+    y = "Predicted ln(Reproductive Biomass)"
+  ) +
+
+  theme_classic() +
+  theme(legend.position = "bottom")
+
+# p
+
+repro_fill_hi_n_narm$group <- repro_fill_hi_n_narm$Growth_Habit
+
+p2 <- ggplot() +
+
+  # Raw data points
+  geom_point(
+    data = repro_fill_hi_n_narm,
+    aes(x = Veg_Mass_ln,
+        y = total_fl_mass_ln,
+        color = group),
+    alpha = 0.3
+  ) +
+
+  # Confidence bands
+  geom_ribbon(
+    data = pred_habit,
+    aes(x = x,
+        ymin = conf.low,
+        ymax = conf.high,
+        fill = group,
+        group = group),
+    alpha = 0.2,
+    color = NA
+  ) +
+
+  # Predicted lines
+  geom_line(
+    data = pred_habit,
+    aes(x = x,
+        y = predicted,
+        color = group,
+        group = group),
+    linewidth = 1.2
+  ) +
+
+  # Shared continuous scale
+  scale_color_manual(
+    name = "Growth Habit",
+    values = c(
+    "Forb" = "#3B528BFF",
+    "Grass" = "#5DC863FF"
+  )) +
+    scale_fill_manual(
+      name = "Growth Habit",
+      values = c(
+    "Forb" = "#3B528BFF",
+    "Grass" = "#5DC863FF"
+  )) +
+
+  labs(
+    x = "Ln(Vegetative Biomass)",
+    y = "Predicted ln(Reproductive Biomass)"
+  ) +
+
+  theme_classic() +
+  theme(legend.position = "bottom")
+
+# p2
+
+p3 <- p2 | p
+p3
+
+# Go back and make another map of CA SPEI, maybe even side by side with precip
+
+ggsave(here::here("figs/model_slopes_1.jpg"),p3, width = 7, height = 4)
+```
 
 # Q3a: Forbs
 
@@ -3529,15 +3685,6 @@ full[which(is.na(full$Population)),]
 full <- full %>% 
   filter(!duplicated(Plant_ID)) %>% 
   filter(!Plant_ID %in% c("D4.AVEFAT","D4.AVEBAR","H4.AVEBAR","H4.AVEFAT","D7.AVEFAT")) 
-
-pheno_gaps <- full[which(!complete.cases(full$doy)),c("Plant_ID","Flower_Count","doy")]
-pheno_gaps <- pheno_gaps[!c(rowSums(is.na(pheno_gaps)) > 1),]
-
-write_csv(pheno_gaps,here::here("data/phenology_gaps.csv"))
-
-seed_gaps <- full[which(!complete.cases(full$seed_mass)),c("Plant_ID","Sp_Code","Population","seed_mass")]
-seed_gaps <- seed_gaps[!c(rowSums(is.na(seed_gaps)) > 1),]
-# So many that didn't get properly assigned species and population info
 
 full <- full[!c(rowSums(is.na(full)) > 10),]
 
