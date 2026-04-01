@@ -3880,3 +3880,157 @@ ggsave("pca_spp.jpg")
 ```
 
 
+Now try reducing to species x population and only using slope and intercept. 
+```{r}
+#Need slopes and intercepts from model then merge
+
+head(full_filled)
+
+full_collapse <- full_filled %>% 
+  group_by(Sp_Code,Population) %>% 
+  summarise(Flower_Count = mean(Flower_Count, na.rm = TRUE)
+            , fl_average = mean(fl_average, na.rm = TRUE)
+            , max_rate_ht = mean(max_rate_ht, na.rm = TRUE)
+            , max_rate_lf = mean(max_rate_lf, na.rm = TRUE)
+            , max_rate_vol = mean(max_rate_vol, na.rm = TRUE)
+            , A_adj_av = mean(A_adj_av, na.rm = TRUE)
+            , WUE_adj_av = mean(WUE_adj_av, na.rm = TRUE)
+            , gsw_adj_av = mean(gsw_adj_av, na.rm = TRUE)
+            , lma_g_m2 = mean(lma_g_m2, na.rm = TRUE)
+            , total.leaf.area = mean(total.leaf.area, na.rm = TRUE)
+            , N_per = mean(N_per, na.rm = TRUE)
+            , CN_ratio = mean(CN_ratio, na.rm = TRUE)
+            , iWUE = mean(iWUE, na.rm = TRUE)
+            , h_max = mean(h_max, na.rm = TRUE)
+            , doy = mean(doy, na.rm = TRUE)
+            , seed_mass = mean(seed_mass, na.rm = TRUE)
+    
+  )
+
+# convert NaN to NAs
+full_collapse[which(full_collapse$N_per == "NaN"), "N_per"] <- NA
+
+full_collapse$N_per
+
+full_collapse[which(full_collapse$CN_ratio == "NaN"), "CN_ratio"] <- NA
+
+full_collapse$CN_ratio
+
+full_collapse[which(full_collapse$iWUE == "NaN"), "iWUE"] <- NA
+
+full_collapse$iWUE
+
+full_collapse[which(full_collapse$seed_mass == "NaN"), "seed_mass"] <- NA
+
+full_collapse$seed_mass
+
+# Create slopes and merge
+mod <- lm(total_fl_mass_ln ~ Veg_Mass_ln * Sp_Code * Population, 
+          data = repro_fill_hi_n_narm)
+
+slopes <- emtrends(mod, ~ Sp_Code*Population, var = "Veg_Mass_ln")
+
+slopes.df <- summary(slopes) %>% 
+  arrange(desc(Veg_Mass_ln.trend)) %>% 
+  filter(!is.na(Veg_Mass_ln.trend)) %>% 
+  select(
+    Sp_Code
+    , Population
+    , Veg_Mass_ln.trend
+  )
+
+full_slopes <- left_join(slopes.df,full_collapse, by = join_by(Sp_Code,Population))
+
+full_slopes_anon <- full_slopes %>% 
+  select(
+    !c(Sp_Code,
+       Population)
+  )
+
+library(missMDA)
+nb <- estim_ncpPCA(full_slopes_anon)
+full_imputed <- imputePCA(full_slopes_anon, ncp = nb$ncp)$completeObs
+
+full_scaled <- scale(full_imputed)
+
+pca <- prcomp(full_scaled, center = TRUE, scale. = TRUE)
+
+# View summary
+summary(pca)
+
+# View loadings
+pca$rotation
+
+loadings_pc1 <- pca$rotation[, 1]
+loadings_pc1
+sort(abs(loadings_pc1), decreasing = TRUE)
+contrib_pc1 <- loadings_pc1^2
+sort(contrib_pc1, decreasing = TRUE)
+
+loadings_pc2 <- pca$rotation[, 2]
+loadings_pc2
+contrib_pc2 <- loadings_pc2^2
+sort(contrib_pc2, decreasing = TRUE)
+
+loadings_pc3 <- pca$rotation[, 3]
+loadings_pc3
+contrib_pc3 <- loadings_pc3^2
+sort(contrib_pc3, decreasing = TRUE)
+
+biplot(pca)
+
+pca_scores <- as.data.frame(pca$x)
+pca_scores$Sp_Code <- full_slopes$Sp_Code   
+# Add grouping variable
+pca_scores$Population <- full_slopes$Population
+pca_scores_2 <- left_join(pca_scores,spp, by=join_by("Sp_Code"))
+
+ggplot(pca_scores_2, aes(PC1, PC2
+                        # , color = Native_Status
+                        )) +
+  geom_point(size = 3, alpha = 0.8) +
+  theme_minimal() +
+  labs(title = "PCA of Iris Dataset",
+       x = paste0("PC1 (", round(summary(pca)$importance[2,1] * 100, 1), "% variance)"),
+       y = paste0("PC2 (", round(summary(pca)$importance[2,2] * 100, 1), "% variance)"))
+
+
+# Install devtools if needed
+library(ggbiplot)
+
+ggbiplot(pca, groups = pca_scores_2$Native_Status, ellipse = TRUE, circle = TRUE) +
+  scale_color_discrete(name = "") +
+  theme_minimal()
+
+ggsave("pca_native.jpg")
+
+ggbiplot(pca, groups = pca_scores_2$Population, ellipse = TRUE, circle = TRUE) +
+  scale_color_discrete(name = "") +
+  theme_minimal()
+
+ggsave("pca_pop.jpg")
+
+ggbiplot(pca, groups = pca_scores_2$Growth_Habit, ellipse = TRUE, circle = TRUE) +
+  scale_color_discrete(name = "") +
+  theme_minimal()
+
+ggsave("pca_growth.jpg")
+
+ggbiplot(pca, groups = pca_scores_2$Sp_Code, ellipse = TRUE, circle = TRUE) +
+  scale_color_discrete(name = "") +
+  theme_minimal()
+
+ggsave("pca_spp.jpg")
+
+# Make points smaller
+# how to report raw loadings
+
+# Take out veg mass ln.trend and attempt to use PCs to model slope...
+# OR can we use PCs to model fl_mass~veg mass
+
+# Also make a correlation table like from jen's paper but highlighting slope as focal trait
+
+
+
+```
+
