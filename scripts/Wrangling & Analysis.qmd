@@ -32,6 +32,7 @@ Limited Data:
 -   Specific root length partial
 -   Root nitrogen partial
 
+Q0: Did drought treatment affect reproductive investment?
 Q1: How much variation is there among annual California grassland plant in their allometric vegetative and reproductive scaling relationship?
 Q2: Is there a difference in reproductive allometric scaling between annual forbs and grasses?
 Q3: Does native status or provenance have an effect on reproductive scaling of forbs and grasse, separately?
@@ -850,9 +851,18 @@ repro_fill_hi_n_narm <- repro_fill_hi_n_narm %>%
                           ,"F5.BROHOR.1"))
 ```
 
+## Q0: Drought
+
+```{r}
+head(repro_fill_hi_n_narm)
+
+anova(lm(total_fl_mass_ln ~ Veg_Mass_ln*Treatment, data = repro_fill_hi_n_narm))
+```
+
+
 ## Q1: 1:1
 
-Q1: How much variation is there among annual California grassland plant in their allometric vegetative and reproductive scaling relationship?
+Q1: How much variation is there among annual California grassland plants in their allometric vegetative and reproductive scaling relationship?
 
 Does this group of species have different allometric scaling slopes?
 
@@ -865,25 +875,86 @@ No, the effect of vegetative mass on reproductive mass does not depend on specie
 Herbaceous species are thought to have a 1:1 scaling relationship between vegetative biomass and reproductive biomass because their lack of woody tissue. Do any species have slopes significantly diffferent than 1?
 
 ```{r}
-mod <- lm(total_fl_mass_ln ~ Veg_Mass_ln * Scientific_Name, 
-          data = repro_fill_hi_n_narm)
+# ChatGPT Prompt, May 11, 2026: "I have reproductive biomass and vegetative biomass data for about 500 individual plants across 26 species. For each species, I want to know if the scaling relationship between reproductive biomass and vegetative biomass is different than a slope of 1"
 
-slopes <- emtrends(mod, ~ Scientific_Name, var = "Veg_Mass_ln")
+# Option 2: SMA Regression to account for error of both x and y axis
+# Standardized Major Axis Regression
+# install.packages("smatr")
+library(smatr)
 
-slopes.df <- summary(slopes) %>% 
-  arrange(desc(Veg_Mass_ln.trend))
+AIRCAR <- repro_fill_hi_n_narm %>% 
+  filter(Sp_Code == "AIRCAR")
+a <- sma(total_fl_mass_ln ~ Veg_Mass_ln, data = AIRCAR,
+    slope.test = 1)
+a$pval
+a$groupsummary[["Slope_test_p"]]
+coef(a)[["slope"]]
+a$groupsummary[["Slope_lowCI"]]
+a$groupsummary[["Slope_highCI"]]
 
-# Test is any slopes are different than 1
-test_slopes_vs1 <- summary(slopes, infer = TRUE, null = 1)
-test_slopes_vs1[which(test_slopes_vs1$p.value<0.05),]
+AMSMEN <- repro_fill_hi_n_narm %>% 
+  filter(Sp_Code == "AMSMEN")
+
+library(ggplot2)
+
+ggplot(AMSMEN, aes(x = Veg_Mass_ln,
+                y = total_fl_mass_ln,
+                label = Plant_ID)) +
+
+  # points
+  geom_point(size = 2) +
+
+  # labels
+  geom_text(vjust = -0.5, size = 3) +
+  
+    # regression line
+  geom_smooth(method = "lm",
+              se = FALSE,
+              color = "blue",
+              linewidth = 1) +
+
+  # line with slope = 1 through origin
+  geom_abline(intercept = 0,
+              slope = 1,
+              color = "black",
+              linewidth = 1) +
+
+  labs(
+    x = "ln(Vegetative mass)",
+    y = "ln(Reproductive mass)"
+  ) +
+
+  theme_classic()
+
+
+repro_fill_hi_n_narm <- repro_fill_hi_n_narm %>% 
+  filter(!Sp_Code %in% c("ACMPAR","CAUCOU"))
+
+results <- repro_fill_hi_n_narm %>%
+  group_by(Scientific_Name) %>%
+  do({
+    fit <- sma(total_fl_mass_ln ~ Veg_Mass_ln,
+               data = .,
+               slope.test = 1)
+
+    tibble(
+      slope = coef(fit)[["slope"]],
+      lower = fit$groupsummary[["Slope_lowCI"]],
+      upper = fit$groupsummary[["Slope_highCI"]],
+      intercept = coef(fit)[["elevation"]],
+      p_value = fit$groupsummary[["Slope_test_p"]]
+    )
+  }) %>%
+  ungroup %>% 
+  mutate(p_adj = p.adjust(p_value, method = "fdr"))
 ```
 
-Yes, four species have slopes significantly different than 1, one greater than and three less than.
+Six species have slopes significantly different than 1.
 
 ```{r}
 #| echo: false
 
-level_order <- unique(as.factor(slopes.df$Scientific_Name))
+level_order <- unique(as.factor(results$Scientific_Name))
 # Graph a bar plot of each species in order of slope with standard error bars and line at 1
 
 #("ANGELO" = "#440154FF", "MCL" = "#3B528BFF", "BORR" = "#21908CFF", "SEDG" = "#5DC863FF", "WWP" = "#FDE725FF")) + 
@@ -891,26 +962,32 @@ level_order <- unique(as.factor(slopes.df$Scientific_Name))
 # Make species names italic and 45 degrees
 # Maybe make bar colors if significant
 
-sigs <- test_slopes_vs1[which(test_slopes_vs1$p.value<0.05),1]
+sigs <- results[which(results$p_adj<0.1),1]
 
-slopes.df$columnColor <- "N.S."
+results$columnColor <- "N.S."
 
-slopes.df$columnColor[which(slopes.df$Scientific_Name == sigs[1])] <- "p-value < 0.05"
+results <- arrange(results,desc(slope))
 
-slopes.df$columnColor[which(slopes.df$Scientific_Name == sigs[2])] <- "p-value < 0.05"
+#results$columnColor[which(results$Scientific_Name == "Amsinckia menziesii")] <- "p-value < 0.05"
 
-slopes.df$columnColor[which(slopes.df$Scientific_Name == sigs[3])] <- "p-value < 0.05"
+results$columnColor[which(results$Scientific_Name == "Bromus arenarius")] <- "p-value < 0.1"
 
-slopes.df$columnColor[which(slopes.df$Scientific_Name == sigs[4])] <- "p-value < 0.05"
+results$columnColor[which(results$Scientific_Name == "Bromus diandrus")] <- "p-value < 0.1"
 
-ggplot(slopes.df, aes(x = factor(Scientific_Name, level=c(level_order)), y = Veg_Mass_ln.trend
+results$columnColor[which(results$Scientific_Name == "Erodium botrys")] <- "p-value < 0.1"
+
+#results$columnColor[which(results$Scientific_Name == "Madia gracilis")] <- "p-value < 0.05"
+
+#results$columnColor[which(results$Scientific_Name == "Micropus californicus")] <- "p-value < 0.05"
+
+ggplot(results, aes(x = factor(Scientific_Name, level=c(level_order)), y = slope
                        , fill = columnColor
                       )) + 
   geom_bar(position = position_dodge(), stat = "identity") +
   geom_hline(yintercept = 1, linetype = "dashed") +
-  geom_errorbar(aes(ymin=Veg_Mass_ln.trend-SE, ymax=Veg_Mass_ln.trend+SE), width=0.3, colour="#FDE725FF", alpha=0.9, linewidth=1.3, position = position_dodge(0.9)) +
+  geom_errorbar(aes(ymin=lower, ymax=upper), width=0.3, colour="#FDE725FF", alpha=0.9, linewidth=1.3, position = position_dodge(0.9)) +
   theme_classic() +
-  scale_fill_manual(values = c("N.S." = "#21908CFF", "p-value < 0.05" = "#440154FF")) +
+  scale_fill_manual(values = c("N.S." = "#21908CFF", "p-value < 0.1" = "#440154FF")) +
   theme(
     axis.text.x = element_text(face = "italic", angle = 45, vjust = 1, hjust = 1),
     legend.position = c(0.75, 0.95),
@@ -924,15 +1001,25 @@ ggplot(slopes.df, aes(x = factor(Scientific_Name, level=c(level_order)), y = Veg
        y = "RV Slope",
        fill = "")
 
-ggsave(here::here("figs/Q1_slopes_spp.jpg"))
+ggsave(here::here("figs/Q1_slopes_spp_SMA.jpg"))
+
+rm(level_order
+   , sigs)
 ```
 
-Fig 2. Reproductive scaling slopes of 28 annual grassland species. Black dotted line indicates slope of 1 or a 1:1 relationship of vegetative to reproductive biomass. Teal bars indicate species slope is not significantly different than 1. Purple bars indicate slopes significantly different than 1.  
+Fig 2. SMA reproductive scaling slopes of 26 annual grassland species. Black dotted line indicates slope of 1 or a 1:1 relationship of vegetative to reproductive biomass. Teal bars indicate species slope is not significantly different than 1. Purple bars indicate slopes significantly different than 1.
+
+Need to look into AMSMEN. Why so large and disproportionate. See graph above. B8 and H3 seem to be skewing it heavily. Both died in April. Technically produced flowers so they're on the board but got arrested early? Feels  wrong to omit them but their effect is disproportionate.
+Same iwth A2 and A4 potentially.
+
+Maybe go check out all AMSMEN...
+
+
 ```{r}
 #| echo: false
 #| eval: false
 
-# This creates a graph for presentations
+# This creates a graph for presentations. Not yet updated with SMA
 
 ggplot(slopes.df, aes(x = factor(Scientific_Name, level=c(level_order)), y = Veg_Mass_ln.trend
                        , fill = columnColor
@@ -961,20 +1048,6 @@ ggplot(slopes.df, aes(x = factor(Scientific_Name, level=c(level_order)), y = Veg
 ggsave(here::here("figs/Q1_slopes_spp_prez.jpg"), width = 7,height = 3.5)
 ```
 
-```{r}
-#| echo: false
-
-rm(
-  mod
-  , slopes
-  , slopes.df
-  , test_slopes_vs1
-  , level_order
-  , my_plot_ggplot
-)
-```
-
-It's interesting that the three most widespread species are significant and low. And the arguable invasive native is the other significant.
 
 ## Q2: Grass vs Forb Scaling
 
@@ -1221,7 +1294,7 @@ m_g <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + Growth_Habit + (1 | Scientific_Name
 anova(m_s, m_s_g)
 anova(m_g, m_s_g)
 
-AIC(m_g,m_s, m_s_g)
+AIC(m_g,m_s, m_s_g,m_s_r2,m_g_r2,m_g_r2_s)
 
 AIC(m0,m_g,m_r2,mxr2,m_p,m_s,mxpp,m_pp,m_s_g, m_s_r2, m_g_r2, m_g_r2_s)
 
@@ -3929,6 +4002,8 @@ mod <- lm(total_fl_mass_ln ~ Veg_Mass_ln * Sp_Code * Population,
           data = repro_fill_hi_n_narm)
 
 slopes <- emtrends(mod, ~ Sp_Code*Population, var = "Veg_Mass_ln")
+intercepts <- emmeans(mod, ~ Sp_Code * Population,
+                      at = list(Veg_Mass_ln = 0))
 
 slopes.df <- summary(slopes) %>% 
   arrange(desc(Veg_Mass_ln.trend)) %>% 
@@ -3937,19 +4012,27 @@ slopes.df <- summary(slopes) %>%
     Sp_Code
     , Population
     , Veg_Mass_ln.trend
+    , SE
   )
+
+intercepts.df <- as.data.frame(intercepts) %>%
+  arrange(desc(emmean)) %>%
+  filter(!is.na(emmean)) %>%
+  select(Sp_Code, Population, intercept = emmean, SE)
 
 full_slopes <- left_join(slopes.df,full_collapse, by = join_by(Sp_Code,Population))
 
-full_slopes_anon <- full_slopes %>% 
+full_slopes_int <- left_join(intercepts.df,full_slopes, by = join_by(Sp_Code,Population))
+
+full_slopes_int_anon <- full_slopes_int %>% 
   select(
     !c(Sp_Code,
        Population)
   )
 
 library(missMDA)
-nb <- estim_ncpPCA(full_slopes_anon)
-full_imputed <- imputePCA(full_slopes_anon, ncp = nb$ncp)$completeObs
+nb <- estim_ncpPCA(full_slopes_int_anon)
+full_imputed <- imputePCA(full_slopes_int_anon, ncp = nb$ncp)$completeObs
 
 full_scaled <- scale(full_imputed)
 
@@ -4034,3 +4117,170 @@ ggsave("pca_spp.jpg")
 
 ```
 
+```{r}
+str(full_slopes_int)
+str(full_slopes_int_anon)
+str(full_slopes)
+str(full_slopes_anon)
+str(full_collapse)
+
+full_collapse_anon <- full_collapse %>% 
+  ungroup() %>% 
+    select(
+    !c(Sp_Code,
+       Population)
+  )
+
+
+library(missMDA)
+nb <- estim_ncpPCA(full_collapse_anon)
+full_imputed <- imputePCA(full_collapse_anon, ncp = nb$ncp)$completeObs
+
+full_scaled <- scale(full_imputed)
+
+pca <- prcomp(full_scaled, center = TRUE, scale. = TRUE)
+
+# View summary
+summary(pca)
+
+# View loadings
+pca$rotation
+
+loadings_pc1 <- pca$rotation[, 1]
+loadings_pc1
+sort(abs(loadings_pc1), decreasing = TRUE)
+contrib_pc1 <- loadings_pc1^2
+sort(contrib_pc1, decreasing = TRUE)
+
+loadings_pc2 <- pca$rotation[, 2]
+loadings_pc2
+contrib_pc2 <- loadings_pc2^2
+sort(contrib_pc2, decreasing = TRUE)
+
+loadings_pc3 <- pca$rotation[, 3]
+loadings_pc3
+contrib_pc3 <- loadings_pc3^2
+sort(contrib_pc3, decreasing = TRUE)
+
+pca_scores <- as.data.frame(pca$x)
+pca_scores <- pca_scores[, 1:3]  # example: PC1–PC3
+
+pca_scores <- as.data.frame(pca$x)
+pca_scores$Sp_Code <- full_collapse$Sp_Code   
+# Add grouping variable
+pca_scores$Population <- full_collapse$Population
+pca_scores_2 <- left_join(pca_scores,spp, by=join_by("Sp_Code"))
+
+analysis_df <- slopes.df %>%
+  left_join(intercepts.df, by = c("Sp_Code", "Population")) %>%
+  left_join(pca_scores_2, by = c("Sp_Code", "Population")) %>%
+  left_join(full_collapse, by = c("Sp_Code", "Population"))
+
+mod_slope <- lm(Veg_Mass_ln.trend ~ PC1 + PC2 + PC3 +
+                          Growth_Habit + Native_Status + Population,
+                data = analysis_df)
+mod_intercept <- lm(intercept ~ PC1 + PC2 + PC3 +
+                               Growth_Habit + Native_Status + Population,
+                    data = analysis_df)
+
+
+mod1 <- lm(Veg_Mass_ln.trend ~ PC1 + PC2, data = analysis_df)
+mod2 <- lm(Veg_Mass_ln.trend ~ PC1 + PC2 + Growth_Habit, data = analysis_df)
+mod3 <- lm(Veg_Mass_ln.trend ~ PC1 + PC2 + Growth_Habit + Native_Status, data = analysis_df)
+mod4 <- lm(Veg_Mass_ln.trend ~ PC2, data = analysis_df)
+mod5 <- lm(Veg_Mass_ln.trend ~ PC2 + Growth_Habit, data = analysis_df)
+mod6 <- lm(Veg_Mass_ln.trend ~ PC2 + Native_Status, data = analysis_df)
+
+
+AIC(mod1, mod2, mod3,mod4,mod5,mod6)
+
+mod_0 <- lm(Veg_Mass_ln.trend ~ 1, data = analysis_df,weights = 1/ slope_SE^2)
+
+mod_0 <- lm(Veg_Mass_ln.trend ~ 1, data = analysis_df, weights = 1/ SE.x^2)
+mod_1 <- lm(Veg_Mass_ln.trend ~ PC1, data = analysis_df, weights = 1/ SE.x^2)
+mod_2 <- lm(Veg_Mass_ln.trend ~ PC2, data = analysis_df, weights = 1/ SE.x^2)
+mod_3 <- lm(Veg_Mass_ln.trend ~ PC3, data = analysis_df, weights = 1/ SE.x^2)
+
+mod_0 <- lm(Veg_Mass_ln.trend ~ 1, data = analysis_df)
+mod_1 <- lm(Veg_Mass_ln.trend ~ PC1, data = analysis_df)
+mod_2 <- lm(Veg_Mass_ln.trend ~ PC2, data = analysis_df)
+mod_3 <- lm(Veg_Mass_ln.trend ~ PC3, data = analysis_df)
+
+
+anova(mod_0,mod_1)
+anova(mod_0,mod_2)
+anova(mod_0,mod_3)
+mod_6 <- lm(Veg_Mass_ln.trend ~ PC2 + Native_Status, data = analysis_df, weights = 1/ SE.x^2)
+
+anova(mod_0,mod_6)
+
+
+mod_0 <- lm(intercept ~ 1, data = analysis_df, weights = 1/ SE.y^2)
+mod_1 <- lm(intercept ~ PC1, data = analysis_df, weights = 1/ SE.y^2)
+mod_2 <- lm(intercept ~ PC2, data = analysis_df, weights = 1/ SE.y^2)
+mod_3 <- lm(intercept ~ PC3, data = analysis_df, weights = 1/ SE.y^2)
+
+anova(mod_0,mod_1)
+anova(mod_0,mod_2)
+anova(mod_0,mod_3)
+mod_12 <- lm(intercept ~ PC1 + PC2, data = analysis_df, weights = 1/ SE.y^2)
+
+anova(mod_1,mod_12)
+anova(mod_2,mod_12)
+
+mod_6 <- lm(intercept ~ PC2 + Native_Status, data = analysis_df, weights = 1/ SE.y^2)
+mod_7 <- lm(intercept ~ PC2 + Growth_Habit, data = analysis_df, weights = 1/ SE.y^2)
+
+anova(mod_0,mod_6)
+anova(mod_2,mod_6)
+anova(mod_0,mod_7)
+anova(mod_2,mod_7)
+
+AIC(mod_2,mod_6,mod_7)
+
+
+summary(mod_7)
+
+
+library(ggplot2)
+
+ggplot(analysis_df, aes(x = PC2, y = intercept, color = Growth_Habit)) +
+  geom_point(size = 3, alpha = 0.7) +
+  geom_smooth(method = "lm", se = TRUE) +
+  theme_classic() +
+  labs(
+    x = "PC2",
+    y = "Reproductive Scaling Intercept",
+    color = "Native Status"
+  )
+
+library(dplyr)
+
+pred_df <- expand.grid(
+  PC2 = seq(min(analysis_df$PC2), max(analysis_df$PC2), length.out = 100))
+
+pred_df$pred <- predict(mod_2, newdata = pred_df)
+
+
+ggplot() +
+  geom_point(data = analysis_df,
+             aes(x = PC2, y = intercept),
+             alpha = 0.6) +
+  geom_line(data = pred_df,
+            aes(x = PC2, y = pred),
+            size = 1.2) +
+  theme_classic() +
+    labs(
+    x = "Large Size               PC2              Resource Acquisitive",
+    y = "Reproductive Scaling Intercept"
+  )
+
+ggsave(here::here("figs/pca2_intercept.jpg"), width = 7,height = 3.5)
+
+pca$rotation
+
+coef(mod_7)
+coef(mod_2)
+summary(mod_2)
+
+```
