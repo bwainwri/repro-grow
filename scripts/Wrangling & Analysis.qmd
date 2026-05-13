@@ -332,6 +332,7 @@ rm(ca,
 my_plot_ggplot <- image_read(here::here("figs/CA_precip_comp_map.jpg")) %>% 
   image_ggplot(interpolate = TRUE)
 my_plot_ggplot
+rm(my_plot_ggplot)
 ```
 Figure 1. Plant composition of 12 most dominant species in 5 grasslands along latitudinal precipitation gradient in California. Colors in pie chart reflect distinct species. 
 
@@ -842,7 +843,10 @@ repro_fill_hi_n_narm <- read_csv(here::here("data/repro_fill_hi_n_narm.csv"))
 # Remove two grass individuals because they are outliers with high influential, likely weeds
 
 repro_fill_hi_n_narm <- repro_fill_hi_n_narm %>% 
-  filter(!Sp_Code == "LUPSUC") %>% 
+  filter(!Sp_Code %in% c("LUPSUC"
+                         #, "ACMPAR"
+                         #,"CAUCOU"
+                         )) %>% 
    filter(!Plant_ID %in% c("I8.BRODIA.1"
                           ,"B2.AVEBAR.1"
                           ,"C1.AVEBAR.1"
@@ -947,9 +951,30 @@ results <- repro_fill_hi_n_narm %>%
   }) %>%
   ungroup %>% 
   mutate(p_adj = p.adjust(p_value, method = "fdr"))
+
+AMSMEN <- AMSMEN %>% 
+  select(
+    Plant_ID,
+    Flower_1_g,
+    Flower_2_g,
+    Flower_3_g,
+    Flower_4_g,
+    Flower_5_g,
+    Flower_6_g,
+    Flower_7_g,
+    Flower_8_g,
+    Flower_9_g,
+    Flower_10_g,
+    Flower_Count,
+    Veg_Mass,
+    fl_average,
+    total_fl_mass
+  )
+write_csv(AMSMEN,"AMSMEN.csv")
+
 ```
 
-Six species have slopes significantly different than 1.
+Three species have slopes significantly different than 1 (p-value < 0.1)
 
 ```{r}
 #| echo: false
@@ -1014,6 +1039,7 @@ Same iwth A2 and A4 potentially.
 
 Maybe go check out all AMSMEN...
 
+I'm also curious if southern populations of BRODIA are higher than 1.
 
 ```{r}
 #| echo: false
@@ -1053,6 +1079,8 @@ ggsave(here::here("figs/Q1_slopes_spp_prez.jpg"), width = 7,height = 3.5)
 
 Q2: Is there a difference in reproductive allometric scaling between annual forbs and grasses?
 
+Let's separate them anayway since all grasses are not native, then forbs if invasive matters and if site matters. And ask grasses if invasive level matters and if site matters
+
 ```{r}
 # Use a mixed effects linear regression to reflect experimental structure
 mxg <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*Growth_Habit +
@@ -1061,7 +1089,64 @@ mxg <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*Growth_Habit +
               data = repro_fill_hi_n_narm)
 
 summary(mxg)
+anova(mxg)
+#install.packages("lmerTest")
+library(lmerTest)
+anova(mxg)
 
+library(emmeans)
+
+slopes <- emtrends(
+  mxg,
+  ~ Growth_Habit,
+  var = "Veg_Mass_ln"
+)
+
+slopes
+
+slopes_df <- as.data.frame(slopes)
+
+library(ggplot2)
+
+ggplot(slopes_df,
+       aes(x = Growth_Habit,
+           y = Veg_Mass_ln.trend)) +
+
+  geom_point(size = 3) +
+
+  geom_errorbar(
+    aes(ymin = lower.CL,
+        ymax = upper.CL),
+    width = 0.2
+  ) +
+
+  geom_hline(yintercept = 1,
+             linetype = "dashed",
+             color = "black") +
+
+  labs(
+    y = "Scaling slope",
+    x = "Growth habit"
+  ) +
+
+  theme_classic()
+
+library(smatr)
+
+fit <- sma(
+  total_fl_mass_ln ~ Veg_Mass_ln * Growth_Habit,
+  data = repro_fill_hi_n_narm
+)
+
+summary(fit)
+
+```
+
+There appears to be a difference between grasses and forbs (forbs have a steeper slope but this interactive effect is not significant). 
+
+SMA regression can't include random effects which are important. SMA still shows forbs have higher slopes and says slopes are different. 
+
+```{r}
 # This model better accounts for the variation in slopes among species 
 mxgi <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*Growth_Habit +
               (1 + Veg_Mass_ln | Scientific_Name) +
