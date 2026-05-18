@@ -935,7 +935,7 @@ ggplot(AMSMEN, aes(x = Veg_Mass_ln,
 
   theme_classic()
 
-results <- repro_fill_hi_n_narm %>%
+results <- repro_fill_hi_n_narm_2 %>%
   group_by(Scientific_Name) %>%
   do({
     fit <- sma(total_fl_mass_ln ~ Veg_Mass_ln,
@@ -1034,7 +1034,6 @@ rm(level_order
    , AIRCAR
    , AMSMEN
    , a
-   , fit
    , repro_fill_hi_n_narm_2)
 ```
 
@@ -1189,13 +1188,13 @@ p2 <- ggplot() +
 
   # Shared continuous scale
   scale_color_manual(
-    name = "Growth Habit",
+    name = "Functional Type",
     values = c(
     "Forb" = "#3B528BFF",
     "Grass" = "#5DC863FF"
   )) +
     scale_fill_manual(
-      name = "Growth Habit",
+      name = "Functional Type",
       values = c(
     "Forb" = "#3B528BFF",
     "Grass" = "#5DC863FF"
@@ -1232,6 +1231,377 @@ rm(
 There appears to be a difference between grasses and forbs (forbs have a steeper slope but this interactive effect is not significant). 
 
 SMA regression can't include random effects which are important. SMA still shows forbs have higher slopes and says slopes are different. 
+
+# Grasses
+
+```{r}
+# scale spei
+repro_fill_hi_n_narm$spei_c <- scale(repro_fill_hi_n_narm$spei_avg, center = TRUE, scale = FALSE)
+
+repro_grass <- repro_fill_hi_n_narm %>% 
+  filter(Growth_Habit == "Grass")
+
+mxrxs <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*Rating*spei_c +
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = repro_grass)
+
+mxr_s <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*Rating + spei_c +
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = repro_grass)
+
+m_r_s <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + Rating + spei_c +
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = repro_grass)
+
+mxr2_s <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*Rating_2 + spei_c +
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = repro_grass)
+
+m_r2_s <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + Rating_2 + spei_c +
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = repro_grass)
+
+mxr <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*Rating + 
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = repro_grass)
+
+m_r <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + Rating + 
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = repro_grass)
+
+mxr2 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*Rating_2 + 
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = repro_grass)
+
+m_r2 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + Rating_2 + 
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = repro_grass)
+
+mxs <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*spei_c + 
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = repro_grass)
+
+m_s <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + spei_c + 
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = repro_grass)
+
+mV <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + 
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = repro_grass)
+
+ICtab(mxrxs
+      , mxr_s
+      , m_r_s 
+      , mxr2_s
+      , m_r2_s
+      , mxr
+      , m_r
+      , mxr2
+      , m_r2
+      , mxs
+      , m_s)
+
+# Winners are m_s, m_r2_s
+# Runner up is mxr2_s, and m_r_s
+
+lrtest(mV,m_s)
+lrtest(m_s,m_r2_s)
+
+# m_s wins
+slopes <- emtrends(m_s, ~ spei_c, var = "Veg_Mass_ln")
+intercepts <- emmeans(m_s, ~ spei_c,
+                      at = list(Veg_Mass_ln = 0))
+
+slopes.df <- summary(slopes)
+
+
+
+
+# Use plot from below
+library(ggeffects)
+
+# SPEI predictions (3 lines: low, mean, high)
+pred_spei <- ggpredict(m_s, terms = c("Veg_Mass_ln", "spei_c [-1,0,1]"))
+
+library(dplyr)
+
+pred_spei <- as.data.frame(pred_spei) %>%
+  mutate(panel = "Aridity (SPEI)")
+
+pred_spei$spei_c <-as.numeric(pred_spei$group) 
+pred_spei <- pred_spei %>% 
+  mutate(spei_c =
+    case_when(
+      spei_c == 1 ~ -1,
+      spei_c == 2 ~ 0,
+      spei_c == 3 ~ 1
+    )
+  )
+
+pg <- ggplot() +
+
+  # Raw data points
+  geom_point(
+    data = repro_grass,
+    aes(x = Veg_Mass_ln,
+        y = total_fl_mass_ln,
+        color = spei_c),
+    alpha = 0.3
+  ) +
+
+  # Confidence bands
+  geom_ribbon(
+    data = pred_spei,
+    aes(x = x,
+        ymin = conf.low,
+        ymax = conf.high,
+        fill = spei_c,
+        group = spei_c),
+    alpha = 0.2,
+    color = NA
+  ) +
+
+  # Predicted lines
+  geom_line(
+    data = pred_spei,
+    aes(x = x,
+        y = predicted,
+        color = spei_c,
+        group = spei_c),
+    linewidth = 1.2
+  ) +
+
+  # Shared continuous scale
+  scale_color_viridis_c(
+    direction = -1,
+    name = "SPEI",
+    option = "D"
+  ) +
+  scale_fill_viridis_c(
+    direction = -1,
+    name = "SPEI",
+    option = "D",
+    guide = "none"   # prevents duplicate legend
+  ) +
+
+  labs(
+    x = "Ln(Vegetative Biomass)",
+    y = "Predicted ln(Reproductive Biomass)"
+  ) +
+
+  theme_classic() +
+  theme(legend.position = "bottom")
+
+
+pg
+
+repro_fill_hi_n_narm$group <- repro_fill_hi_n_narm$Growth_Habit
+
+
+
+
+```
+
+# Forbs
+
+```{r}
+repro_forb <- repro_fill_hi_n_narm %>% 
+  filter(Growth_Habit == "Forb")
+
+mxg2_s <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*Growth_2 + spei_c +
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = repro_forb)
+
+m_g2_s <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + Growth_2 + spei_c +
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = repro_forb)
+
+
+mxg2 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*Growth_2 + 
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = repro_forb)
+
+m_g2 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + Growth_2 +
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = repro_forb)
+
+mxn_s <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*Native_Status + spei_c +
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = repro_forb)
+
+m_n_s <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + Native_Status + spei_c +
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = repro_forb)
+
+
+mxn <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*Native_Status + 
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = repro_forb)
+
+m_n <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + Native_Status +
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = repro_forb)
+
+
+mxr_s <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*Rating + spei_c +
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = repro_forb)
+
+m_r_s <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + Rating + spei_c +
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = repro_forb)
+
+mxr2_s <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*Rating_2 + spei_c +
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = repro_forb)
+
+m_r2_s <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + Rating_2 + spei_c +
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = repro_forb)
+
+mxr <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*Rating + 
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = repro_forb)
+
+m_r <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + Rating + 
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = repro_forb)
+
+mxr2 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*Rating_2 + 
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = repro_forb)
+
+m_r2 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + Rating_2 + 
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = repro_forb)
+
+mxs <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*spei_c + 
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = repro_forb)
+
+m_s <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + spei_c + 
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = repro_forb)
+
+mV <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + 
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = repro_forb)
+
+ICtab(mxg2_s
+      , m_g2_s
+      , mxg2
+      , m_g2
+      , mxn_s
+      , m_n_s
+      , mxn
+      , m_n
+      , mxr_s
+      , m_r_s 
+      , mxr2_s
+      , m_r2_s
+      , mxr
+      , m_r
+      , mxr2
+      , m_r2
+      , mxs
+      , m_s,
+      mV)
+
+# Winners are mV, m_g2, m_r2
+
+lrtest(mV,m_g2)
+lrtest(mV,m_r2)
+
+# mV wins
+summary(mV)
+
+# m_s wins
+
+
+# SPEI predictions (3 lines: low, mean, high)
+pred_line <- ggpredict(mV, terms = c("Veg_Mass_ln"))
+
+library(dplyr)
+
+pred_line <- as.data.frame(pred_line)
+
+pf <- ggplot() +
+
+  # Raw data points
+  geom_point(
+    data = repro_forb,
+    aes(x = Veg_Mass_ln,
+        y = total_fl_mass_ln),
+    alpha = 0.3
+  ) +
+
+  # Confidence bands
+  geom_ribbon(
+    data = pred_line,
+    aes(x = x,
+        ymin = conf.low,
+        ymax = conf.high),
+    alpha = 0.2,
+    color = NA
+  ) +
+
+  # Predicted lines
+  geom_line(
+    data = pred_line,
+    aes(x = x,
+        y = predicted),
+    linewidth = 1.2
+  ) +
+
+  labs(
+    x = "Ln(Vegetative Biomass)",
+    y = "Predicted ln(Reproductive Biomass)"
+  ) +
+
+  theme_classic() +
+  theme(legend.position = "bottom")
+
+ pf
+
+p3 <- pf | pg
+p3
+
+# Go back and make another map of CA SPEI, maybe even side by side with precip
+
+ggsave(here::here("figs/model_slopes_1.jpg"),p3, width = 7, height = 4)
+
+```
 
 ```{r}
 # This model better accounts for the variation in slopes among species 
