@@ -1623,7 +1623,6 @@ rm(
   , m_r2
   , m_r2_s
   , m_s
-  , mV
   , mxg2
   , mxg2_s
   , mxn
@@ -1634,7 +1633,6 @@ rm(
   , mxr2_s
   , mxs
   , pred_line
-  , repro_forb
   , repro_grass
   , results
   , slopes
@@ -1648,7 +1646,7 @@ Considered including phylogenetics in model but tried using phyr but 29 out of 3
 ```{r}
 # Check assumptions of model
 
-sim_res <- simulateResiduals(m_g)
+sim_res <- simulateResiduals(mV)
 plot(sim_res)
 
 testDispersion(sim_res)
@@ -1659,29 +1657,29 @@ testUniformity(sim_res)
 # Poor on normality but data is robust, as good as it gets
 
 # Check for funnel shape (bad), we want constant variance
-plot(fitted(m_g), resid(m_g))
+plot(fitted(mV), resid(mV))
 abline(h = 0)
 # good
 
 # check for dramatic S-shape (bad)
-qqnorm(resid(m_g))
-qqline(resid(m_g))
+qqnorm(resid(mV))
+qqline(resid(mV))
 # for the most part hugs the line but is a bit skewy
 
 # not sure what this does
-plot(m_g)
+plot(mV)
 
 # determine influential points
-infl <- influence(m_g, group="Scientific_Name")
+infl <- influence(mV, group="Scientific_Name")
 
 # normal across groups, can also do it for plot etc
-qqnorm(ranef(m_g)$Scientific_Name[,1])
-qqline(ranef(m_g)$Scientific_Name[,1])
+qqnorm(ranef(mV)$Scientific_Name[,1])
+qqline(ranef(mV)$Scientific_Name[,1])
 
 #check for singularity
-isSingular(m_g)
+isSingular(mV)
 
-sim_res <- simulateResiduals(m_g)
+sim_res <- simulateResiduals(mV)
 plot(sim_res)
 
 ```
@@ -3520,6 +3518,9 @@ full <- full[!c(rowSums(is.na(full)) > 10),]
 # Go get seed masses
 # Go get phenology
 
+
+
+
 ```
 
 ```{r}
@@ -3594,6 +3595,8 @@ which(full_filled$seed_mass == "NaN" | is.na(full_filled$seed_mass))
 
 ### PCA and/or NMDS
 
+Run raw PCA assuming each line of values are from the same individual (not true) and include all traits
+
 ```{r}
 # There are NaN values in this column
 # force them to be NAs
@@ -3620,17 +3623,11 @@ full_anon <- full_filled %>%
 str(full_anon)
 
 
-
-
-
 library(missMDA)
 nb <- estim_ncpPCA(full_anon)
 full_imputed <- imputePCA(full_anon, ncp = nb$ncp)$completeObs
 
 full_scaled <- scale(full_imputed)
-
-
-
 
 pca <- prcomp(full_scaled, center = TRUE, scale. = TRUE)
 
@@ -3712,6 +3709,7 @@ ggsave("pca_spp.jpg")
 
 
 Now try reducing to species x population and only using slope and intercept. 
+
 ```{r}
 #Need slopes and intercepts from model then merge
 
@@ -3755,142 +3753,12 @@ full_collapse[which(full_collapse$seed_mass == "NaN"), "seed_mass"] <- NA
 
 full_collapse$seed_mass
 
-# Create slopes and merge
-mod <- lm(total_fl_mass_ln ~ Veg_Mass_ln * Sp_Code * Population, 
-          data = repro_fill_hi_n_narm)
-
-slopes <- emtrends(mod, ~ Sp_Code*Population, var = "Veg_Mass_ln")
-intercepts <- emmeans(mod, ~ Sp_Code * Population,
-                      at = list(Veg_Mass_ln = 0))
-
-slopes.df <- summary(slopes) %>% 
-  arrange(desc(Veg_Mass_ln.trend)) %>% 
-  filter(!is.na(Veg_Mass_ln.trend)) %>% 
-  select(
-    Sp_Code
-    , Population
-    , Veg_Mass_ln.trend
-    , SE
-  )
-
-intercepts.df <- as.data.frame(intercepts) %>%
-  arrange(desc(emmean)) %>%
-  filter(!is.na(emmean)) %>%
-  select(Sp_Code, Population, intercept = emmean, SE)
-
-full_slopes <- left_join(slopes.df,full_collapse, by = join_by(Sp_Code,Population))
-
-full_slopes_int <- left_join(intercepts.df,full_slopes, by = join_by(Sp_Code,Population))
-
-full_slopes_int_anon <- full_slopes_int %>% 
-  select(
-    !c(Sp_Code,
-       Population)
-  )
-
-library(missMDA)
-nb <- estim_ncpPCA(full_slopes_int_anon)
-full_imputed <- imputePCA(full_slopes_int_anon, ncp = nb$ncp)$completeObs
-
-full_scaled <- scale(full_imputed)
-
-pca <- prcomp(full_scaled, center = TRUE, scale. = TRUE)
-
-# View summary
-summary(pca)
-
-# View loadings
-pca$rotation
-
-loadings_pc1 <- pca$rotation[, 1]
-loadings_pc1
-sort(abs(loadings_pc1), decreasing = TRUE)
-contrib_pc1 <- loadings_pc1^2
-sort(contrib_pc1, decreasing = TRUE)
-
-loadings_pc2 <- pca$rotation[, 2]
-loadings_pc2
-contrib_pc2 <- loadings_pc2^2
-sort(contrib_pc2, decreasing = TRUE)
-
-loadings_pc3 <- pca$rotation[, 3]
-loadings_pc3
-contrib_pc3 <- loadings_pc3^2
-sort(contrib_pc3, decreasing = TRUE)
-
-biplot(pca)
-
-pca_scores <- as.data.frame(pca$x)
-pca_scores$Sp_Code <- full_slopes$Sp_Code   
-# Add grouping variable
-pca_scores$Population <- full_slopes$Population
-pca_scores_2 <- left_join(pca_scores,spp, by=join_by("Sp_Code"))
-
-ggplot(pca_scores_2, aes(PC1, PC2
-                        # , color = Native_Status
-                        )) +
-  geom_point(size = 3, alpha = 0.8) +
-  theme_minimal() +
-  labs(title = "PCA of Iris Dataset",
-       x = paste0("PC1 (", round(summary(pca)$importance[2,1] * 100, 1), "% variance)"),
-       y = paste0("PC2 (", round(summary(pca)$importance[2,2] * 100, 1), "% variance)"))
-
-
-# Install devtools if needed
-library(ggbiplot)
-
-ggbiplot(pca, groups = pca_scores_2$Native_Status, ellipse = TRUE, circle = TRUE) +
-  scale_color_discrete(name = "") +
-  theme_minimal()
-
-ggsave("pca_native.jpg")
-
-ggbiplot(pca, groups = pca_scores_2$Population, ellipse = TRUE, circle = TRUE) +
-  scale_color_discrete(name = "") +
-  theme_minimal()
-
-ggsave("pca_pop.jpg")
-
-ggbiplot(pca, groups = pca_scores_2$Growth_Habit, ellipse = TRUE, circle = TRUE) +
-  scale_color_discrete(name = "") +
-  theme_minimal()
-
-ggsave("pca_growth.jpg")
-
-ggbiplot(pca, groups = pca_scores_2$Sp_Code, ellipse = TRUE, circle = TRUE) +
-  scale_color_discrete(name = "") +
-  theme_minimal()
-
-ggsave("pca_spp.jpg")
-
-# Make points smaller
-# how to report raw loadings
-
-# Take out veg mass ln.trend and attempt to use PCs to model slope...
-# OR can we use PCs to model fl_mass~veg mass
-
-# Also make a correlation table like from jen's paper but highlighting slope as focal trait
-
-
-
-```
-
-
-
-
-```{r}
-str(full_slopes_int)
-str(full_slopes_int_anon)
-str(full_slopes)
-str(full_collapse)
-
 full_collapse_anon <- full_collapse %>% 
   ungroup() %>% 
     select(
     !c(Sp_Code,
        Population)
   )
-
 
 library(missMDA)
 nb <- estim_ncpPCA(full_collapse_anon)
@@ -3930,119 +3798,6 @@ pca_scores$Sp_Code <- full_collapse$Sp_Code
 # Add grouping variable
 pca_scores$Population <- full_collapse$Population
 pca_scores_2 <- left_join(pca_scores,spp, by=join_by("Sp_Code"))
-
-analysis_df <- slopes.df %>%
-  left_join(intercepts.df, by = c("Sp_Code", "Population")) %>%
-  left_join(pca_scores_2, by = c("Sp_Code", "Population")) %>%
-  left_join(full_collapse, by = c("Sp_Code", "Population"))
-
-mod_slope <- lm(Veg_Mass_ln.trend ~ PC1 + PC2 + PC3 +
-                          Growth_Habit + Native_Status + Population,
-                data = analysis_df)
-mod_intercept <- lm(intercept ~ PC1 + PC2 + PC3 +
-                               Growth_Habit + Native_Status + Population,
-                    data = analysis_df)
-
-
-mod1 <- lm(Veg_Mass_ln.trend ~ PC1 + PC2, data = analysis_df)
-mod2 <- lm(Veg_Mass_ln.trend ~ PC1 + PC2 + Growth_Habit, data = analysis_df)
-mod3 <- lm(Veg_Mass_ln.trend ~ PC1 + PC2 + Growth_Habit + Native_Status, data = analysis_df)
-mod4 <- lm(Veg_Mass_ln.trend ~ PC2, data = analysis_df)
-mod5 <- lm(Veg_Mass_ln.trend ~ PC2 + Growth_Habit, data = analysis_df)
-mod6 <- lm(Veg_Mass_ln.trend ~ PC2 + Native_Status, data = analysis_df)
-
-
-AIC(mod1, mod2, mod3,mod4,mod5,mod6)
-
-mod_0 <- lm(Veg_Mass_ln.trend ~ 1, data = analysis_df,weights = 1/ slope_SE^2)
-
-mod_0 <- lm(Veg_Mass_ln.trend ~ 1, data = analysis_df, weights = 1/ SE.x^2)
-mod_1 <- lm(Veg_Mass_ln.trend ~ PC1, data = analysis_df, weights = 1/ SE.x^2)
-mod_2 <- lm(Veg_Mass_ln.trend ~ PC2, data = analysis_df, weights = 1/ SE.x^2)
-mod_3 <- lm(Veg_Mass_ln.trend ~ PC3, data = analysis_df, weights = 1/ SE.x^2)
-
-mod_0 <- lm(Veg_Mass_ln.trend ~ 1, data = analysis_df)
-mod_1 <- lm(Veg_Mass_ln.trend ~ PC1, data = analysis_df)
-mod_2 <- lm(Veg_Mass_ln.trend ~ PC2, data = analysis_df)
-mod_3 <- lm(Veg_Mass_ln.trend ~ PC3, data = analysis_df)
-
-
-anova(mod_0,mod_1)
-anova(mod_0,mod_2)
-anova(mod_0,mod_3)
-mod_6 <- lm(Veg_Mass_ln.trend ~ PC2 + Native_Status, data = analysis_df, weights = 1/ SE.x^2)
-
-anova(mod_0,mod_6)
-
-
-mod_0 <- lm(intercept ~ 1, data = analysis_df, weights = 1/ SE.y^2)
-mod_1 <- lm(intercept ~ PC1, data = analysis_df, weights = 1/ SE.y^2)
-mod_2 <- lm(intercept ~ PC2, data = analysis_df, weights = 1/ SE.y^2)
-mod_3 <- lm(intercept ~ PC3, data = analysis_df, weights = 1/ SE.y^2)
-
-anova(mod_0,mod_1)
-anova(mod_0,mod_2)
-anova(mod_0,mod_3)
-mod_12 <- lm(intercept ~ PC1 + PC2, data = analysis_df, weights = 1/ SE.y^2)
-
-anova(mod_1,mod_12)
-anova(mod_2,mod_12)
-
-mod_6 <- lm(intercept ~ PC2 + Native_Status, data = analysis_df, weights = 1/ SE.y^2)
-mod_7 <- lm(intercept ~ PC2 + Growth_Habit, data = analysis_df, weights = 1/ SE.y^2)
-
-anova(mod_0,mod_6)
-anova(mod_2,mod_6)
-anova(mod_0,mod_7)
-anova(mod_2,mod_7)
-
-AIC(mod_2,mod_6,mod_7)
-
-
-summary(mod_7)
-
-
-library(ggplot2)
-
-ggplot(analysis_df, aes(x = PC2, y = intercept, color = Growth_Habit)) +
-  geom_point(size = 3, alpha = 0.7) +
-  geom_smooth(method = "lm", se = TRUE) +
-  theme_classic() +
-  labs(
-    x = "PC2",
-    y = "Reproductive Scaling Intercept",
-    color = "Native Status"
-  )
-
-library(dplyr)
-
-pred_df <- expand.grid(
-  PC2 = seq(min(analysis_df$PC2), max(analysis_df$PC2), length.out = 100))
-
-pred_df$pred <- predict(mod_2, newdata = pred_df)
-
-
-ggplot() +
-  geom_point(data = analysis_df,
-             aes(x = PC2, y = intercept),
-             alpha = 0.6) +
-  geom_line(data = pred_df,
-            aes(x = PC2, y = pred),
-            size = 1.2) +
-  theme_classic() +
-    labs(
-    x = "Large Size               PC2              Resource Acquisitive",
-    y = "Reproductive Scaling Intercept"
-  )
-
-ggsave(here::here("figs/pca2_intercept.jpg"), width = 7,height = 3.5)
-
-pca$rotation
-
-coef(mod_7)
-coef(mod_2)
-summary(mod_2)
-
 ```
 
 Now try full_collapse, with reduced traits to see if it's better coverage. Make it anonymous. Try out different traits to get best coverage.
@@ -4055,7 +3810,7 @@ str(full_collapse)
 # Limit it to a handful of traits:
 # growth: RGR-height
 # Size: Height
-# Leaf physiology: Leaf N
+# Leaf physiology: A
 # Phenology
 # Seed mass
 # photosynthetic rate (higher score than WUE)
@@ -4119,25 +3874,29 @@ ggbiplot(pca, groups = pca_scores_2$Native_Status, ellipse = TRUE, circle = TRUE
   scale_color_discrete(name = "") +
   theme_minimal()
 
-ggsave("pca_native.jpg")
+ggsave(here::here("figs/pca_native.jpg"))
 
 ggbiplot(pca, groups = pca_scores_2$Population, ellipse = TRUE, circle = TRUE) +
   scale_color_discrete(name = "") +
   theme_minimal()
 
-ggsave("pca_pop.jpg")
+ggsave(here::here("figs/pca_pop.jpg"))
 
 ggbiplot(pca, groups = pca_scores_2$Growth_Habit, ellipse = TRUE, circle = TRUE) +
   scale_color_discrete(name = "") +
   theme_minimal()
 
-ggsave("pca_growth.jpg")
+ggsave(here::here("figs/pca_growth.jpg"))
 
 ggbiplot(pca, groups = pca_scores_2$Sp_Code, ellipse = TRUE, circle = TRUE) +
   scale_color_discrete(name = "") +
   theme_minimal()
 
-ggsave("pca_spp.jpg")
+ggsave(here::here("figs/pca_spp.jpg"))
+
+# Facet wrap four PCA graphs to show that it was a good idea to use grass v forbs
+
+
 
 
 # use PCs to model fl_mass~veg mass
@@ -4231,6 +3990,11 @@ m_3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC3 +
               (1 | Plot),
               data = analysis_df)
 
+mV <- lmer(total_fl_mass_ln ~ Veg_Mass_ln +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df)
+
 ICtab(m_1
     , m_2
     , m_2_1
@@ -4249,8 +4013,335 @@ ICtab(m_1
     , mx3
     , mx3_1
     , mx3_1_2
-    , mx3_2)
+    , mx3_2
+    , mV)
 
 summary(m_3)
+
+mx1_2_3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*PC1 + PC2 + PC3 + Growth_Habit +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df)
+mx2_1_3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*PC2 + PC1 + PC3 + Growth_Habit +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df)
+mx3_1_2 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*PC3 + PC1 + PC2 + Growth_Habit +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df)
+m_3_1_2 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC3 + PC1 + PC2 + Growth_Habit +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df)
+mx1_2 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*PC1 + PC2 + Growth_Habit +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df)
+mx2_1 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*PC2 + PC1 + Growth_Habit +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df)
+m_2_1 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC2 + PC1 + Growth_Habit +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df)
+mx2_3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*PC2 + PC3 + Growth_Habit +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df)
+mx3_2 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*PC3 + PC2 + Growth_Habit +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df)
+m_3_2 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC3 + PC2 + Growth_Habit +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df)
+mx1_3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*PC1 + PC3 + Growth_Habit +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df)
+mx3_1 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*PC3 + PC1 + Growth_Habit +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df)
+m_3_1 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC3 + PC1 + Growth_Habit +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df)
+mx1 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*PC1 + Growth_Habit +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df)
+m_1 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC1 + Growth_Habit +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df)
+mx2 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*PC2 + Growth_Habit +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df)
+m_2 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC2 + Growth_Habit +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df)
+mx3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*PC3 + Growth_Habit +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df)
+m_3_g <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC3 + Growth_Habit +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df)
+
+mxg_3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*Growth_Habit + PC3 +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df)
+
+m_gx3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC3*Growth_Habit +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df)
+
+m_3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC3 +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df)
+
+m_g <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + Growth_Habit +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df)
+
+mV <- lmer(total_fl_mass_ln ~ Veg_Mass_ln +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df)
+
+ICtab(mV
+      , m_3
+      , m_3_g
+      , mxg_3
+      , m_gx3
+      , m_g)
+
+lrtest(m_3,m_3_g)
+lrtest(m_3,m_gx3)
+lrtest(mV,m_gx3)
+summary(m_gx3)
+
+ICtab(m_1
+    , m_2
+    , m_2_1
+    , m_3
+    , m_3_1
+    , m_3_1_2
+    , m_3_2
+    , mx1
+    , mx1_2
+    , mx1_2_3
+    , mx1_3
+    , mx2
+    , mx2_1
+    , mx2_1_3
+    , mx2_3
+    , mx3
+    , mx3_1
+    , mx3_1_2
+    , mx3_2
+    , mV)
+
+# Model comparison
+# First need to link raw values of rgr, height, and seed mass to analysis_df
+# dataframes: ht, rgrh, seed or seed_a -- seed_a is annuals only, perennials removed
+
+ht_plus <- ht %>% 
+  mutate(Plant_ID = paste0(Plant_ID,".1"))
+rgrh_plus <- rgrh %>% 
+  mutate(Plant_ID = paste0(Plant_ID,".1"))
+
+analysis_df_plus <- analysis_df %>% 
+  left_join(seed_a, by = c("Sp_Code","Population")) %>% 
+  left_join(rgrh_plus, by = c("Plant_ID")) %>% 
+  left_join(ht_plus, by = c("Plant_ID", "Sp_Code"))
+
+
+m_3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC3 +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
+
+mV <- lmer(total_fl_mass_ln ~ Veg_Mass_ln +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
+
+m_gx3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC3*Growth_Habit +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
+
+m_s <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + seed_mass +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
+
+m_r <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + max_rate_ht +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
+
+m_h <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + h_max +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
+
+m_s_r <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + seed_mass + max_rate_ht +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
+
+m_s_h <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + seed_mass + h_max +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
+
+m_h_r <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + h_max + max_rate_ht +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
+
+m_s_h_r <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + seed_mass + h_max + max_rate_ht +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
+
+ICtab(m_3
+      , mV
+      , m_gx3
+      , m_s
+      , m_r
+      , m_h
+      , m_s_r
+      , m_s_h
+      , m_h_r
+      , m_s_h_r)
+
+summary(m_s_r)
+summary(m_3)
+summary(m_r)
+summary(m_gx3)
+
+lrtest(m_s_r, m_s)
+
+#Visualize both m_3 and m_gx3
+pred_m3 <- ggpredict(m_3, terms = "PC3")
+
+ggplot(pred_m3, aes(x = x, y = predicted)) +
+  geom_line(size = 1.2) +
+  geom_ribbon(aes(ymin = conf.low, ymax = conf.high),
+              alpha = 0.2) +
+  labs(
+    x = "PC3",
+    y = "Predicted log floral mass",
+    title = "Effect of PC3 on floral mass"
+  ) +
+  theme_classic()
+
+pred_gx3 <- ggpredict(m_gx3, terms = c("PC3", "Growth_Habit"))
+
+ggplot(pred_gx3,
+       aes(x = x, y = predicted, color = group, fill = group)) +
+  geom_line(size = 1.2) +
+  geom_ribbon(aes(ymin = conf.low, ymax = conf.high),
+              alpha = 0.15,
+              color = NA) +
+  labs(
+    x = "PC3",
+    y = "Predicted log floral mass",
+    color = "Growth Habit",
+    fill = "Growth Habit",
+    title = "Interaction between PC3 and Growth Habit"
+  ) +
+  theme_classic()
+
+ggplot(pred_gx3,
+       aes(x = x,
+           y = predicted,
+           color = group,
+           fill = group)) +
+
+  geom_ribbon(aes(ymin = conf.low,
+                  ymax = conf.high),
+              alpha = 0.15,
+              color = NA) +
+
+  geom_line(size = 1.3) +
+
+  labs(
+    x = "PC3",
+    y = "Predicted floral mass (ln)",
+    color = "Growth habit",
+    fill = "Growth habit"
+  ) +
+
+  theme_classic(base_size = 14) +
+
+  theme(
+    legend.position = "right",
+    axis.title = element_text(face = "bold")
+  )
+
+library(ggeffects)
+library(ggplot2)
+library(dplyr)
+
+# choose 5 PC3 values
+pc3_vals <- quantile(
+  analysis_df_plus$PC3,
+  probs = c(0.1, 0.3, 0.5, 0.7, 0.9),
+  na.rm = TRUE
+)
+
+pc3_vals
+
+pred <- ggpredict(
+  m_gx3,
+  terms = c(
+    "Veg_Mass_ln",
+    paste0("PC3 [", paste(round(pc3_vals, 2), collapse = ","), "]"),
+    "Growth_Habit"
+  )
+)
+
+ggplot(pred,
+       aes(x = x,
+           y = predicted,
+           color = group,
+           fill = group)) +
+
+  geom_line(size = 1.2) +
+
+  geom_ribbon(aes(ymin = conf.low,
+                  ymax = conf.high),
+              alpha = 0.12,
+              color = NA) +
+
+  facet_wrap(~ facet) +
+
+  labs(
+    x = "Vegetative mass (ln)",
+    y = "Predicted floral mass (ln)",
+    color = "PC3",
+    fill = "PC3"
+  ) +
+
+  theme_classic(base_size = 14)
+
+
+
+
 ```
 
