@@ -3870,35 +3870,46 @@ pca_scores_2 <- left_join(pca_scores,spp, by=join_by("Sp_Code"))
 # Install devtools if needed
 library(ggbiplot)
 
-ggbiplot(pca, groups = pca_scores_2$Native_Status, ellipse = TRUE, circle = TRUE) +
+p1 <- ggbiplot(pca, groups = pca_scores_2$Native_Status, ellipse = TRUE, circle = TRUE) +
   scale_color_discrete(name = "") +
   theme_minimal()
 
-ggsave(here::here("figs/pca_native.jpg"))
+#ggsave(here::here("figs/pca_native.jpg"))
 
-ggbiplot(pca, groups = pca_scores_2$Population, ellipse = TRUE, circle = TRUE) +
+p2 <- ggbiplot(pca, groups = pca_scores_2$Population, ellipse = TRUE, circle = TRUE) +
   scale_color_discrete(name = "") +
   theme_minimal()
 
-ggsave(here::here("figs/pca_pop.jpg"))
+#ggsave(here::here("figs/pca_pop.jpg"))
 
-ggbiplot(pca, groups = pca_scores_2$Growth_Habit, ellipse = TRUE, circle = TRUE) +
+p3 <- ggbiplot(pca, groups = pca_scores_2$Growth_Habit, ellipse = TRUE, circle = TRUE) +
   scale_color_discrete(name = "") +
   theme_minimal()
 
-ggsave(here::here("figs/pca_growth.jpg"))
+#ggsave(here::here("figs/pca_growth.jpg"))
 
-ggbiplot(pca, groups = pca_scores_2$Sp_Code, ellipse = TRUE, circle = TRUE) +
+p4 <- ggbiplot(pca, groups = pca_scores_2$Rating, ellipse = TRUE, circle = TRUE) +
   scale_color_discrete(name = "") +
   theme_minimal()
 
-ggsave(here::here("figs/pca_spp.jpg"))
+#ggsave(here::here("figs/pca_spp.jpg"))
 
 # Facet wrap four PCA graphs to show that it was a good idea to use grass v forbs
 
+library(patchwork)
 
+# assuming your plots are:
+# p1, p2, p3, p4
 
+combined_plot <- (p1 | p2) /
+                 (p3 | p4)
 
+combined_plot
+
+ggsave(here::here("figs/combined_pca.jpg"))
+```
+
+```{r}
 # use PCs to model fl_mass~veg mass
 # Need to merge PCs with repro_fill_hi_narm
 
@@ -3913,245 +3924,37 @@ analysis_df <- repro_fill_hi_n_narm %>%
                                  , "Rating_2"
                                  , "Source"))
 
-mx1_2_3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*PC1 + PC2 + PC3 +
-              (1 | Scientific_Name) +
-              (1 | Plot),
-              data = analysis_df)
-mx2_1_3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*PC2 + PC1 + PC3 +
-              (1 | Scientific_Name) +
-              (1 | Plot),
-              data = analysis_df)
-mx3_1_2 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*PC3 + PC1 + PC2 +
-              (1 | Scientific_Name) +
-              (1 | Plot),
-              data = analysis_df)
-m_3_1_2 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC3 + PC1 + PC2 +
-              (1 | Scientific_Name) +
-              (1 | Plot),
-              data = analysis_df)
-mx1_2 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*PC1 + PC2 +
-              (1 | Scientific_Name) +
-              (1 | Plot),
-              data = analysis_df)
-mx2_1 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*PC2 + PC1 +
-              (1 | Scientific_Name) +
-              (1 | Plot),
-              data = analysis_df)
-m_2_1 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC2 + PC1 +
-              (1 | Scientific_Name) +
-              (1 | Plot),
-              data = analysis_df)
-mx2_3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*PC2 + PC3 +
-              (1 | Scientific_Name) +
-              (1 | Plot),
-              data = analysis_df)
-mx3_2 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*PC3 + PC2 +
-              (1 | Scientific_Name) +
-              (1 | Plot),
-              data = analysis_df)
-m_3_2 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC3 + PC2 +
-              (1 | Scientific_Name) +
-              (1 | Plot),
-              data = analysis_df)
-mx1_3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*PC1 + PC3 +
-              (1 | Scientific_Name) +
-              (1 | Plot),
-              data = analysis_df)
-mx3_1 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*PC3 + PC1 +
-              (1 | Scientific_Name) +
-              (1 | Plot),
-              data = analysis_df)
-m_3_1 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC3 + PC1 +
-              (1 | Scientific_Name) +
-              (1 | Plot),
-              data = analysis_df)
-mx1 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*PC1 +
-              (1 | Scientific_Name) +
-              (1 | Plot),
-              data = analysis_df)
-m_1 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC1 +
-              (1 | Scientific_Name) +
-              (1 | Plot),
-              data = analysis_df)
-mx2 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*PC2 +
-              (1 | Scientific_Name) +
-              (1 | Plot),
-              data = analysis_df)
-m_2 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC2 +
-              (1 | Scientific_Name) +
-              (1 | Plot),
-              data = analysis_df)
-mx3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*PC3 +
-              (1 | Scientific_Name) +
-              (1 | Plot),
-              data = analysis_df)
-m_3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC3 +
+# Return here to figure out models and testing
+
+m_1_2_3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC1 + PC2 + PC3 +
               (1 | Scientific_Name) +
               (1 | Plot),
               data = analysis_df)
 
-mV <- lmer(total_fl_mass_ln ~ Veg_Mass_ln +
+m_g_1_2_3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + Growth_Habit + PC1 + PC2 + PC3 +
               (1 | Scientific_Name) +
               (1 | Plot),
               data = analysis_df)
 
-ICtab(m_1
-    , m_2
-    , m_2_1
-    , m_3
-    , m_3_1
-    , m_3_1_2
-    , m_3_2
-    , mx1
-    , mx1_2
-    , mx1_2_3
-    , mx1_3
-    , mx2
-    , mx2_1
-    , mx2_1_3
-    , mx2_3
-    , mx3
-    , mx3_1
-    , mx3_1_2
-    , mx3_2
-    , mV)
-
-summary(m_3)
-
-mx1_2_3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*PC1 + PC2 + PC3 + Growth_Habit +
-              (1 | Scientific_Name) +
-              (1 | Plot),
-              data = analysis_df)
-mx2_1_3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*PC2 + PC1 + PC3 + Growth_Habit +
-              (1 | Scientific_Name) +
-              (1 | Plot),
-              data = analysis_df)
-mx3_1_2 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*PC3 + PC1 + PC2 + Growth_Habit +
-              (1 | Scientific_Name) +
-              (1 | Plot),
-              data = analysis_df)
-m_3_1_2 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC3 + PC1 + PC2 + Growth_Habit +
-              (1 | Scientific_Name) +
-              (1 | Plot),
-              data = analysis_df)
-mx1_2 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*PC1 + PC2 + Growth_Habit +
-              (1 | Scientific_Name) +
-              (1 | Plot),
-              data = analysis_df)
-mx2_1 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*PC2 + PC1 + Growth_Habit +
-              (1 | Scientific_Name) +
-              (1 | Plot),
-              data = analysis_df)
-m_2_1 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC2 + PC1 + Growth_Habit +
-              (1 | Scientific_Name) +
-              (1 | Plot),
-              data = analysis_df)
-mx2_3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*PC2 + PC3 + Growth_Habit +
-              (1 | Scientific_Name) +
-              (1 | Plot),
-              data = analysis_df)
-mx3_2 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*PC3 + PC2 + Growth_Habit +
-              (1 | Scientific_Name) +
-              (1 | Plot),
-              data = analysis_df)
-m_3_2 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC3 + PC2 + Growth_Habit +
-              (1 | Scientific_Name) +
-              (1 | Plot),
-              data = analysis_df)
-mx1_3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*PC1 + PC3 + Growth_Habit +
-              (1 | Scientific_Name) +
-              (1 | Plot),
-              data = analysis_df)
-mx3_1 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*PC3 + PC1 + Growth_Habit +
-              (1 | Scientific_Name) +
-              (1 | Plot),
-              data = analysis_df)
-m_3_1 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC3 + PC1 + Growth_Habit +
-              (1 | Scientific_Name) +
-              (1 | Plot),
-              data = analysis_df)
-mx1 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*PC1 + Growth_Habit +
-              (1 | Scientific_Name) +
-              (1 | Plot),
-              data = analysis_df)
-m_1 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC1 + Growth_Habit +
-              (1 | Scientific_Name) +
-              (1 | Plot),
-              data = analysis_df)
-mx2 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*PC2 + Growth_Habit +
-              (1 | Scientific_Name) +
-              (1 | Plot),
-              data = analysis_df)
-m_2 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC2 + Growth_Habit +
-              (1 | Scientific_Name) +
-              (1 | Plot),
-              data = analysis_df)
-mx3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*PC3 + Growth_Habit +
-              (1 | Scientific_Name) +
-              (1 | Plot),
-              data = analysis_df)
-m_3_g <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC3 + Growth_Habit +
+mxg_1_2_3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*Growth_Habit + PC1 + PC2 + PC3 +
               (1 | Scientific_Name) +
               (1 | Plot),
               data = analysis_df)
 
-mxg_3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*Growth_Habit + PC3 +
+m_1xg_2_3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC1*Growth_Habit + PC2 + PC3 +
               (1 | Scientific_Name) +
               (1 | Plot),
               data = analysis_df)
 
-m_gx3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC3*Growth_Habit +
+m_1_2xg_3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC1 + PC2*Growth_Habit + PC3 +
               (1 | Scientific_Name) +
               (1 | Plot),
               data = analysis_df)
 
-m_3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC3 +
+m_1_2_3xg <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC1 + PC2 + PC3*Growth_Habit +
               (1 | Scientific_Name) +
               (1 | Plot),
               data = analysis_df)
-
-m_g <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + Growth_Habit +
-              (1 | Scientific_Name) +
-              (1 | Plot),
-              data = analysis_df)
-
-mV <- lmer(total_fl_mass_ln ~ Veg_Mass_ln +
-              (1 | Scientific_Name) +
-              (1 | Plot),
-              data = analysis_df)
-
-ICtab(mV
-      , m_3
-      , m_3_g
-      , mxg_3
-      , m_gx3
-      , m_g)
-
-lrtest(m_3,m_3_g)
-lrtest(m_3,m_gx3)
-lrtest(mV,m_gx3)
-summary(m_gx3)
-
-ICtab(m_1
-    , m_2
-    , m_2_1
-    , m_3
-    , m_3_1
-    , m_3_1_2
-    , m_3_2
-    , mx1
-    , mx1_2
-    , mx1_2_3
-    , mx1_3
-    , mx2
-    , mx2_1
-    , mx2_1_3
-    , mx2_3
-    , mx3
-    , mx3_1
-    , mx3_1_2
-    , mx3_2
-    , mV)
 
 # Model comparison
 # First need to link raw values of rgr, height, and seed mass to analysis_df
@@ -4234,8 +4037,6 @@ summary(m_3)
 summary(m_r)
 summary(m_gx3)
 
-lrtest(m_s_r, m_s)
-
 #Visualize both m_3 and m_gx3
 pred_m3 <- ggpredict(m_3, terms = "PC3")
 
@@ -4316,7 +4117,7 @@ pred <- ggpredict(
   )
 )
 
-ggplot(pred,
+p <- ggplot(pred,
        aes(x = x,
            y = predicted,
            color = group,
@@ -4340,7 +4141,7 @@ ggplot(pred,
 
   theme_classic(base_size = 14)
 
-
+ggsave(here::here("figs/PC_models.jpg"),p, width = 7, height = 4)
 
 
 ```
