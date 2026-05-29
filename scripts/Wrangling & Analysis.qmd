@@ -3924,42 +3924,6 @@ analysis_df <- repro_fill_hi_n_narm %>%
                                  , "Rating_2"
                                  , "Source"))
 
-# Return here to figure out models and testing
-
-m_1_2_3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC1 + PC2 + PC3 +
-              (1 | Scientific_Name) +
-              (1 | Plot),
-              data = analysis_df)
-
-m_g_1_2_3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + Growth_Habit + PC1 + PC2 + PC3 +
-              (1 | Scientific_Name) +
-              (1 | Plot),
-              data = analysis_df)
-
-mxg_1_2_3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*Growth_Habit + PC1 + PC2 + PC3 +
-              (1 | Scientific_Name) +
-              (1 | Plot),
-              data = analysis_df)
-
-m_1xg_2_3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC1*Growth_Habit + PC2 + PC3 +
-              (1 | Scientific_Name) +
-              (1 | Plot),
-              data = analysis_df)
-
-m_1_2xg_3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC1 + PC2*Growth_Habit + PC3 +
-              (1 | Scientific_Name) +
-              (1 | Plot),
-              data = analysis_df)
-
-m_1_2_3xg <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC1 + PC2 + PC3*Growth_Habit +
-              (1 | Scientific_Name) +
-              (1 | Plot),
-              data = analysis_df)
-
-# Model comparison
-# First need to link raw values of rgr, height, and seed mass to analysis_df
-# dataframes: ht, rgrh, seed or seed_a -- seed_a is annuals only, perennials removed
-
 ht_plus <- ht %>% 
   mutate(Plant_ID = paste0(Plant_ID,".1"))
 rgrh_plus <- rgrh %>% 
@@ -3970,13 +3934,126 @@ analysis_df_plus <- analysis_df %>%
   left_join(rgrh_plus, by = c("Plant_ID")) %>% 
   left_join(ht_plus, by = c("Plant_ID", "Sp_Code"))
 
+# Return here to figure out models and testing
+# Scale seed mass, height, and growth rate
+# include growth form with raw variables
+# include population
+
+analysis_df_plus$seed_mass_sc <- scale(analysis_df_plus$seed_mass, center = TRUE, scale = TRUE)
+analysis_df_plus$max_rate_ht_sc <- scale(analysis_df_plus$max_rate_ht, center = TRUE, scale = TRUE)
+analysis_df_plus$h_max_sc <- scale(analysis_df_plus$h_max, center = TRUE, scale = TRUE)
+
+m_1_2_3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC1 + PC2 + PC3 +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
+
+m_g_1_2_3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + Growth_Habit + PC1 + PC2 + PC3 +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
+
+mxg_1_2_3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*Growth_Habit + PC1 + PC2 + PC3 +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
+
+m_1xg_2_3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC1*Growth_Habit + PC2 + PC3 +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
+
+m_1_2xg_3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC1 + PC2*Growth_Habit + PC3 +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
+
+m_1_2_3xg <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC1 + PC2 + PC3*Growth_Habit +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
+
+m_p_1_2_3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + Population + PC1 + PC2 + PC3 +
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = analysis_df_plus)
+
+mxp_1_2_3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*Population + PC1 + PC2 + PC3 +
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = analysis_df_plus)
+
+m_1xp_2_3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC1*Population + PC2 + PC3 +
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = analysis_df_plus)
+
+m_1_2xp_3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC1 + PC2*Population + PC3 +
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = analysis_df_plus)
+
+m_1_2_3xp <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC1 + PC2 + PC3*Population +
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = analysis_df_plus)
+
+mV <- lmer(total_fl_mass_ln ~ Veg_Mass_ln +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
+
+m_1 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC1 +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
+
+mx1 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*PC1 +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
+
+m_2 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC2 +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
+
+mx2 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*PC2 +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
 
 m_3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC3 +
               (1 | Scientific_Name) +
               (1 | Plot),
               data = analysis_df_plus)
 
-mV <- lmer(total_fl_mass_ln ~ Veg_Mass_ln +
+mx3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*PC3 +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
+
+m_g_1 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC1 + Growth_Habit +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
+
+m_gx1 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC1*Growth_Habit +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
+
+m_g_2 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC2 + Growth_Habit +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
+
+m_gx2 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC2*Growth_Habit +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
+
+m_g_3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC3 + Growth_Habit +
               (1 | Scientific_Name) +
               (1 | Plot),
               data = analysis_df_plus)
@@ -3986,57 +4063,397 @@ m_gx3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC3*Growth_Habit +
               (1 | Plot),
               data = analysis_df_plus)
 
-m_s <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + seed_mass +
+m_p_1 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC1 + Population +
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = analysis_df_plus)
+
+m_px1 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC1*Population +
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = analysis_df_plus)
+
+m_p_2 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC2 + Population +
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = analysis_df_plus)
+
+m_px2 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC2*Population +
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = analysis_df_plus)
+
+m_p_3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC3 + Population +
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = analysis_df_plus)
+
+m_px3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC3*Population +
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = analysis_df_plus)
+
+m_s <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + seed_mass_sc +
               (1 | Scientific_Name) +
               (1 | Plot),
               data = analysis_df_plus)
 
-m_r <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + max_rate_ht +
+m_r <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + max_rate_ht_sc +
               (1 | Scientific_Name) +
               (1 | Plot),
               data = analysis_df_plus)
 
-m_h <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + h_max +
+m_h <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + h_max_sc +
               (1 | Scientific_Name) +
               (1 | Plot),
               data = analysis_df_plus)
 
-m_s_r <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + seed_mass + max_rate_ht +
+m_s_r <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + seed_mass_sc + max_rate_ht_sc +
               (1 | Scientific_Name) +
               (1 | Plot),
               data = analysis_df_plus)
 
-m_s_h <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + seed_mass + h_max +
+m_s_h <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + seed_mass_sc + h_max_sc +
               (1 | Scientific_Name) +
               (1 | Plot),
               data = analysis_df_plus)
 
-m_h_r <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + h_max + max_rate_ht +
+m_h_r <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + h_max_sc + max_rate_ht_sc +
               (1 | Scientific_Name) +
               (1 | Plot),
               data = analysis_df_plus)
 
-m_s_h_r <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + seed_mass + h_max + max_rate_ht +
+m_s_h_r <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + seed_mass_sc + h_max_sc + max_rate_ht_sc +
               (1 | Scientific_Name) +
               (1 | Plot),
               data = analysis_df_plus)
 
-ICtab(m_3
+m_s_g <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + seed_mass_sc + Growth_Habit + 
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
+
+m_sxg <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + seed_mass_sc*Growth_Habit + 
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
+
+m_r_g <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + max_rate_ht_sc + Growth_Habit +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
+
+m_rxg <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + max_rate_ht_sc*Growth_Habit +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
+
+m_h_g <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + h_max_sc + Growth_Habit +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
+
+m_hxg <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + h_max_sc*Growth_Habit +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
+
+m_s_r_g <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + seed_mass_sc + max_rate_ht_sc + Growth_Habit +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
+
+m_sxg_r <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + seed_mass_sc*Growth_Habit + max_rate_ht_sc +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
+
+m_s_rxg <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + seed_mass_sc + max_rate_ht_sc*Growth_Habit +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
+
+m_s_h_g <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + seed_mass_sc + Growth_Habit + h_max_sc +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
+
+m_sxg_h <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + seed_mass_sc*Growth_Habit + h_max_sc +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
+
+m_s_hxg <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + seed_mass_sc + h_max_sc*Growth_Habit +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
+
+m_h_r_g <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + h_max_sc + max_rate_ht_sc + Growth_Habit +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
+
+m_hxg_r <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + h_max_sc*Growth_Habit + max_rate_ht_sc + 
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
+
+m_h_rxg <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + h_max_sc + max_rate_ht_sc*Growth_Habit + 
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
+
+m_s_h_r_g <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + seed_mass_sc + h_max_sc + max_rate_ht_sc + Growth_Habit +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
+
+m_sxg_h_r <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + seed_mass_sc*Growth_Habit + h_max_sc + max_rate_ht_sc +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
+
+m_s_hxg_r <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + seed_mass_sc + h_max_sc*Growth_Habit + max_rate_ht_sc +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
+m_s_h_rxg <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + seed_mass_sc + h_max_sc + max_rate_ht_sc*Growth_Habit +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
+
+m_s_p <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + seed_mass_sc + Population + 
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = analysis_df_plus)
+
+m_sxp <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + seed_mass_sc*Population + 
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = analysis_df_plus)
+
+m_r_p <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + max_rate_ht_sc + Population +
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = analysis_df_plus)
+
+m_rxp <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + max_rate_ht_sc*Growth_Habit +
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = analysis_df_plus)
+
+m_h_p <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + h_max_sc + Population +
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = analysis_df_plus)
+
+m_hxp <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + h_max_sc*Population +
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = analysis_df_plus)
+
+m_s_r_p <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + seed_mass_sc + max_rate_ht_sc + Population +
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = analysis_df_plus)
+
+m_sxp_r <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + seed_mass_sc*Population + max_rate_ht_sc +
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = analysis_df_plus)
+
+m_s_rxp <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + seed_mass_sc + max_rate_ht_sc*Population +
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = analysis_df_plus)
+
+m_s_h_p <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + seed_mass_sc + Population + h_max_sc +
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = analysis_df_plus)
+
+m_sxp_h <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + seed_mass_sc*Population + h_max_sc +
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = analysis_df_plus)
+
+m_s_hxp <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + seed_mass_sc + h_max_sc*Population +
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = analysis_df_plus)
+
+m_h_r_p <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + h_max_sc + max_rate_ht_sc + Population +
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = analysis_df_plus)
+
+m_hxp_r <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + h_max_sc*Population + max_rate_ht_sc + 
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = analysis_df_plus)
+
+m_h_rxp <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + h_max_sc + max_rate_ht_sc*Population + 
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = analysis_df_plus)
+
+m_s_h_r_p <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + seed_mass_sc + h_max_sc + max_rate_ht_sc + Population +
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = analysis_df_plus)
+
+m_sxp_h_r <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + seed_mass_sc*Population + h_max_sc + max_rate_ht_sc +
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = analysis_df_plus)
+
+m_s_hxp_r <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + seed_mass_sc + h_max_sc*Population + max_rate_ht_sc +
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = analysis_df_plus)
+
+m_s_h_rxp <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + seed_mass_sc + h_max_sc + max_rate_ht_sc*Population +
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = analysis_df_plus)
+
+m_rxp_g <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + max_rate_ht_sc*Population + Growth_Habit +
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = analysis_df_plus)
+
+m_h_p_g <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + h_max_sc + Population + Growth_Habit +
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = analysis_df_plus)
+
+m_r_p_g <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + max_rate_ht_sc + Population + Growth_Habit +
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = analysis_df_plus)
+
+m_h_r_p_g <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + h_max_sc + max_rate_ht_sc + Population + Growth_Habit +
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = analysis_df_plus)
+
+m_pxg <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + Population*Growth_Habit +
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = analysis_df_plus)
+
+m_h_pxg <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + h_max_sc + Population*Growth_Habit +
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = analysis_df_plus)
+
+m_r_pxg <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + max_rate_ht_sc + Population*Growth_Habit +
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = analysis_df_plus)
+
+m_h_r_pxg <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + h_max_sc + max_rate_ht_sc + Population*Growth_Habit +
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = analysis_df_plus)
+
+
+ICtab(m_1_2_3
+      , m_g_1_2_3
+      , mxg_1_2_3
+      , m_1xg_2_3
+      , m_1_2xg_3
+      , m_1_2_3xg
+      , m_p_1_2_3
+      , mxp_1_2_3
+      , m_1xp_2_3
+      , m_1_2xp_3
+      , m_1_2_3xp
       , mV
+      , m_1
+      , mx1
+      , m_2
+      , mx2
+      , m_3
+      , mx3
+      , m_gx1
+      , m_g_1
+      , m_gx2
+      , m_g_2
       , m_gx3
+      , m_g_3
+      , m_px1
+      , m_p_1
+      , m_px2
+      , m_p_2
+      , m_px3
+      , m_p_3
       , m_s
       , m_r
       , m_h
       , m_s_r
       , m_s_h
       , m_h_r
-      , m_s_h_r)
+      , m_s_h_r
+      , m_s_g
+      , m_sxg
+      , m_r_g
+      , m_rxg
+      , m_h_g
+      , m_hxg
+      , m_s_r_g
+      , m_sxg_r
+      , m_s_rxg
+      , m_s_h_g
+      , m_sxg_h
+      , m_s_hxg
+      , m_h_r_g
+      , m_hxg_r
+      , m_h_rxg
+      , m_s_h_r_g
+      , m_sxg_h_r
+      , m_s_hxg_r
+      , m_s_h_rxg
+      , m_s_p
+      , m_sxp
+      , m_r_p
+      , m_rxp
+      , m_h_p
+      , m_hxp
+      , m_s_r_p
+      , m_sxp_r
+      , m_s_rxp
+      , m_s_h_p
+      , m_sxp_h
+      , m_s_hxp
+      , m_h_r_p
+      , m_hxp_r
+      , m_h_rxp
+      , m_s_h_r_p
+      , m_sxp_h_r
+      , m_s_hxp_r
+      , m_s_h_rxp
+      , m_rxp_g
+      , m_h_p_g
+      , m_r_p_g
+      , m_h_r_p_g
+      , m_p_g
+      , m_pxg
+      , m_h_pxg
+      , m_r_pxg
+      , m_h_r_pxg)
 
-summary(m_s_r)
-summary(m_3)
-summary(m_r)
-summary(m_gx3)
+summary(m_h_p_g)
+summary(m_r_p_g)
+summary(m_rxp)
+summary(m_h_p)
+summary(m_h_r_p_g)
 
+## LEFT OFF HERE ##
+
+```
+
+```{r}
 #Visualize both m_3 and m_gx3
 pred_m3 <- ggpredict(m_3, terms = "PC3")
 
@@ -4143,6 +4560,9 @@ p <- ggplot(pred,
 
 ggsave(here::here("figs/PC_models.jpg"),p, width = 7, height = 4)
 
+plot(ggpredict(m_s_r, terms = c("Veg_Mass_ln", "seed_mass","max_rate_ht")))
+
+ggsave(here::here("figs/m_s_r.jpg"), width = 7, height = 4)
 
 ```
 
