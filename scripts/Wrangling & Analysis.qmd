@@ -4357,18 +4357,22 @@ m_h_r_pxg <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + h_max_sc + max_rate_ht_sc + P
               (1 | Shelter),
               data = analysis_df_plus)
 
+m_p_g <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + Population + Growth_Habit +
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = analysis_df_plus)
 
 ICtab(m_1_2_3
-      , m_g_1_2_3
-      , mxg_1_2_3
-      , m_1xg_2_3
-      , m_1_2xg_3
-      , m_1_2_3xg
-      , m_p_1_2_3
-      , mxp_1_2_3
-      , m_1xp_2_3
-      , m_1_2xp_3
-      , m_1_2_3xp
+#      , m_g_1_2_3
+#      , mxg_1_2_3
+#      , m_1xg_2_3
+ #     , m_1_2xg_3
+#      , m_1_2_3xg
+#      , m_p_1_2_3
+#      , mxp_1_2_3
+#      , m_1xp_2_3
+#      , m_1_2xp_3
+#      , m_1_2_3xp
       , mV
       , m_1
       , mx1
@@ -4376,72 +4380,73 @@ ICtab(m_1_2_3
       , mx2
       , m_3
       , mx3
-      , m_gx1
-      , m_g_1
-      , m_gx2
-      , m_g_2
-      , m_gx3
-      , m_g_3
-      , m_px1
-      , m_p_1
-      , m_px2
-      , m_p_2
-      , m_px3
-      , m_p_3
-      , m_s
-      , m_r
-      , m_h
-      , m_s_r
-      , m_s_h
-      , m_h_r
-      , m_s_h_r
-      , m_s_g
-      , m_sxg
-      , m_r_g
-      , m_rxg
-      , m_h_g
-      , m_hxg
-      , m_s_r_g
-      , m_sxg_r
-      , m_s_rxg
-      , m_s_h_g
-      , m_sxg_h
-      , m_s_hxg
-      , m_h_r_g
-      , m_hxg_r
-      , m_h_rxg
-      , m_s_h_r_g
-      , m_sxg_h_r
-      , m_s_hxg_r
-      , m_s_h_rxg
-      , m_s_p
-      , m_sxp
-      , m_r_p
-      , m_rxp
-      , m_h_p
-      , m_hxp
-      , m_s_r_p
-      , m_sxp_r
-      , m_s_rxp
-      , m_s_h_p
-      , m_sxp_h
-      , m_s_hxp
-      , m_h_r_p
-      , m_hxp_r
-      , m_h_rxp
-      , m_s_h_r_p
-      , m_sxp_h_r
-      , m_s_hxp_r
-      , m_s_h_rxp
-      , m_rxp_g
-      , m_h_p_g
-      , m_r_p_g
-      , m_h_r_p_g
-      , m_p_g
-      , m_pxg
-      , m_h_pxg
-      , m_r_pxg
-      , m_h_r_pxg)
+#      , m_gx1
+#      , m_g_1
+#      , m_gx2
+#      , m_g_2
+#      , m_gx3
+#      , m_g_3
+#      , m_px1
+#      , m_p_1
+#      , m_px2
+#      , m_p_2
+#      , m_px3
+#      , m_p_3
+#      , m_s
+#      , m_r
+#      , m_h
+#      , m_s_r
+#      , m_s_h
+#      , m_h_r
+#      , m_s_h_r
+#      , m_s_g
+#      , m_sxg
+#      , m_r_g
+#      , m_rxg
+#      , m_h_g
+#      , m_hxg
+#      , m_s_r_g
+#      , m_sxg_r
+#      , m_s_rxg
+#      , m_s_h_g
+#      , m_sxg_h
+#      , m_s_hxg
+ #     , m_h_r_g
+#      , m_hxg_r
+#      , m_h_rxg
+#      , m_s_h_r_g
+#      , m_sxg_h_r
+#      , m_s_hxg_r
+#      , m_s_h_rxg
+#      , m_s_p
+#      , m_sxp
+#      , m_r_p
+#      , m_rxp
+#      , m_h_p
+#      , m_hxp
+#      , m_s_r_p
+#      , m_sxp_r
+#      , m_s_rxp
+#      , m_s_h_p
+#      , m_sxp_h
+#      , m_s_hxp
+#      , m_h_r_p
+#      , m_hxp_r
+#      , m_h_rxp
+#      , m_s_h_r_p
+#      , m_sxp_h_r
+#      , m_s_hxp_r
+#      , m_s_h_rxp
+#      , m_rxp_g
+#      , m_h_p_g
+#      , m_r_p_g
+#      , m_h_r_p_g
+#      , m_p_g
+#      , m_pxg
+#      , m_h_pxg
+#      , m_r_pxg
+#      , m_h_r_pxg
+)
 
 summary(m_h_p_g)
 summary(m_r_p_g)
@@ -4451,13 +4456,177 @@ summary(m_h_r_p_g)
 
 ## LEFT OFF HERE ##
 
+## Asked Chat GPT on June 1: "I'm trying to figure out which plant traits best predict or explain the reproductive allometric scaling relationship for 28 different species. The species list is comprised of native and invasive species, grasses and forbs, and come from 1-5 different populations from along a precipitation gradient. I ran a PCA with eight traits that explains 69% of the variation in traits. I then used the PCA axes in linear mixed effects models. The third PC alone axes consistently was part of the best fit model (using ICtab). I broke down the third PC axes into it's top three traits and tried those in different combinations in the model, along with growth habit (forbs v grasses) and population. The result is that I have five models with similar dAIC scores (within 2) with different predictors and I'm not sure how to proceed. The models include natural log of vegetative biomass, maximum height, relative height growth rate, population, and growth habit. How should I proceed?" 
+# Followed up with "natural log of reproductive biomass is the response variable"
+
+# ln(R) ~ ln(V)
+mV <- lmer(total_fl_mass_ln ~ Veg_Mass_ln +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
+
+# ln(R) ~ ln(V) + height
+m_h <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + h_max_sc +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
+
+# ln(R) ~ ln(V) + growth rate
+m_r <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + max_rate_ht_sc +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
+
+# ln(R) ~ ln(V) + seed mass
+m_s <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + seed_mass_sc +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
+
+# ln(R) ~ ln(V) + habit
+m_g <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + Growth_Habit +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
+
+m_sp <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + spei_c +
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = analysis_df_plus)
+
+# ln(R) ~ ln(V) + PC3
+m_3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC3 +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
+
+# ln(R) ~ ln(V) + height + ln(V):height
+mxh <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*h_max_sc +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
+
+# ln(R) ~ ln(V) + height + ln(V):rate
+mxr <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*max_rate_ht_sc +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
+
+# ln(R) ~ ln(V) + height + ln(V):seed
+mxs <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*seed_mass_sc +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
+
+# ln(R) ~ ln(V) + habit + ln(V):PC3
+mx3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*PC3 +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
+
+# ln(R) ~ ln(V) + habit + ln(V):habit
+mxg <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*Growth_Habit +
+              (1 | Scientific_Name) +
+              (1 | Plot),
+              data = analysis_df_plus)
+
+mxsp <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*spei_c +
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = analysis_df_plus)
+
+mxsp_3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*spei_c + PC3 +
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = analysis_df_plus)
+
+mx3_sp <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*PC3 + spei_c + 
+              (1 | Scientific_Name) +
+              (1 | Shelter),
+              data = analysis_df_plus)
+
+m_both <- lmer(
+  total_fl_mass_ln ~ Veg_Mass_ln + spei_c + PC3 + (1|Scientific_Name) + (1|Shelter),
+  data = analysis_df_plus
+)
+
+ICtab(
+  mV
+  , m_h
+  , m_r
+  , m_s
+  , m_3
+  , m_g
+  , m_sp
+  , mxh
+  , mxr
+  , mxs
+  , mx3
+  , mxg
+  , mxsp
+  , mxsp_3,
+    m_both,
+  mx3_sp
+)
+
+cor.test(analysis_df_plus$PC3, analysis_df_plus$spei_c)
+
+summary(lm(PC3 ~ spei_c, data = analysis_df_plus))
+
+library(ggplot2)
+
+ggplot(analysis_df_plus, aes(spei_c, PC3)) +
+  geom_point(size = 2, alpha = 0.7) +
+  geom_smooth(method = "lm", se = TRUE) +
+  theme_classic()
+
+library(lme4)
+
+m_PC3 <- lmer(
+  total_fl_mass_ln ~ Veg_Mass_ln + PC3 + (1|Scientific_Name) + (1|Shelter),
+  data = analysis_df_plus
+)
+
+m_arid <- lmer(
+  total_fl_mass_ln ~ Veg_Mass_ln + spei_c + (1|Scientific_Name) + (1|Shelter),
+  data = analysis_df_plus
+)
+
+m_both <- lmer(
+  total_fl_mass_ln ~ Veg_Mass_ln + spei_c + PC3 + (1|Scientific_Name) + (1|Shelter),
+  data = analysis_df_plus
+)
+
+install.packages("AICcmodavg")
+library(AICcmodavg)
+
+aictab(
+  list(m_PC3, m_arid, m_both),
+  modnames = c("PC3", "Aridity", "PC3+Aridity")
+)
+ICtab(m_PC3, m_arid, m_both)
+
+summary(m_both)
+
+library(performance)
+
+check_collinearity(m_both)
+vif(m_both)
+
+ggplot(analysis_df_plus,
+       aes(Veg_Mass_ln, total_fl_mass_ln, color = spei_c)) +
+  geom_point(alpha = 0.6) +
+  geom_smooth(method = "lm", se = FALSE) +
+  scale_color_viridis_c() +
+  theme_classic()
+
 ```
 
 ```{r}
 #Visualize both m_3 and m_gx3
-pred_m3 <- ggpredict(m_3, terms = "PC3")
+pred_mboth <- ggpredict(m_both, terms = "PC3")
 
-ggplot(pred_m3, aes(x = x, y = predicted)) +
+ggplot(pred_mboth, aes(x = x, y = predicted)) +
   geom_line(size = 1.2) +
   geom_ribbon(aes(ymin = conf.low, ymax = conf.high),
               alpha = 0.2) +
@@ -4468,9 +4637,9 @@ ggplot(pred_m3, aes(x = x, y = predicted)) +
   ) +
   theme_classic()
 
-pred_gx3 <- ggpredict(m_gx3, terms = c("PC3", "Growth_Habit"))
+pred_mboth <- ggpredict(m_both, terms = c("PC3", "spei_c"))
 
-ggplot(pred_gx3,
+ggplot(pred_mboth,
        aes(x = x, y = predicted, color = group, fill = group)) +
   geom_line(size = 1.2) +
   geom_ribbon(aes(ymin = conf.low, ymax = conf.high),
@@ -4479,13 +4648,13 @@ ggplot(pred_gx3,
   labs(
     x = "PC3",
     y = "Predicted log floral mass",
-    color = "Growth Habit",
-    fill = "Growth Habit",
+    color = "SPEI",
+    fill = "SPEI",
     title = "Interaction between PC3 and Growth Habit"
   ) +
   theme_classic()
 
-ggplot(pred_gx3,
+ggplot(pred_mboth,
        aes(x = x,
            y = predicted,
            color = group,
@@ -4501,8 +4670,8 @@ ggplot(pred_gx3,
   labs(
     x = "PC3",
     y = "Predicted floral mass (ln)",
-    color = "Growth habit",
-    fill = "Growth habit"
+    color = "SPEI",
+    fill = "SPEI"
   ) +
 
   theme_classic(base_size = 14) +
@@ -4526,11 +4695,11 @@ pc3_vals <- quantile(
 pc3_vals
 
 pred <- ggpredict(
-  m_gx3,
+  m_both,
   terms = c(
     "Veg_Mass_ln",
     paste0("PC3 [", paste(round(pc3_vals, 2), collapse = ","), "]"),
-    "Growth_Habit"
+    "spei_c"
   )
 )
 
