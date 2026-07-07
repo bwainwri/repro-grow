@@ -855,6 +855,14 @@ repro_fill_hi_n_narm <- repro_fill_hi_n_narm %>%
                           ,"F5.BROHOR.1"))
 
 unique(repro_fill_hi_n_narm$Sp_Code)
+unique(repro_fill_hi_n_narm$Scientific_Name)
+
+repro_fill_hi_n_narm <- repro_fill_hi_n_narm %>% 
+    mutate(Scientific_Name = case_when(
+         Scientific_Name == "Bromus hordeaceaus" ~ "Bromus hordeaceus"
+        ,TRUE ~ Scientific_Name
+        )
+    )
 ```
 
 ## Q0: Drought
@@ -1024,7 +1032,7 @@ ggplot(results, aes(x = factor(Scientific_Name, level=c(level_order)), y = slope
   ) + 
   guides(fill=guide_legend(ncol=2)) +
   labs(x = "Species",
-       y = "RV Slope",
+       y = "R:V Slope",
        fill = "")
 
 ggsave(here::here("figs/Q1_slopes_spp_SMA.jpg"))
@@ -1395,7 +1403,8 @@ pg <- ggplot() +
 
   labs(
     x = "Ln(Vegetative Biomass)",
-    y = "Predicted ln(Reproductive Biomass)"
+    y = "Predicted Ln(Reproductive Biomass)",
+    tag = "A"
   ) +
 
   theme_classic() +
@@ -1598,7 +1607,8 @@ pf <- ggplot() +
 
   labs(
     x = "Ln(Vegetative Biomass)",
-    y = "Predicted ln(Reproductive Biomass)"
+    y = "Predicted Ln(Reproductive Biomass)",
+    tag = "B"
   ) +
 
   theme_classic() +
@@ -1606,7 +1616,7 @@ pf <- ggplot() +
 
  pf
 
-p3 <- pf | pg
+p3 <- pg | pf
 p3
 
 # Go back and make another map of CA SPEI, maybe even side by side with precip
@@ -3208,12 +3218,12 @@ rgr_max_h <- rgr2 %>%
 rgr_max_h2 <- rgr_max_h %>% 
   group_by(Plant_ID) %>% 
   summarise(h_max = max(Height_cm, na.rm = TRUE),
-            Sp_Code = Sp_Code,
-            Plot = Plot,
-            Population = Population,
-            Treatment = Treatment
+            Sp_Code = first(Sp_Code),
+            Plot = first(Plot),
+            Population = first(Population),
+            Treatment = first(Treatment)
             ) 
-rgr_max_h2 <- rgr_max_h2[-which(duplicated(rgr_max_h2)),]
+# rgr_max_h2 <- rgr_max_h2[-which(duplicated(rgr_max_h2)),]
 
 
 rgr_max_h3 <- left_join(rgr_max_h2,plots, by = join_by(Plot))
@@ -3893,6 +3903,57 @@ p4 <- ggbiplot(pca, groups = pca_scores_2$Rating, ellipse = TRUE, circle = TRUE)
   theme_minimal()
 
 #ggsave(here::here("figs/pca_spp.jpg"))
+
+p4 <- ggbiplot(pca, groups = pca_scores_2$Rating, ellipse = TRUE, circle = TRUE) +
+  scale_color_discrete(name = "") +
+  theme_minimal()
+
+install.packages("ggrepel")
+library(ggrepel)
+
+p <- ggbiplot(
+  pca,
+  obs.scale = 1,
+  var.scale = 1,
+  var.axes = TRUE,
+  ellipse = FALSE
+)
+
+# Make the points more transparent
+p$layers[[2]]$aes_params$alpha <- 0.3
+
+p + theme_classic()
+
+p <- ggbiplot(
+  pca,
+  obs.scale = 1,
+  var.scale = 1,
+  var.axes = TRUE,
+  ellipse = FALSE
+)
+
+# Make points more transparent (optional)
+p$layers[[2]]$aes_params$alpha <- 0.3
+
+# Save the loading label data
+label_data <- p$layers[[3]]$data
+
+# Remove the original text layer
+p$layers[[3]] <- NULL
+
+# Add repelled labels
+p +
+  geom_text_repel(
+    data = label_data,
+    aes(x = x, y = y, label = label),
+    size = 4,
+    box.padding = 0.3,
+    point.padding = 0.2,
+    segment.color = "grey50",
+    max.overlaps = Inf
+  ) +
+  theme_classic()
+
 
 # Facet wrap four PCA graphs to show that it was a good idea to use grass v forbs
 
@@ -4878,7 +4939,7 @@ pg <- ggplot() +
 
 pg
 ```
-
+Big error when trying to re-run code and PCA. Need to go back through with fine-toothed comb. Left off on trying to get PCA graph labels to spread out for readability. Grrrrr
 
 
 
