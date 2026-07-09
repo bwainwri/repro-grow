@@ -3632,14 +3632,17 @@ full_anon <- full_filled %>%
   ) 
 str(full_anon)
 
+library(mice)
 
-library(missMDA)
-nb <- estim_ncpPCA(full_anon)
-full_imputed <- imputePCA(full_anon, ncp = nb$ncp)$completeObs
+imp <- mice(full_anon,
+            m = 1,
+            method = "pmm",
+            maxit = 20,
+            seed = 123)
 
-full_scaled <- scale(full_imputed)
+dat_imp <- complete(imp)
 
-pca <- prcomp(full_scaled, center = TRUE, scale. = TRUE)
+pca <- prcomp(dat_imp, scale. = TRUE)
 
 # View summary
 summary(pca)
@@ -3686,19 +3689,19 @@ ggbiplot(pca, groups = pca_scores_2$Rating_2, ellipse = TRUE, circle = TRUE) +
   scale_color_discrete(name = "") +
   theme_minimal()
 
-ggsave("pca_rating2.jpg")
+ggsave(here::here("figs/pca_rating2.jpg"))
 
 ggbiplot(pca, groups = pca_scores_2$Growth_2, ellipse = TRUE, circle = TRUE) +
   scale_color_discrete(name = "") +
   theme_minimal()
 
-ggsave("pca_growth2.jpg")
+ggsave(here::here("figs/pca_growth2.jpg"))
 
 ggbiplot(pca, groups = pca_scores_2$Sp_Code, ellipse = TRUE, circle = TRUE) +
   scale_color_discrete(name = "") +
   theme_minimal()
 
-ggsave("pca_spp.jpg")
+ggsave(here::here("figs/pca_spp.jpg"))
 
 # Make points smaller
 # how to report raw loadings
@@ -3770,13 +3773,16 @@ full_collapse_anon <- full_collapse %>%
        Population)
   )
 
-library(missMDA)
-nb <- estim_ncpPCA(full_collapse_anon)
-full_imputed <- imputePCA(full_collapse_anon, ncp = nb$ncp)$completeObs
+library(mice)
 
-full_scaled <- scale(full_imputed)
+imp <- mice(full_collapse_anon,
+            m = 1,
+            method = "pmm",
+            seed = 123)
 
-pca <- prcomp(full_scaled, center = TRUE, scale. = TRUE)
+dat_imp <- complete(imp)
+
+pca <- prcomp(dat_imp, scale. = TRUE)
 
 # View summary
 summary(pca)
@@ -3838,13 +3844,16 @@ full_collapse_anon_ltd <- full_collapse_anon %>%
     , lma_g_m2
   )
 
-library(missMDA)
-nb <- estim_ncpPCA(full_collapse_anon_ltd)
-full_imputed <- imputePCA(full_collapse_anon_ltd, ncp = nb$ncp)$completeObs
+library(mice)
 
-full_scaled <- scale(full_imputed)
+imp <- mice(full_collapse_anon_ltd,
+            m = 1,
+            method = "pmm",
+            seed = 123)
 
-pca <- prcomp(full_scaled, center = TRUE, scale. = TRUE)
+dat_imp <- complete(imp)
+
+pca <- prcomp(dat_imp, scale. = TRUE)
 
 # View summary
 summary(pca)
@@ -3908,8 +3917,17 @@ p4 <- ggbiplot(pca, groups = pca_scores_2$Rating, ellipse = TRUE, circle = TRUE)
   scale_color_discrete(name = "") +
   theme_minimal()
 
-install.packages("ggrepel")
-library(ggrepel)
+new_names <- c(
+  "Height RGR",
+  "Maximum Height",
+  "Leaf N",
+  "Flower Date",
+  "Seed Mass",
+  "Photosynthetic Rate",
+  "Leaf Mass Area"
+)
+
+rownames(pca$rotation) <- new_names
 
 p <- ggbiplot(
   pca,
@@ -3917,43 +3935,16 @@ p <- ggbiplot(
   var.scale = 1,
   var.axes = TRUE,
   ellipse = FALSE
-)
+) +
+  scale_x_continuous(expand = expansion(mult = 0.35)) +
+  scale_y_continuous(expand = expansion(mult = 0.3))
 
 # Make the points more transparent
 p$layers[[2]]$aes_params$alpha <- 0.3
 
 p + theme_classic()
 
-p <- ggbiplot(
-  pca,
-  obs.scale = 1,
-  var.scale = 1,
-  var.axes = TRUE,
-  ellipse = FALSE
-)
-
-# Make points more transparent (optional)
-p$layers[[2]]$aes_params$alpha <- 0.3
-
-# Save the loading label data
-label_data <- p$layers[[3]]$data
-
-# Remove the original text layer
-p$layers[[3]] <- NULL
-
-# Add repelled labels
-p +
-  geom_text_repel(
-    data = label_data,
-    aes(x = x, y = y, label = label),
-    size = 4,
-    box.padding = 0.3,
-    point.padding = 0.2,
-    segment.color = "grey50",
-    max.overlaps = Inf
-  ) +
-  theme_classic()
-
+ggsave(here::here("figs/base_pca.jpg"))
 
 # Facet wrap four PCA graphs to show that it was a good idea to use grass v forbs
 
@@ -4009,56 +4000,6 @@ m_1_2_3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC1 + PC2 + PC3 +
               (1 | Plot),
               data = analysis_df_plus)
 
-m_g_1_2_3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + Growth_Habit + PC1 + PC2 + PC3 +
-              (1 | Scientific_Name) +
-              (1 | Plot),
-              data = analysis_df_plus)
-
-mxg_1_2_3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*Growth_Habit + PC1 + PC2 + PC3 +
-              (1 | Scientific_Name) +
-              (1 | Plot),
-              data = analysis_df_plus)
-
-m_1xg_2_3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC1*Growth_Habit + PC2 + PC3 +
-              (1 | Scientific_Name) +
-              (1 | Plot),
-              data = analysis_df_plus)
-
-m_1_2xg_3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC1 + PC2*Growth_Habit + PC3 +
-              (1 | Scientific_Name) +
-              (1 | Plot),
-              data = analysis_df_plus)
-
-m_1_2_3xg <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC1 + PC2 + PC3*Growth_Habit +
-              (1 | Scientific_Name) +
-              (1 | Plot),
-              data = analysis_df_plus)
-
-m_p_1_2_3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + Population + PC1 + PC2 + PC3 +
-              (1 | Scientific_Name) +
-              (1 | Shelter),
-              data = analysis_df_plus)
-
-mxp_1_2_3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*Population + PC1 + PC2 + PC3 +
-              (1 | Scientific_Name) +
-              (1 | Shelter),
-              data = analysis_df_plus)
-
-m_1xp_2_3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC1*Population + PC2 + PC3 +
-              (1 | Scientific_Name) +
-              (1 | Shelter),
-              data = analysis_df_plus)
-
-m_1_2xp_3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC1 + PC2*Population + PC3 +
-              (1 | Scientific_Name) +
-              (1 | Shelter),
-              data = analysis_df_plus)
-
-m_1_2_3xp <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC1 + PC2 + PC3*Population +
-              (1 | Scientific_Name) +
-              (1 | Shelter),
-              data = analysis_df_plus)
-
 mV <- lmer(total_fl_mass_ln ~ Veg_Mass_ln +
               (1 | Scientific_Name) +
               (1 | Plot),
@@ -4092,66 +4033,6 @@ m_3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC3 +
 mx3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln*PC3 +
               (1 | Scientific_Name) +
               (1 | Plot),
-              data = analysis_df_plus)
-
-m_g_1 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC1 + Growth_Habit +
-              (1 | Scientific_Name) +
-              (1 | Plot),
-              data = analysis_df_plus)
-
-m_gx1 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC1*Growth_Habit +
-              (1 | Scientific_Name) +
-              (1 | Plot),
-              data = analysis_df_plus)
-
-m_g_2 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC2 + Growth_Habit +
-              (1 | Scientific_Name) +
-              (1 | Plot),
-              data = analysis_df_plus)
-
-m_gx2 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC2*Growth_Habit +
-              (1 | Scientific_Name) +
-              (1 | Plot),
-              data = analysis_df_plus)
-
-m_g_3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC3 + Growth_Habit +
-              (1 | Scientific_Name) +
-              (1 | Plot),
-              data = analysis_df_plus)
-
-m_gx3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC3*Growth_Habit +
-              (1 | Scientific_Name) +
-              (1 | Plot),
-              data = analysis_df_plus)
-
-m_p_1 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC1 + Population +
-              (1 | Scientific_Name) +
-              (1 | Shelter),
-              data = analysis_df_plus)
-
-m_px1 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC1*Population +
-              (1 | Scientific_Name) +
-              (1 | Shelter),
-              data = analysis_df_plus)
-
-m_p_2 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC2 + Population +
-              (1 | Scientific_Name) +
-              (1 | Shelter),
-              data = analysis_df_plus)
-
-m_px2 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC2*Population +
-              (1 | Scientific_Name) +
-              (1 | Shelter),
-              data = analysis_df_plus)
-
-m_p_3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC3 + Population +
-              (1 | Scientific_Name) +
-              (1 | Shelter),
-              data = analysis_df_plus)
-
-m_px3 <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + PC3*Population +
-              (1 | Scientific_Name) +
-              (1 | Shelter),
               data = analysis_df_plus)
 
 m_s <- lmer(total_fl_mass_ln ~ Veg_Mass_ln + seed_mass_sc +
@@ -4515,6 +4396,8 @@ summary(m_rxp)
 summary(m_h_p)
 summary(m_h_r_p_g)
 
+anova(m_3, mV)
+anova(m_3, mx3)
 ## LEFT OFF HERE ##
 
 ## Asked Chat GPT on June 1: "I'm trying to figure out which plant traits best predict or explain the reproductive allometric scaling relationship for 28 different species. The species list is comprised of native and invasive species, grasses and forbs, and come from 1-5 different populations from along a precipitation gradient. I ran a PCA with eight traits that explains 69% of the variation in traits. I then used the PCA axes in linear mixed effects models. The third PC alone axes consistently was part of the best fit model (using ICtab). I broke down the third PC axes into it's top three traits and tried those in different combinations in the model, along with growth habit (forbs v grasses) and population. The result is that I have five models with similar dAIC scores (within 2) with different predictors and I'm not sure how to proceed. The models include natural log of vegetative biomass, maximum height, relative height growth rate, population, and growth habit. How should I proceed?" 
@@ -4794,8 +4677,8 @@ p_main <- ggplot() +
     size = 4
   ) +
   labs(
-    x = "Vegetative Biomass (ln)",
-    y = "Predicted\nreproductive biomass (ln)",
+    x = "Ln(Vegetative Biomass)",
+    y = "Predicted\nLn(Reproductive Biomass)",
     tag = "A"
   ) +
 
