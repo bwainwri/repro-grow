@@ -69,10 +69,10 @@ library(LeafArea)
 library(broom)
 library(tidyverse)
 #library(sf)
-#library(geodata)
+library(geodata)
 library(tigris)
 library(ggnewscale)
-#library(scatterpie)
+library(scatterpie)
 library(lmtest)
 library(car)
 library(bbmle)
@@ -197,7 +197,8 @@ colors <- rainbow_hcl(37)
 # ----- plot -----
 ggplot() +
   geom_raster(data = ppt_df, aes(x = x, y = y, fill = ppt)) +
-    scale_fill_viridis_c(name = "Annual precip (mm)") +
+    scale_fill_viridis_c(name = "Annual precip (mm)",
+                         direction = -1) +
   new_scale_fill() +
  geom_segment(
   data = comp_wide,
@@ -286,11 +287,11 @@ scale_fill_manual(
              ,"Phacelia tanacetifolia" = colors[36]
              ,"Mirabilis multiflora" = colors[37]
     )
-    , guide = "none"
+    , guide = none
   ) +
   geom_sf(data = ca, fill = NA, color = "black",linewidth = 0.75) +
   coord_sf(xlim = c(-127, -113), ylim = c(32, 42)) +
-  labs(title = "Annual Precipitation in California (WorldClim v2.1)") +
+#  labs(title = "Annual Precipitation in California (WorldClim v2.1)") +
   theme_minimal() +
   theme(
     panel.grid = element_blank(),
@@ -304,18 +305,22 @@ scale_fill_manual(
                  color = "red", 
                  size = 4)
 
-ggsave(here::here("figs/CA_precip_comp_map.jpg"))
 
-rm(ca,
-   ca_vect,
-   comp_reduced,
-   comp_sum, 
-   comp_wide,
-   pl_list,
-   plant_comp,
-   PlList_2023,
-   ppt_df)
+#ggsave(here::here("figs/CA_precip_comp_map.jpg"))
+
+# rm(ca,
+#   ca_vect,
+#   comp_reduced,
+#   comp_sum, 
+#   comp_wide,
+#   pl_list,
+#   plant_comp,
+#   PlList_2023,
+ #  ppt_df)
 ```
+
+
+
 
 ```{r}
 #| label: fig-plot

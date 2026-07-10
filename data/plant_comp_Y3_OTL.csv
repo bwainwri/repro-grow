@@ -1,0 +1,1076 @@
+Site,Date,Plot,Species,% Cover,Notes,Block,Shelter,Plot_number,Population,Treatment,Scientific_Name,Native_Status,Growth_Habit,Growth_2,Perenniality,Rating,Rating_2,Source
+OTL,4/12/25,E1,AVEBAR,22,"4, numbers in notes indicate phenology 1-10. 1 = completely vegetative, 10 = senesced",5,E,1,ANGELO,Control,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/12/25,E1,Bare,2,NA,5,E,1,ANGELO,Control,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/12/25,E1,Litter,1,NA,5,E,1,ANGELO,Control,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/12/25,E1,Rock,0,NA,5,E,1,ANGELO,Control,Rock,NA,NA,NA,NA,NA,NA,NA
+OTL,4/12/25,E1,PLANOT,24,5,5,E,1,ANGELO,Control,Plagiobothrys nothofulvus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/12/25,E1,ESCCAL,6,1,5,E,1,ANGELO,Control,Eschscholzia californica,Native,Forb,Forb,Perennial,Native,Native,CalFlora
+OTL,4/12/25,E1,BROHOR,8,2,5,E,1,ANGELO,Control,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/12/25,E1,BRODIA,10,1,5,E,1,ANGELO,Control,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/12/25,E1,GALPAR,1,7,5,E,1,ANGELO,Control,Galium parisiense,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/12/25,E1,HYPGLA,10,2,5,E,1,ANGELO,Control,Hypochaeris glabra,Non-native,Forb,Forb,Annual,Limited,Invasive,Cal IPC
+OTL,4/12/25,E1,EPI-1,1,1,5,E,1,ANGELO,Control,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/12/25,E1,AIRCAR,1,3,5,E,1,ANGELO,Control,Aira caryophyllea,Non-native,Grass,Grass,Annual,Non-native,Non-native,CalFlora
+OTL,4/12/25,E1,DAUPUS,1,1,5,E,1,ANGELO,Control,Daucus pusillus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/12/25,E1,UNK-CAR,10,1,5,E,1,ANGELO,Control,Anthriscus caucalis,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/12/25,E1,CLAPUR,1,2,5,E,1,ANGELO,Control,Clarkia purpurea,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/12/25,E1,MADGRA,10,1,5,E,1,ANGELO,Control,Madia gracilis,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/12/25,E2,Bare,14,NA,5,E,2,WWP,Control,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/12/25,E2,Litter,1,NA,5,E,2,WWP,Control,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/12/25,E2,BROMAD,30,5,5,E,2,WWP,Control,Bromus madritensis,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/12/25,E2,AVEBAR,19,4,5,E,2,WWP,Control,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/12/25,E2,BRODIA,3,3,5,E,2,WWP,Control,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/12/25,E2,BROARE,5,8,5,E,2,WWP,Control,Bromus arenarius,Non-native,Grass,Grass,Annual,Non-native,Non-native,CalFlora
+OTL,4/12/25,E2,AMSMEN,1,8,5,E,2,WWP,Control,Amsinckia menziesii,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/12/25,E2,EROCIC,16,5,5,E,2,WWP,Control,Erodium cicutarium,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/12/25,E2,PHATAN,1,6,5,E,2,WWP,Control,Phacelia tanacetifolia,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/12/25,E2,SALCOL,2,6,5,E,2,WWP,Control,NA,NA,NA,NA,NA,NA,NA,NA
+OTL,4/12/25,E2,EPI-1,1,1,5,E,2,WWP,Control,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/12/25,E2,UNK-CAR,3,1,5,E,2,WWP,Control,Anthriscus caucalis,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/12/25,E2,LACSER,1,1,5,E,2,WWP,Control,Lactuca serriola,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/12/25,E2,ESCCAL,1,1,5,E,2,WWP,Control,Eschscholzia californica,Native,Forb,Forb,Perennial,Native,Native,CalFlora
+OTL,4/12/25,E3,Bare,5,NA,5,E,3,ANGELO,Control,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/12/25,E3,Litter,1,NA,5,E,3,ANGELO,Control,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/12/25,E3,AVEBAR,20,4,5,E,3,ANGELO,Control,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/12/25,E3,BROHOR,13,2,5,E,3,ANGELO,Control,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/12/25,E3,BRODIA,5,1,5,E,3,ANGELO,Control,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/12/25,E3,ESCCAL,22,3,5,E,3,ANGELO,Control,Eschscholzia californica,Native,Forb,Forb,Perennial,Native,Native,CalFlora
+OTL,4/12/25,E3,MADGRA,8,1,5,E,3,ANGELO,Control,Madia gracilis,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/12/25,E3,DAUPUS,1,1,5,E,3,ANGELO,Control,Daucus pusillus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/12/25,E3,GALPAR,1,2,5,E,3,ANGELO,Control,Galium parisiense,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/12/25,E3,HYPGLA,15,2,5,E,3,ANGELO,Control,Hypochaeris glabra,Non-native,Forb,Forb,Annual,Limited,Invasive,Cal IPC
+OTL,4/12/25,E3,UNK-CAR,2,1,5,E,3,ANGELO,Control,Anthriscus caucalis,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/12/25,E3,EPI-1,1,1,5,E,3,ANGELO,Control,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/12/25,E3,AIRCAR,1,2,5,E,3,ANGELO,Control,Aira caryophyllea,Non-native,Grass,Grass,Annual,Non-native,Non-native,CalFlora
+OTL,4/12/25,E3,CLAPUR,1,1,5,E,3,ANGELO,Control,Clarkia purpurea,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/12/25,E3,DANCAL,1,1,5,E,3,ANGELO,Control,Danthonia californica,Native,Grass,Grass,Perennial,Native,Native,CalFlora
+OTL,4/12/25,E3,AMCMPAR,1,1,5,E,3,ANGELO,Control,Acmispon parviflorus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/12/25,E4,Bare,17,NA,5,E,4,WWP,Control,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/12/25,E4,Litter,1,NA,5,E,4,WWP,Control,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/12/25,E4,AVEBAR,18,4,5,E,4,WWP,Control,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/12/25,E4,BROMAD,25,5,5,E,4,WWP,Control,Bromus madritensis,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/12/25,E4,BRODIA,14,3,5,E,4,WWP,Control,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/12/25,E4,BROARE,6,8,5,E,4,WWP,Control,Bromus arenarius,Non-native,Grass,Grass,Annual,Non-native,Non-native,CalFlora
+OTL,4/12/25,E4,AMSMEN,6,8,5,E,4,WWP,Control,Amsinckia menziesii,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/12/25,E4,PHATAN,1,6,5,E,4,WWP,Control,Phacelia tanacetifolia,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/12/25,E4,EROCIC,16,6,5,E,4,WWP,Control,Erodium cicutarium,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/12/25,E4,ESCCAL,2,1,5,E,4,WWP,Control,Eschscholzia californica,Native,Forb,Forb,Perennial,Native,Native,CalFlora
+OTL,4/12/25,E4,EPI-1,1,1,5,E,4,WWP,Control,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/12/25,E4,UNK-CAR,1,1,5,E,4,WWP,Control,Anthriscus caucalis,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/12/25,E4,SALCOL,1,2,5,E,4,WWP,Control,NA,NA,NA,NA,NA,NA,NA,NA
+OTL,4/12/25,E5,Litter,6,NA,5,E,5,SEDG,Control,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/12/25,E5,AVEFAT,3,3,5,E,5,SEDG,Control,Avena fatua,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/12/25,E5,BROMAD,5,5,5,E,5,SEDG,Control,Bromus madritensis,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/12/25,E5,BROHOR,4,5,5,E,5,SEDG,Control,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/12/25,E5,STIPUL,10,4,5,E,5,SEDG,Control,Stipa pulchra,Native,Grass,Grass,Perennial,Native,Native,CalFlora
+OTL,4/12/25,E5,MICCAL,1,7,5,E,5,SEDG,Control,Micropus californicus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/12/25,E5,CENMEL,4,2,5,E,5,SEDG,Control,Centaurea melitensis,Non-native,Forb,Forb,Annual,Moderate,Invasive,Cal IPC
+OTL,4/12/25,E5,CORFIL,2,1,5,E,5,SEDG,Control,Corethrogyne filaginafolia,Native,Forb,Forb,Perennial,Native,Native,CalFlora
+OTL,4/12/25,E5,UNK-CAR,1,1,5,E,5,SEDG,Control,Anthriscus caucalis,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/12/25,E5,EPI-1,1,1,5,E,5,SEDG,Control,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/12/25,E5,ESCCAL,3,1,5,E,5,SEDG,Control,Eschscholzia californica,Native,Forb,Forb,Perennial,Native,Native,CalFlora
+OTL,4/12/25,E5,BRODIA,25,5,5,E,5,SEDG,Control,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/12/25,E6,Bare,18,NA,5,E,6,SEDG,Control,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/12/25,E6,Litter,3,NA,5,E,6,SEDG,Control,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/12/25,E6,BRODIA,8,5,5,E,6,SEDG,Control,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/12/25,E6,BROMAD,4,5,5,E,6,SEDG,Control,Bromus madritensis,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/12/25,E6,BROHOR,5,5,5,E,6,SEDG,Control,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/12/25,E6,STIPUL,22,4,5,E,6,SEDG,Control,Stipa pulchra,Native,Grass,Grass,Perennial,Native,Native,CalFlora
+OTL,4/12/25,E6,AVEFAT,4,4,5,E,6,SEDG,Control,Avena fatua,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/12/25,E6,CENMEL,6,2,5,E,6,SEDG,Control,Centaurea melitensis,Non-native,Forb,Forb,Annual,Moderate,Invasive,Cal IPC
+OTL,4/12/25,E6,EROCIC,1,6,5,E,6,SEDG,Control,Erodium cicutarium,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/12/25,E6,MICCAL,1,6,5,E,6,SEDG,Control,Micropus californicus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/12/25,E6,EPI-1,1,1,5,E,6,SEDG,Control,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/12/25,E6,LACSER,1,1,5,E,6,SEDG,Control,Lactuca serriola,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/12/25,E6,CORFIL,4,1,5,E,6,SEDG,Control,Corethrogyne filaginafolia,Native,Forb,Forb,Perennial,Native,Native,CalFlora
+OTL,4/12/25,E7,Bare,11,NA,5,E,7,MCL,Control,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/12/25,E7,Litter,1,NA,5,E,7,MCL,Control,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/12/25,E7,AVEBAR,20,3,5,E,7,MCL,Control,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/12/25,E7,BROHOR,3,3,5,E,7,MCL,Control,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/12/25,E7,BROMAD,5,5,5,E,7,MCL,Control,Bromus madritensis,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/12/25,E7,EROBOT,9,5,5,E,7,MCL,Control,Erodium botrys,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/12/25,E7,CLAPUR,7,1,5,E,7,MCL,Control,Clarkia purpurea,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/12/25,E7,PLAERE,8,7,5,E,7,MCL,Control,Plantago erecta,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/12/25,E7,LUPBIC,3,6,5,E,7,MCL,Control,Lupinus bicolor,Native,Forb,Nfixer,Annual,Native,Native,CalFlora
+OTL,4/12/25,E7,TRIHIR,15,3,5,E,7,MCL,Control,Trifolium hirtum,Non-native,Forb,Nfixer,Annual,Limited,Invasive,Cal IPC
+OTL,4/12/25,E7,ELYCAP,4,1,5,E,7,MCL,Control,Elymus caput-medusae,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/12/25,E7,MICCAL,2,5,5,E,7,MCL,Control,Micropus californicus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/12/25,E7,UNK-CAR,12,1,5,E,7,MCL,Control,Anthriscus caucalis,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/12/25,E7,EPI-1,1,1,5,E,7,MCL,Control,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/12/25,E7,HYGLA,1,2,5,E,7,MCL,Control,Hypochaeris glabra,Non-native,Forb,Forb,Annual,Limited,Invasive,Cal IPC
+OTL,4/12/25,E7,BRODIA,7,3,5,E,7,MCL,Control,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/12/25,E8,Bare,11,NA,5,E,8,BORR,Control,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/12/25,E8,Litter,3,NA,5,E,8,BORR,Control,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/12/25,E8,AVEBAR,19,3,5,E,8,BORR,Control,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/12/25,E8,EROBOT,6,5,5,E,8,BORR,Control,Erodium botrys,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/12/25,E8,CLAPUR,4,2,5,E,8,BORR,Control,Clarkia purpurea,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/12/25,E8,LUPBIC,4,6,5,E,8,BORR,Control,Lupinus bicolor,Native,Forb,Nfixer,Annual,Native,Native,CalFlora
+OTL,4/12/25,E8,DAUPUS,1,1,5,E,8,BORR,Control,Daucus pusillus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/12/25,E8,TORARV,8,1,5,E,8,BORR,Control,Torilis arvensis,Non-native,Forb,Forb,Annual,Moderate,Invasive,Cal IPC
+OTL,4/12/25,E8,MADGRA,24,1,5,E,8,BORR,Control,Madia gracilis,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/12/25,E8,VISCAT,13,1,5,E,8,BORR,Control,NA,NA,NA,NA,NA,NA,NA,NA
+OTL,4/12/25,E8,BROHOR,4,3,5,E,8,BORR,Control,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/12/25,E8,BRODIA,16,2,5,E,8,BORR,Control,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/12/25,E8,GERDIS,2,6,5,E,8,BORR,Control,Geranium dissectum,Non-native,Forb,Forb,Annual,Limited,Invasive,Cal IPC
+OTL,4/12/25,E8,UNK-CAR,3,1,5,E,8,BORR,Control,Anthriscus caucalis,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/12/25,E8,EPI-1,1,1,5,E,8,BORR,Control,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/13/25,B1,Bare,40,NA,2,B,1,BORR,Drought,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/13/25,B1,Litter,16,NA,2,B,1,BORR,Drought,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/13/25,B1,AVEBAR,11,4,2,B,1,BORR,Drought,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/13/25,B1,BROHOR,10,5,2,B,1,BORR,Drought,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/13/25,B1,BRODIA,5,4,2,B,1,BORR,Drought,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/13/25,B1,MADGRA,10,3,2,B,1,BORR,Drought,Madia gracilis,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/13/25,B1,CLAPUR,2,5,2,B,1,BORR,Drought,Clarkia purpurea,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/13/25,B1,TORARV,10,1,2,B,1,BORR,Drought,Torilis arvensis,Non-native,Forb,Forb,Annual,Moderate,Invasive,Cal IPC
+OTL,4/13/25,B1,VISCAT,3,1,2,B,1,BORR,Drought,NA,NA,NA,NA,NA,NA,NA,NA
+OTL,4/13/25,B1,GERDIS,2,7,2,B,1,BORR,Drought,Geranium dissectum,Non-native,Forb,Forb,Annual,Limited,Invasive,Cal IPC
+OTL,4/13/25,B1,DAUPUS,2,1,2,B,1,BORR,Drought,Daucus pusillus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/13/25,B1,LACSER,1,1,2,B,1,BORR,Drought,Lactuca serriola,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/13/25,B1,TRIHIR,1,1,2,B,1,BORR,Drought,Trifolium hirtum,Non-native,Forb,Nfixer,Annual,Limited,Invasive,Cal IPC
+OTL,4/13/25,B1,EROBOT,2,5,2,B,1,BORR,Drought,Erodium botrys,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/13/25,B1,EPI-1,1,1,2,B,1,BORR,Drought,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/13/25,B2,Bare,22,NA,2,B,2,MCL,Drought,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/13/25,B2,Litter,5,NA,2,B,2,MCL,Drought,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/13/25,B2,HOLVIR,15,1,2,B,2,MCL,Drought,Holocarpha virgata,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/13/25,B2,AVEBAR,9,4,2,B,2,MCL,Drought,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/13/25,B2,BROHOR,3,4,2,B,2,MCL,Drought,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/13/25,B2,BRODIA,12,3,2,B,2,MCL,Drought,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/13/25,B2,BROMAD,5,5,2,B,2,MCL,Drought,Bromus madritensis,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/13/25,B2,TRIHIR,20,4,2,B,2,MCL,Drought,Trifolium hirtum,Non-native,Forb,Nfixer,Annual,Limited,Invasive,Cal IPC
+OTL,4/13/25,B2,MICCAL,1,6,2,B,2,MCL,Drought,Micropus californicus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/13/25,B2,EPI-1,1,1,2,B,2,MCL,Drought,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/13/25,B2,LUPBIC,1,8,2,B,2,MCL,Drought,Lupinus bicolor,Native,Forb,Nfixer,Annual,Native,Native,CalFlora
+OTL,4/13/25,B2,PLAERE,1,9,2,B,2,MCL,Drought,Plantago erecta,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/13/25,B2,ELYCAP,5,2,2,B,2,MCL,Drought,Elymus caput-medusae,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/13/25,B2,CLAPUR,2,2,2,B,2,MCL,Drought,Clarkia purpurea,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/13/25,B2,EROBOT,2,7,2,B,2,MCL,Drought,Erodium botrys,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/13/25,B3,Bare,14,NA,2,B,3,SEDG,Drought,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/13/25,B3,Litter,16,NA,2,B,3,SEDG,Drought,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/13/25,B3,AVEFAT,2,10,2,B,3,SEDG,Drought,Avena fatua,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/13/25,B3,BRODIA,45,8,2,B,3,SEDG,Drought,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/13/25,B3,BROHOR,4,7,2,B,3,SEDG,Drought,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/13/25,B3,BROMAD,2,9,2,B,3,SEDG,Drought,Bromus madritensis,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/13/25,B3,CENMEL,5,2,2,B,3,SEDG,Drought,Centaurea melitensis,Non-native,Forb,Forb,Annual,Moderate,Invasive,Cal IPC
+OTL,4/13/25,B3,EROCIC,3,7,2,B,3,SEDG,Drought,Erodium cicutarium,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/13/25,B3,MICCAL,1,8,2,B,3,SEDG,Drought,Micropus californicus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/13/25,B3,EPI-1,1,1,2,B,3,SEDG,Drought,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/13/25,B4,Bare,12,NA,2,B,4,ANGELO,Drought,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/13/25,B4,Litter,15,NA,2,B,4,ANGELO,Drought,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/13/25,B4,AVEBAR,7,4,2,B,4,ANGELO,Drought,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/13/25,B4,BRODIA,9,2,2,B,4,ANGELO,Drought,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/13/25,B4,BROHOR,3,5,2,B,4,ANGELO,Drought,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/13/25,B4,CLAPUR,2,2,2,B,4,ANGELO,Drought,Clarkia purpurea,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/13/25,B4,MADGRA,4,2,2,B,4,ANGELO,Drought,Madia gracilis,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/13/25,B4,GALPAR,1,6,2,B,4,ANGELO,Drought,Galium parisiense,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/13/25,B4,LACSER,1,1,2,B,4,ANGELO,Drought,Lactuca serriola,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/13/25,B4,DAUPUS,2,1,2,B,4,ANGELO,Drought,Daucus pusillus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/13/25,B4,EPI-1,1,1,2,B,4,ANGELO,Drought,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/13/25,B4,ESCCAL,1,1,2,B,4,ANGELO,Drought,Eschscholzia californica,Native,Forb,Forb,Perennial,Native,Native,CalFlora
+OTL,4/13/25,B5,Bare,8,NA,2,B,5,MCL,Drought,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/13/25,B5,Litter,12,NA,2,B,5,MCL,Drought,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/13/25,B5,AVEBAR,3,3,2,B,5,MCL,Drought,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/13/25,B5,BRODIA,4,2,2,B,5,MCL,Drought,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/13/25,B5,BROHOR,3,5,2,B,5,MCL,Drought,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/13/25,B5,BROMAD,4,6,2,B,5,MCL,Drought,Bromus madritensis,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/13/25,F1,BARE,11,NA,1,F,1,ANGELO,Control,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/13/25,F1,Litter,0,NA,1,F,1,ANGELO,Control,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/13/25,F1,AVEBAR,6,4,1,F,1,ANGELO,Control,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/13/25,F1,BRODIA,11,1,1,F,1,ANGELO,Control,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/13/25,F1,BROHOR,7,2,1,F,1,ANGELO,Control,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/13/25,F1,ESCCAL,20,4,1,F,1,ANGELO,Control,Eschscholzia californica,Native,Forb,Forb,Perennial,Native,Native,CalFlora
+OTL,4/13/25,F1,GALPAR,8,4,1,F,1,ANGELO,Control,Galium parisiense,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/13/25,F1,DAUPUS,1,1,1,F,1,ANGELO,Control,Daucus pusillus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/13/25,F1,MADGRA,15,1,1,F,1,ANGELO,Control,Madia gracilis,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/13/25,F1,HYPGLA,5,2,1,F,1,ANGELO,Control,Hypochaeris glabra,Non-native,Forb,Forb,Annual,Limited,Invasive,Cal IPC
+OTL,4/13/25,F1,CLAPUR,1,2,1,F,1,ANGELO,Control,Clarkia purpurea,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/13/25,F1,LACSER,1,1,1,F,1,ANGELO,Control,Lactuca serriola,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/13/25,F1,EPI-1,1,1,1,F,1,ANGELO,Control,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/13/25,F1,AIRCAR,1,2,1,F,1,ANGELO,Control,Aira caryophyllea,Non-native,Grass,Grass,Annual,Non-native,Non-native,CalFlora
+OTL,4/13/25,F2,Bare,45,NA,1,F,2,WWP,Control,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/13/25,F2,Litter,2,NA,1,F,2,WWP,Control,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/13/25,F2,AVEBAR,10,4,1,F,2,WWP,Control,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/13/25,F2,BRODIA,9,4,1,F,2,WWP,Control,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/13/25,F2,BROMAD,5,5,1,F,2,WWP,Control,Bromus madritensis,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/13/25,F2,BROARE,2,9,1,F,2,WWP,Control,Bromus arenarius,Non-native,Grass,Grass,Annual,Non-native,Non-native,CalFlora
+OTL,4/13/25,F2,EROCIC,2,6,1,F,2,WWP,Control,Erodium cicutarium,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/13/25,F2,PHATAN,1,4,1,F,2,WWP,Control,Phacelia tanacetifolia,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/13/25,F2,SALCOL,1,3,1,F,2,WWP,Control,NA,NA,NA,NA,NA,NA,NA,NA
+OTL,4/13/25,F2,MIRMUL,1,1,1,F,2,WWP,Control,Mirabilis multiflora,Native,Forb,Forb,Perennial,Native,Native,CalFlora
+OTL,4/13/25,F2,GALPAR,1,1,1,F,2,WWP,Control,Galium parisiense,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/13/25,F2,AMSMEN,1,8,1,F,2,WWP,Control,Amsinckia menziesii,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/13/25,F3,Bare,10,NA,1,F,3,BORR,Control,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/13/25,F3,Litter,0,NA,1,F,3,BORR,Control,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/13/25,F3,AVEBAR,15,4,1,F,3,BORR,Control,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/13/25,F3,BRODIA,5,3,1,F,3,BORR,Control,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/13/25,F3,BROHOR,4,4,1,F,3,BORR,Control,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/13/25,F3,CLAPUR,3,3,1,F,3,BORR,Control,Clarkia purpurea,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/13/25,F3,MADGRA,6,1,1,F,3,BORR,Control,Madia gracilis,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/13/25,F3,VISCAT,5,1,1,F,3,BORR,Control,NA,NA,NA,NA,NA,NA,NA,NA
+OTL,4/13/25,F3,TORARU,2,1,1,F,3,BORR,Control,Torilis arvensis,Non-native,Forb,Forb,Annual,Moderate,Invasive,Cal IPC
+OTL,4/13/25,F3,TRIHIR,2,1,1,F,3,BORR,Control,Trifolium hirtum,Non-native,Forb,Nfixer,Annual,Limited,Invasive,Cal IPC
+OTL,4/13/25,F3,EROBOT,3,5,1,F,3,BORR,Control,Erodium botrys,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/13/25,F3,GERDIS,1,6,1,F,3,BORR,Control,Geranium dissectum,Non-native,Forb,Forb,Annual,Limited,Invasive,Cal IPC
+OTL,4/13/25,F3,DAUPUS,1,1,1,F,3,BORR,Control,Daucus pusillus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/13/25,F4,Bare,13,NA,1,F,4,MCL,Control,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/13/25,F4,Litter,0,NA,1,F,4,MCL,Control,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/13/25,F4,AVEBAR,8,4,1,F,4,MCL,Control,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/13/25,F4,BRODIA,13,3,1,F,4,MCL,Control,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/13/25,B5,HOLVIR,6,1,2,B,5,MCL,Drought,Holocarpha virgata,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/13/25,B5,TRIHIR,2,2,2,B,5,MCL,Drought,Trifolium hirtum,Non-native,Forb,Nfixer,Annual,Limited,Invasive,Cal IPC
+OTL,4/13/25,B5,MICCAL,1,6,2,B,5,MCL,Drought,Micropus californicus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/13/25,B5,ELYCAP,0,NA,2,B,5,MCL,Drought,Elymus caput-medusae,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/13/25,B5,PLAERE,1,9,2,B,5,MCL,Drought,Plantago erecta,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/13/25,B5,EROBOT,2,6,2,B,5,MCL,Drought,Erodium botrys,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/13/25,B5,CLAPUR,1,1,2,B,5,MCL,Drought,Clarkia purpurea,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/13/25,B5,EPI-1,1,1,2,B,5,MCL,Drought,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/13/25,B5,LACSER,1,1,2,B,5,MCL,Drought,Lactuca serriola,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/13/25,B6,Bare,7,NA,2,B,6,SEDG,Drought,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/13/25,B6,Litter,3,NA,2,B,6,SEDG,Drought,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/13/25,B6,ESCCAL,5,4,2,B,6,SEDG,Drought,Eschscholzia californica,Native,Forb,Forb,Perennial,Native,Native,CalFlora
+OTL,4/13/25,B6,BRODIA,6,6,2,B,6,SEDG,Drought,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/13/25,B6,BROHOR,3,6,2,B,6,SEDG,Drought,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/13/25,B6,BROMAD,5,8,2,B,6,SEDG,Drought,Bromus madritensis,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/13/25,B6,AVEFAT,3,10,2,B,6,SEDG,Drought,Avena fatua,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/13/25,B6,STIPUL,4,4,2,B,6,SEDG,Drought,Stipa pulchra,Native,Grass,Grass,Perennial,Native,Native,CalFlora
+OTL,4/13/25,B6,CENMEL,9,2,2,B,6,SEDG,Drought,Centaurea melitensis,Non-native,Forb,Forb,Annual,Moderate,Invasive,Cal IPC
+OTL,4/13/25,B6,MICCAL,1,7,2,B,6,SEDG,Drought,Micropus californicus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/13/25,B6,CORFIL,8,1,2,B,6,SEDG,Drought,Corethrogyne filaginafolia,Native,Forb,Forb,Perennial,Native,Native,CalFlora
+OTL,4/13/25,B6,EROCIC,4,6,2,B,6,SEDG,Drought,Erodium cicutarium,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/13/25,B6,EPI-1,1,1,2,B,6,SEDG,Drought,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/13/25,B7,Bare,20,NA,2,B,7,BORR,Drought,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/13/25,B7,Litter,4,NA,2,B,7,BORR,Drought,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/13/25,B7,AVEBAR,3,3,2,B,7,BORR,Drought,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/13/25,B7,BRODIA,4,2,2,B,7,BORR,Drought,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/13/25,B7,BROHOR,3,5,2,B,7,BORR,Drought,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/13/25,B7,CLAPUR,2,4,2,B,7,BORR,Drought,Clarkia purpurea,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/13/25,B7,TORARV,18,1,2,B,7,BORR,Drought,Torilis arvensis,Non-native,Forb,Forb,Annual,Moderate,Invasive,Cal IPC
+OTL,4/13/25,B7,MADGRA,4,2,2,B,7,BORR,Drought,Madia gracilis,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/13/25,B7,GERDIS,5,7,2,B,7,BORR,Drought,Geranium dissectum,Non-native,Forb,Forb,Annual,Limited,Invasive,Cal IPC
+OTL,4/13/25,B7,DAUPUS,5,1,2,B,7,BORR,Drought,Daucus pusillus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/13/25,B7,TRIHIR,1,2,2,B,7,BORR,Drought,Trifolium hirtum,Non-native,Forb,Nfixer,Annual,Limited,Invasive,Cal IPC
+OTL,4/13/25,B8,Bare,4,NA,2,B,8,WWP,Drought,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/13/25,B8,Litter,4,NA,2,B,8,WWP,Drought,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/13/25,B8,AVEBAR,3,4,2,B,8,WWP,Drought,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/13/25,B8,BRODIA,20,4,2,B,8,WWP,Drought,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/13/25,B8,BROMAD,20,5,2,B,8,WWP,Drought,Bromus madritensis,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/13/25,B8,EROCIC,15,5,2,B,8,WWP,Drought,Erodium cicutarium,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/13/25,B8,EPI-1,1,1,2,B,8,WWP,Drought,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/13/25,B8,PHATAN,1,8,2,B,8,WWP,Drought,Phacelia tanacetifolia,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/13/25,B8,SALCOL,2,2,2,B,8,WWP,Drought,NA,NA,NA,NA,NA,NA,NA,NA
+OTL,4/13/25,B8,LACSER,1,1,2,B,8,WWP,Drought,Lactuca serriola,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/13/25,B8,BROARE,3,8,2,B,8,WWP,Drought,Bromus arenarius,Non-native,Grass,Grass,Annual,Non-native,Non-native,CalFlora
+OTL,4/13/25,F8,Bare,6,NA,1,F,8,BORR,Control,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/13/25,F8,Litter,0,NA,1,F,8,BORR,Control,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/13/25,F8,AVEBAR,12,4,1,F,8,BORR,Control,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/13/25,F8,BRODIA,12,2,1,F,8,BORR,Control,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/13/25,F8,BROHOR,2,5,1,F,8,BORR,Control,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/13/25,F8,VISCAT,5,5,1,F,8,BORR,Control,NA,NA,NA,NA,NA,NA,NA,NA
+OTL,4/13/25,F8,GERDIS,1,5,1,F,8,BORR,Control,Geranium dissectum,Non-native,Forb,Forb,Annual,Limited,Invasive,Cal IPC
+OTL,4/13/25,F8,MADGRA,5,1,1,F,8,BORR,Control,Madia gracilis,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/13/25,F8,DAUPUS,1,1,1,F,8,BORR,Control,Daucus pusillus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/13/25,F8,TORARV,1,1,1,F,8,BORR,Control,Torilis arvensis,Non-native,Forb,Forb,Annual,Moderate,Invasive,Cal IPC
+OTL,4/13/25,F8,CLAPUR,1,2,1,F,8,BORR,Control,Clarkia purpurea,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/13/25,F8,TRIHIR,2,1,1,F,8,BORR,Control,Trifolium hirtum,Non-native,Forb,Nfixer,Annual,Limited,Invasive,Cal IPC
+OTL,4/13/25,F8,EROBOT,1,5,1,F,8,BORR,Control,Erodium botrys,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/14/25,G1,Bare,10,NA,2,G,1,BORR,Control,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/14/25,G1,Litter,1,NA,2,G,1,BORR,Control,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/14/25,G1,AVEBAR,8,3,2,G,1,BORR,Control,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/14/25,G1,BRODIA,10,3,2,G,1,BORR,Control,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/14/25,G1,VISCAT,11,5,2,G,1,BORR,Control,NA,NA,NA,NA,NA,NA,NA,NA
+OTL,4/14/25,G1,BROHOR,7,5,2,G,1,BORR,Control,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/14/25,G1,CLAPUR,2,4,2,G,1,BORR,Control,Clarkia purpurea,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/14/25,G1,TORARV,1,1,2,G,1,BORR,Control,Torilis arvensis,Non-native,Forb,Forb,Annual,Moderate,Invasive,Cal IPC
+OTL,4/14/25,G1,EROBOT,1,5,2,G,1,BORR,Control,Erodium botrys,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/14/25,G1,DAUPUS,1,1,2,G,1,BORR,Control,Daucus pusillus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/14/25,G1,GERDIS,2,5,2,G,1,BORR,Control,Geranium dissectum,Non-native,Forb,Forb,Annual,Limited,Invasive,Cal IPC
+OTL,4/14/25,G1,TRIHIR,1,1,2,G,1,BORR,Control,Trifolium hirtum,Non-native,Forb,Nfixer,Annual,Limited,Invasive,Cal IPC
+OTL,4/14/25,G1,MADGRA,2,1,2,G,1,BORR,Control,Madia gracilis,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/14/25,G2,Bare,9,NA,2,G,2,MCL,Control,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/14/25,G2,Litter,1,NA,2,G,2,MCL,Control,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/14/25,G2,AVEBAR,2,4,2,G,2,MCL,Control,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/14/25,G2,BROMAD,5,5,2,G,2,MCL,Control,Bromus madritensis,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/14/25,G2,BROHOR,1,5,2,G,2,MCL,Control,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/14/25,G2,BRODIA,4,2,2,G,2,MCL,Control,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/14/25,G2,ELYCAP,1,1,2,G,2,MCL,Control,Elymus caput-medusae,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/14/25,G2,PLAERE,1,8,2,G,2,MCL,Control,Plantago erecta,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/14/25,G2,LUPBIC,20,6,2,G,2,MCL,Control,Lupinus bicolor,Native,Forb,Nfixer,Annual,Native,Native,CalFlora
+OTL,4/14/25,G2,HOLVIR,5,1,2,G,2,MCL,Control,Holocarpha virgata,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/14/25,G2,MICCAL,1,5,2,G,2,MCL,Control,Micropus californicus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/14/25,G2,EROBOT,3,5,2,G,2,MCL,Control,Erodium botrys,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/14/25,G2,CLAPUR,1,1,2,G,2,MCL,Control,Clarkia purpurea,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/14/25,G2,UNK-CAR,1,1,2,G,2,MCL,Control,Anthriscus caucalis,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/14/25,G2,TRIHIR,3,2,2,G,2,MCL,Control,Trifolium hirtum,Non-native,Forb,Nfixer,Annual,Limited,Invasive,Cal IPC
+OTL,4/14/25,G2,CENMEL,1,1,2,G,2,MCL,Control,Centaurea melitensis,Non-native,Forb,Forb,Annual,Moderate,Invasive,Cal IPC
+OTL,4/14/25,G2,EPI-1,1,1,2,G,2,MCL,Control,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/13/25,F4,BROHOR,4,5,1,F,4,MCL,Control,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/13/25,F4,BROMAD,2,5,1,F,4,MCL,Control,Bromus madritensis,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/13/25,F4,ELYCAP,4,1,1,F,4,MCL,Control,Elymus caput-medusae,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/13/25,F4,PLAERE,7,6,1,F,4,MCL,Control,Plantago erecta,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/13/25,F4,CLAPUR,2,1,1,F,4,MCL,Control,Clarkia purpurea,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/13/25,F4,EROBOT,5,5,1,F,4,MCL,Control,Erodium botrys,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/13/25,F4,MICCAL,1,4,1,F,4,MCL,Control,Micropus californicus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/13/25,F4,TRIHIR,1,1,1,F,4,MCL,Control,Trifolium hirtum,Non-native,Forb,Nfixer,Annual,Limited,Invasive,Cal IPC
+OTL,4/13/25,F5,Bare,20,NA,1,F,5,MCL,Control,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/13/25,F5,Litter,0,NA,1,F,5,MCL,Control,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/13/25,F5,AVEBAR,11,4,1,F,5,MCL,Control,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/13/25,F5,BRODIA,11,2,1,F,5,MCL,Control,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/13/25,F5,BROHOR,3,5,1,F,5,MCL,Control,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/13/25,F5,BROMAD,2,5,1,F,5,MCL,Control,Bromus madritensis,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/13/25,F5,ELYCAP,4,1,1,F,5,MCL,Control,Elymus caput-medusae,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/13/25,F5,PLAERE,2,5,1,F,5,MCL,Control,Plantago erecta,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/13/25,F5,CLAPUR,1,1,1,F,5,MCL,Control,Clarkia purpurea,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/13/25,F5,MICCAL,1,4,1,F,5,MCL,Control,Micropus californicus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/13/25,F5,TRIHIR,2,2,1,F,5,MCL,Control,Trifolium hirtum,Non-native,Forb,Nfixer,Annual,Limited,Invasive,Cal IPC
+OTL,4/13/25,F5,EROBOT,1,5,1,F,5,MCL,Control,Erodium botrys,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/13/25,F5,LUPBIC,1,6,1,F,5,MCL,Control,Lupinus bicolor,Native,Forb,Nfixer,Annual,Native,Native,CalFlora
+OTL,4/13/25,F6,Bare,8,NA,1,F,6,SEDG,Control,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/13/25,F6,Litter,2,NA,1,F,6,SEDG,Control,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/13/25,F6,AVEBAR,5,4,1,F,6,SEDG,Control,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/13/25,F6,AVEFAT,3,5,1,F,6,SEDG,Control,Avena fatua,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/13/25,F6,CORFIL,4,1,1,F,6,SEDG,Control,Corethrogyne filaginafolia,Native,Forb,Forb,Perennial,Native,Native,CalFlora
+OTL,4/13/25,F6,BRODIA,11,5,1,F,6,SEDG,Control,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/13/25,F6,BROHOR,3,5,1,F,6,SEDG,Control,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/13/25,F6,BROMAD,1,5,1,F,6,SEDG,Control,Bromus madritensis,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/13/25,F6,STIPUL,2,4,1,F,6,SEDG,Control,Stipa pulchra,Native,Grass,Grass,Perennial,Native,Native,CalFlora
+OTL,4/13/25,F6,MICCAl,1,6,1,F,6,SEDG,Control,Micropus californicus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/13/25,F6,CENMEL,2,1,1,F,6,SEDG,Control,Centaurea melitensis,Non-native,Forb,Forb,Annual,Moderate,Invasive,Cal IPC
+OTL,4/13/25,F6,UNK-CAR,1,1,1,F,6,SEDG,Control,Anthriscus caucalis,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/13/25,F6,LACSER,1,1,1,F,6,SEDG,Control,Lactuca serriola,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/13/25,F6,EROCIC,1,5,1,F,6,SEDG,Control,Erodium cicutarium,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/13/25,F6,ESCCAL,1,1,1,F,6,SEDG,Control,Eschscholzia californica,Native,Forb,Forb,Perennial,Native,Native,CalFlora
+OTL,4/13/25,F7,Bare,75,NA,1,F,7,WWP,Control,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/13/25,F7,Litter,0,NA,1,F,7,WWP,Control,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/13/25,F7,AVEBAR,8,4,1,F,7,WWP,Control,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/13/25,F7,BRODIA,3,2,1,F,7,WWP,Control,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/13/25,F7,BROMAD,2,5,1,F,7,WWP,Control,Bromus madritensis,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/13/25,F7,AMSMEN,1,7,1,F,7,WWP,Control,Amsinckia menziesii,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/13/25,F7,BROARE,2,8,1,F,7,WWP,Control,Bromus arenarius,Non-native,Grass,Grass,Annual,Non-native,Non-native,CalFlora
+OTL,4/13/25,F7,UNK-CAR,1,1,1,F,7,WWP,Control,Anthriscus caucalis,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/13/25,F7,LACSER,1,1,1,F,7,WWP,Control,Lactuca serriola,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/14/25,G6,BROHOR,13,3,2,G,6,ANGELO,Control,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/14/25,G6,ESCCAL,9,4,2,G,6,ANGELO,Control,Eschscholzia californica,Native,Forb,Forb,Perennial,Native,Native,CalFlora
+OTL,4/14/25,G6,MADGRA,21,2,2,G,6,ANGELO,Control,Madia gracilis,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/14/25,G6,SANBIP,2,5,2,G,6,ANGELO,Control,Sanicula bipinnatifida,Native,Forb,Forb,Perennial,Native,Native,CalFlora
+OTL,4/14/25,G6,GALPAR,6,5,2,G,6,ANGELO,Control,Galium parisiense,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/14/25,G6,CLAPUR,1,2,2,G,6,ANGELO,Control,Clarkia purpurea,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/14/25,G6,HYPGLA,5,2,2,G,6,ANGELO,Control,Hypochaeris glabra,Non-native,Forb,Forb,Annual,Limited,Invasive,Cal IPC
+OTL,4/14/25,G6,LACSER,1,1,2,G,6,ANGELO,Control,Lactuca serriola,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/14/25,G6,DAUPUS,1,0,2,G,6,ANGELO,Control,Daucus pusillus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/14/25,G6,AIRCAR,1,2,2,G,6,ANGELO,Control,Aira caryophyllea,Non-native,Grass,Grass,Annual,Non-native,Non-native,CalFlora
+OTL,4/14/25,G7,Bare,4,NA,2,G,7,ANGELO,Control,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/14/25,G7,Litter,0,NA,2,G,7,ANGELO,Control,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/14/25,G7,AVEBAR,3,3,2,G,7,ANGELO,Control,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/14/25,G7,BRODIA,4,2,2,G,7,ANGELO,Control,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/14/25,G7,BROHOR,10,3,2,G,7,ANGELO,Control,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/14/25,G7,AIRCAR,1,2,2,G,7,ANGELO,Control,Aira caryophyllea,Non-native,Grass,Grass,Annual,Non-native,Non-native,CalFlora
+OTL,4/14/25,G7,HYPGLA,3,2,2,G,7,ANGELO,Control,Hypochaeris glabra,Non-native,Forb,Forb,Annual,Limited,Invasive,Cal IPC
+OTL,4/14/25,G7,DAUPUS,3,1,2,G,7,ANGELO,Control,Daucus pusillus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/14/25,G7,MADGRA,8,1,2,G,7,ANGELO,Control,Madia gracilis,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/14/25,G7,GALPAR,12,3,2,G,7,ANGELO,Control,Galium parisiense,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/14/25,G7,ESCCAL,4,4,2,G,7,ANGELO,Control,Eschscholzia californica,Native,Forb,Forb,Perennial,Native,Native,CalFlora
+OTL,4/14/25,G7,UNK-CAR,2,1,2,G,7,ANGELO,Control,Anthriscus caucalis,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/14/25,G7,DANCAL,1,1,2,G,7,ANGELO,Control,Danthonia californica,Native,Grass,Grass,Perennial,Native,Native,CalFlora
+OTL,4/14/25,G7,CLAPUR,1,1,2,G,7,ANGELO,Control,Clarkia purpurea,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/14/25,G7,LACSER,1,1,2,G,7,ANGELO,Control,Lactuca serriola,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/14/25,G8,Bare,9,NA,2,G,8,BORR,Control,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/14/25,G8,Litter,0,NA,2,G,8,BORR,Control,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/14/25,G8,AVEBAR,3,4,2,G,8,BORR,Control,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/14/25,G8,BRODIA,6,3,2,G,8,BORR,Control,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/14/25,G8,BROHOR,5,3,2,G,8,BORR,Control,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/14/25,G8,CLAPUR,1,4,2,G,8,BORR,Control,Clarkia purpurea,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/14/25,G8,TRIHIR,1,2,2,G,8,BORR,Control,Trifolium hirtum,Non-native,Forb,Nfixer,Annual,Limited,Invasive,Cal IPC
+OTL,4/14/25,G8,VISCAT,4,5,2,G,8,BORR,Control,NA,NA,NA,NA,NA,NA,NA,NA
+OTL,4/14/25,G8,TORARV,5,1,2,G,8,BORR,Control,Torilis arvensis,Non-native,Forb,Forb,Annual,Moderate,Invasive,Cal IPC
+OTL,4/14/25,G8,MADGRA,7,1,2,G,8,BORR,Control,Madia gracilis,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/14/25,G8,GERDIS,1,6,2,G,8,BORR,Control,Geranium dissectum,Non-native,Forb,Forb,Annual,Limited,Invasive,Cal IPC
+OTL,4/14/25,G8,DAUPUS,1,1,2,G,8,BORR,Control,Daucus pusillus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/14/25,G8,UNK-CAR,1,1,2,G,8,BORR,Control,Anthriscus caucalis,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/14/25,G8,GALPAR,1,6,2,G,8,BORR,Control,Galium parisiense,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/14/25,G8,EROBOT,1,6,2,G,8,BORR,Control,Erodium botrys,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/14/25,G3,Bare,31,NA,2,G,3,SEDG,Control,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/14/25,G3,Litter,5,NA,2,G,3,SEDG,Control,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/14/25,G3,AVEBAR,1,3,2,G,3,SEDG,Control,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/14/25,G3,BROHOR,3,5,2,G,3,SEDG,Control,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/14/25,G3,BRODIA,5,6,2,G,3,SEDG,Control,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/14/25,G3,BROMAD,2,9,2,G,3,SEDG,Control,Bromus madritensis,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/14/25,G3,STIPUL,6,4,2,G,3,SEDG,Control,Stipa pulchra,Native,Grass,Grass,Perennial,Native,Native,CalFlora
+OTL,4/14/25,G3,CORFIL,6,1,2,G,3,SEDG,Control,Corethrogyne filaginafolia,Native,Forb,Forb,Perennial,Native,Native,CalFlora
+OTL,4/14/25,G3,MICCAL,1,6,2,G,3,SEDG,Control,Micropus californicus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/14/25,G3,CENMEL,1,1,2,G,3,SEDG,Control,Centaurea melitensis,Non-native,Forb,Forb,Annual,Moderate,Invasive,Cal IPC
+OTL,4/14/25,G3,LACSER,1,1,2,G,3,SEDG,Control,Lactuca serriola,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/14/25,G3,EPI-1,1,1,2,G,3,SEDG,Control,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/14/25,G3,UNK-CAR,1,1,2,G,3,SEDG,Control,Anthriscus caucalis,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/14/25,G4,Bare,50,NA,2,G,4,WWP,Control,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/14/25,G4,Litter,1,1,2,G,4,WWP,Control,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/14/25,G4,AVEBAR,7,3,2,G,4,WWP,Control,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/14/25,G4,BRODIA,4,2,2,G,4,WWP,Control,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/14/25,G4,BROMAD,3,5,2,G,4,WWP,Control,Bromus madritensis,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/14/25,G4,BROARE,2,8,2,G,4,WWP,Control,Bromus arenarius,Non-native,Grass,Grass,Annual,Non-native,Non-native,CalFlora
+OTL,4/14/25,G4,EROCIC,1,6,2,G,4,WWP,Control,Erodium cicutarium,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/14/25,G4,AMSMEN,1,8,2,G,4,WWP,Control,Amsinckia menziesii,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/14/25,G4,SALCOL,1,5,2,G,4,WWP,Control,NA,NA,NA,NA,NA,NA,NA,NA
+OTL,4/14/25,G4,UNK-CAR,1,1,2,G,4,WWP,Control,Anthriscus caucalis,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/14/25,G5,Bare,9,NA,2,G,5,MCL,Control,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/14/25,G5,Litter,1,NA,2,G,5,MCL,Control,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/14/25,G5,AVEBAR,3,4,2,G,5,MCL,Control,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/14/25,G5,BRODIA,11,2,2,G,5,MCL,Control,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/14/25,G5,BROHOR,1,5,2,G,5,MCL,Control,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/14/25,G5,BROMAD,1,5,2,G,5,MCL,Control,Bromus madritensis,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/14/25,G5,UNK-CAR,1,1,2,G,5,MCL,Control,Anthriscus caucalis,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/14/25,G5,PLAERE,3,8,2,G,5,MCL,Control,Plantago erecta,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/14/25,G5,TRIHIR,3,2,2,G,5,MCL,Control,Trifolium hirtum,Non-native,Forb,Nfixer,Annual,Limited,Invasive,Cal IPC
+OTL,4/14/25,G5,MICCAL,1,6,2,G,5,MCL,Control,Micropus californicus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/14/25,G5,CLAPUR,1,2,2,G,5,MCL,Control,Clarkia purpurea,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/14/25,G5,ELYCAP,1,1,2,G,5,MCL,Control,Elymus caput-medusae,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/14/25,G5,HOLVIR,1,1,2,G,5,MCL,Control,Holocarpha virgata,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/14/25,G5,LUPBIC,1,6,2,G,5,MCL,Control,Lupinus bicolor,Native,Forb,Nfixer,Annual,Native,Native,CalFlora
+OTL,4/14/25,G5,EROBOT,1,5,2,G,5,MCL,Control,Erodium botrys,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/14/25,G5,GALPAR,3,1,2,G,5,MCL,Control,Galium parisiense,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/14/25,G6,Bare,2,NA,2,G,6,ANGELO,Control,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/14/25,G6,Litter,0,NA,2,G,6,ANGELO,Control,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/14/25,G6,AVEBAR,5,3,2,G,6,ANGELO,Control,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/14/25,G6,BRODIA,5,2,2,G,6,ANGELO,Control,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,C4,BRODIA,11,4,3,C,4,BORR,Drought,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,C4,BROHOR,4,5,3,C,4,BORR,Drought,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,C4,MADGRA,8,4,3,C,4,BORR,Drought,Madia gracilis,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,C4,TRIHIR,3,1,3,C,4,BORR,Drought,Trifolium hirtum,Non-native,Forb,Nfixer,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,C4,TORARV,5,1,3,C,4,BORR,Drought,Torilis arvensis,Non-native,Forb,Forb,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,C4,VISCAT,4,1,3,C,4,BORR,Drought,NA,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,C4,EROBOT,3,6,3,C,4,BORR,Drought,Erodium botrys,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,C4,CLAPUR,1,4,3,C,4,BORR,Drought,Clarkia purpurea,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,C4,DAUPUS,1,1,3,C,4,BORR,Drought,Daucus pusillus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,C4,EPi-1,1,1,3,C,4,BORR,Drought,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,C4,GERDIS,1,6,3,C,4,BORR,Drought,Geranium dissectum,Non-native,Forb,Forb,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,C5,Bare,10,NA,3,C,5,BORR,Drought,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,C5,Litter,4,NA,3,C,5,BORR,Drought,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,C5,AVEBAR,7,4,3,C,5,BORR,Drought,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,C5,BRODIA,6,4,3,C,5,BORR,Drought,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,C5,BROHOR,4,5,3,C,5,BORR,Drought,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,C5,EROBOT,3,6,3,C,5,BORR,Drought,Erodium botrys,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,C5,VISCAT,3,6,3,C,5,BORR,Drought,NA,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,C5,TRIHIR,2,4,3,C,5,BORR,Drought,Trifolium hirtum,Non-native,Forb,Nfixer,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,C5,CLAPUR,1,6,3,C,5,BORR,Drought,Clarkia purpurea,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,C5,DAUPUS,1,4,3,C,5,BORR,Drought,Daucus pusillus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,C5,TORARV,1,1,3,C,5,BORR,Drought,Torilis arvensis,Non-native,Forb,Forb,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,C5,MADGRA,3,4,3,C,5,BORR,Drought,Madia gracilis,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,C5,EPI-1,1,1,3,C,5,BORR,Drought,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,C6,Bare,6,NA,3,C,6,WWP,Drought,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,C6,Litter,8,NA,3,C,6,WWP,Drought,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,C6,AVEBAR,25,5,3,C,6,WWP,Drought,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,C6,BRODIA,7,4,3,C,6,WWP,Drought,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,C6,BROMAD,2,7,3,C,6,WWP,Drought,Bromus madritensis,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/15/25,C6,BROARE,3,9,3,C,6,WWP,Drought,Bromus arenarius,Non-native,Grass,Grass,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,C6,EROCIC,7,5,3,C,6,WWP,Drought,Erodium cicutarium,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,C6,PHATAN,10,7,3,C,6,WWP,Drought,Phacelia tanacetifolia,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,C6,LUPMIC,2,7,3,C,6,WWP,Drought,Lupinus microcarpus,Native,Forb,Nfixer,Annual,Native,Native,CalFlora
+OTL,4/15/25,C6,MADGRA,1,5,3,C,6,WWP,Drought,Madia gracilis,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,C6,ESCCAL,1,5,3,C,6,WWP,Drought,Eschscholzia californica,Native,Forb,Forb,Perennial,Native,Native,CalFlora
+OTL,4/15/25,C6,SALCOL,1,2,3,C,6,WWP,Drought,NA,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,C6,CAUCOU,1,10,3,C,6,WWP,Drought,Caulanthus coulteri,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,C6,BROHOR,1,5,3,C,6,WWP,Drought,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,C6,EPI-1,1,1,3,C,6,WWP,Drought,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,C7,Bare,25,NA,3,C,7,WWP,Drought,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,C7,Litter,12,NA,3,C,7,WWP,Drought,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,C7,AVEBAR,18,5,3,C,7,WWP,Drought,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,C1,Bare,6,NA,3,C,1,MCL,Drought,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,C1,Litter,11,NA,3,C,1,MCL,Drought,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,C1,AVEBAR,5,5,3,C,1,MCL,Drought,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,C1,BROHOR,3,5,3,C,1,MCL,Drought,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,C1,BRODIA,9,2,3,C,1,MCL,Drought,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,C1,BROMAD,1,6,3,C,1,MCL,Drought,Bromus madritensis,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/15/25,C1,ELYCAP,10,1,3,C,1,MCL,Drought,Elymus caput-medusae,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/15/25,C1,HOLVIR,6,1,3,C,1,MCL,Drought,Holocarpha virgata,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,C1,TRIHIR,2,4,3,C,1,MCL,Drought,Trifolium hirtum,Non-native,Forb,Nfixer,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,C1,EROBOT,1,6,3,C,1,MCL,Drought,Erodium botrys,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,C1,EPI-1,1,1,3,C,1,MCL,Drought,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,C1,LUPBIC,1,9,3,C,1,MCL,Drought,Lupinus bicolor,Native,Forb,Nfixer,Annual,Native,Native,CalFlora
+OTL,4/15/25,C1,LACSER,1,1,3,C,1,MCL,Drought,Lactuca serriola,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,C1,CLAPUR,1,2,3,C,1,MCL,Drought,Clarkia purpurea,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,C1,MICCAL,1,7,3,C,1,MCL,Drought,Micropus californicus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,C2,Bare,40,NA,3,C,2,SEDG,Drought,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,C2,Litter,25,NA,3,C,2,SEDG,Drought,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,C2,AVEBAR,8,5,3,C,2,SEDG,Drought,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,C2,AVEFAT,2,6,3,C,2,SEDG,Drought,Avena fatua,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,C2,BRODIA,7,8,3,C,2,SEDG,Drought,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,C2,BROHOR,2,5,3,C,2,SEDG,Drought,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,C2,BROMAD,2,6,3,C,2,SEDG,Drought,Bromus madritensis,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/15/25,C2,CENMEL,8,2,3,C,2,SEDG,Drought,Centaurea melitensis,Non-native,Forb,Forb,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,C2,CORFIL,6,1,3,C,2,SEDG,Drought,Corethrogyne filaginafolia,Native,Forb,Forb,Perennial,Native,Native,CalFlora
+OTL,4/15/25,C2,MICCAL,1,7,3,C,2,SEDG,Drought,Micropus californicus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,C2,STIPUL,2,4,3,C,2,SEDG,Drought,Stipa pulchra,Native,Grass,Grass,Perennial,Native,Native,CalFlora
+OTL,4/15/25,C2,EPI-1,1,1,3,C,2,SEDG,Drought,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,C2,EROCIC,2,5,3,C,2,SEDG,Drought,Erodium cicutarium,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,C3,Bare,12,NA,3,C,3,ANGELO,Drought,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,C3,Litter,5,NA,3,C,3,ANGELO,Drought,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,C3,AVEBAR,8,4,3,C,3,ANGELO,Drought,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,C3,BROHOR,9,4,3,C,3,ANGELO,Drought,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,C3,BRODIA,27,3,3,C,3,ANGELO,Drought,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,C3,MADGRA,3,1,3,C,3,ANGELO,Drought,Madia gracilis,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,C3,ESCCAL,2,1,3,C,3,ANGELO,Drought,Eschscholzia californica,Native,Forb,Forb,Perennial,Native,Native,CalFlora
+OTL,4/15/25,C3,DAUPUS,1,1,3,C,3,ANGELO,Drought,Daucus pusillus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,C3,EPI-1,1,1,3,C,3,ANGELO,Drought,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,C3,CLAPUR,1,2,3,C,3,ANGELO,Drought,Clarkia purpurea,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,C3,GALPAR,1,8,3,C,3,ANGELO,Drought,Galium parisiense,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,C3,LASCER,1,1,3,C,3,ANGELO,Drought,Lactuca serriola,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,C4,Bare,12,NA,3,C,4,BORR,Drought,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,C4,Litter,9,NA,3,C,4,BORR,Drought,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,C4,AVEBAR,8,5,3,C,4,BORR,Drought,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,D2,BROHOR,8,5,4,D,2,BORR,Control,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,D2,FROBOT,2,5,4,D,2,BORR,Control,Erodium botrys,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,D2,VISCAT,5,1,4,D,2,BORR,Control,NA,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,D2,GERDIS,9,5,4,D,2,BORR,Control,Geranium dissectum,Non-native,Forb,Forb,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,D2,MADGRA,2,1,4,D,2,BORR,Control,Madia gracilis,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,D2,DAUPUS,1,1,4,D,2,BORR,Control,Daucus pusillus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,D2,EPI-1,1,1,4,D,2,BORR,Control,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,D2,TORARV,1,1,4,D,2,BORR,Control,Torilis arvensis,Non-native,Forb,Forb,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,D2,CLAPUR,1,2,4,D,2,BORR,Control,Clarkia purpurea,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,D2,LASCER,1,1,4,D,2,BORR,Control,Lactuca serriola,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,D2,TRIHIR,1,1,4,D,2,BORR,Control,Trifolium hirtum,Non-native,Forb,Nfixer,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,D3,Bare,11,NA,4,D,3,WWP,Control,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,D3,Litter,1,NA,4,D,3,WWP,Control,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,D3,AVEBAR,25,5,4,D,3,WWP,Control,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,D3,BRODIA,2,4,4,D,3,WWP,Control,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,D3,BROARE,3,9,4,D,3,WWP,Control,Bromus arenarius,Non-native,Grass,Grass,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,D3,BROMAD,2,7,4,D,3,WWP,Control,Bromus madritensis,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/15/25,D3,LUPMIC,27,6,4,D,3,WWP,Control,Lupinus microcarpus,Native,Forb,Nfixer,Annual,Native,Native,CalFlora
+OTL,4/15/25,D3,EROCIC,6,5,4,D,3,WWP,Control,Erodium cicutarium,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,D3,AMSMEN,1,8,4,D,3,WWP,Control,Amsinckia menziesii,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,D3,BROHOR,1,2,4,D,3,WWP,Control,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,D3,HYPGLA,2,1,4,D,3,WWP,Control,Hypochaeris glabra,Non-native,Forb,Forb,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,D3,EPI-1,1,1,4,D,3,WWP,Control,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,D3,ESCCAL,2,1,4,D,3,WWP,Control,Eschscholzia californica,Native,Forb,Forb,Perennial,Native,Native,CalFlora
+OTL,4/15/25,D3,PHATAN,2,8,4,D,3,WWP,Control,Phacelia tanacetifolia,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,D3,SALCOL,1,4,4,D,3,WWP,Control,NA,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,D3,GALPAR,1,2,4,D,3,WWP,Control,Galium parisiense,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,D4,Bare,25,NA,4,D,4,MCL,Control,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,D4,Litter,1,NA,4,D,4,MCL,Control,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,D4,AVEBAR,7,4,4,D,4,MCL,Control,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,D4,BROHOR,1,4,4,D,4,MCL,Control,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,D4,BRODIA,3,2,4,D,4,MCL,Control,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,D4,BROMAD,2,5,4,D,4,MCL,Control,Bromus madritensis,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/15/25,D4,LUPBIC,7,6,4,D,4,MCL,Control,Lupinus bicolor,Native,Forb,Nfixer,Annual,Native,Native,CalFlora
+OTL,4/15/25,D4,TRIHIR,6,2,4,D,4,MCL,Control,Trifolium hirtum,Non-native,Forb,Nfixer,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,D4,HOLVIR,1,1,4,D,4,MCL,Control,Holocarpha virgata,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,D4,ELYCAP,6,1,4,D,4,MCL,Control,Elymus caput-medusae,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/15/25,D4,CLAPUR,1,1,4,D,4,MCL,Control,Clarkia purpurea,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,D4,PLAERE,1,7,4,D,4,MCL,Control,Plantago erecta,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,D4,EPI-1,1,1,4,D,4,MCL,Control,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,D4,MICCAL,1,6,4,D,4,MCL,Control,Micropus californicus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,D4,EROBOT,2,4,4,D,4,MCL,Control,Erodium botrys,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,D4,UNK-2,1,"10, 8:58AM",4,D,4,MCL,Control,Erigeron bonariensis,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,C7,BRODIA,9,15,3,C,7,WWP,Drought,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,C7,BROMAD,2,9,3,C,7,WWP,Drought,Bromus madritensis,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/15/25,C7,BROARE,3,9,3,C,7,WWP,Drought,Bromus arenarius,Non-native,Grass,Grass,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,C7,BROHOR,1,5,3,C,7,WWP,Drought,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,C7,EROCIC,5,5,3,C,7,WWP,Drought,Erodium cicutarium,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,C7,AMSMEN,1,10,3,C,7,WWP,Drought,Amsinckia menziesii,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,C7,EPI-1,1,1,3,C,7,WWP,Drought,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,C7,PHATAN,2,6,3,C,7,WWP,Drought,Phacelia tanacetifolia,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,C7,GALPAR,1,1,3,C,7,WWP,Drought,Galium parisiense,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,C7,LACSER,1,1,3,C,7,WWP,Drought,Lactuca serriola,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,C7,SALCOL,1,2,3,C,7,WWP,Drought,NA,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,C7,ESCCAL,1,8,3,C,7,WWP,Drought,Eschscholzia californica,Native,Forb,Forb,Perennial,Native,Native,CalFlora
+OTL,4/15/25,C8,Bare,11,NA,3,C,8,ANGELO,Drought,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,C8,Litter,1,NA,3,C,8,ANGELO,Drought,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,C8,AVEBAR,10,4,3,C,8,ANGELO,Drought,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,C8,BRODIA,4,3,3,C,8,ANGELO,Drought,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,C8,BROHOR,3,3,3,C,8,ANGELO,Drought,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,C8,MADGRA,5,1,3,C,8,ANGELO,Drought,Madia gracilis,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,C8,HYPGLA,5,2,3,C,8,ANGELO,Drought,Hypochaeris glabra,Non-native,Forb,Forb,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,C8,LACSER,1,1,3,C,8,ANGELO,Drought,Lactuca serriola,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,C8,GALPAR,1,5,3,C,8,ANGELO,Drought,Galium parisiense,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,C8,CLAPUR,1,2,3,C,8,ANGELO,Drought,Clarkia purpurea,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,C8,ESCCAL,9,1,3,C,8,ANGELO,Drought,Eschscholzia californica,Native,Forb,Forb,Perennial,Native,Native,CalFlora
+OTL,4/15/25,C8,DAUPUS,1,1,3,C,8,ANGELO,Drought,Daucus pusillus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,C8,EPI-1,1,1,3,C,8,ANGELO,Drought,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,D1,Bare,1,NA,4,D,1,ANGELO,Control,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,D1,Litter,0,NA,4,D,1,ANGELO,Control,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,D1,AVEBAR,12,4,4,D,1,ANGELO,Control,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,D1,BRODIA,25,2,4,D,1,ANGELO,Control,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,D1,BROHOR,2,2,4,D,1,ANGELO,Control,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,D1,ESCCAL,12,4,4,D,1,ANGELO,Control,Eschscholzia californica,Native,Forb,Forb,Perennial,Native,Native,CalFlora
+OTL,4/15/25,D1,PLANOT,5,5,4,D,1,ANGELO,Control,Plagiobothrys nothofulvus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,D1,EPI-1,1,1,4,D,1,ANGELO,Control,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,D1,GALPAR,5,5,4,D,1,ANGELO,Control,Galium parisiense,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,D1,DAUPUS,2,1,4,D,1,ANGELO,Control,Daucus pusillus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,D1,CLAPUR,1,2,4,D,1,ANGELO,Control,Clarkia purpurea,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,D1,MADGRA,2,1,4,D,1,ANGELO,Control,Madia gracilis,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,D1,HYPGLA,1,2,4,D,1,ANGELO,Control,Hypochaeris glabra,Non-native,Forb,Forb,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,D1,AIRCAR,1,2,4,D,1,ANGELO,Control,Aira caryophyllea,Non-native,Grass,Grass,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,D2,Bare,3,NA,4,D,2,BORR,Control,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,D2,Litter,0,NA,4,D,2,BORR,Control,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,D2,AVEBAR,5,4,4,D,2,BORR,Control,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,D2,BRODIA,10,2,4,D,2,BORR,Control,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,D8,Bare,20,NA,4,D,8,SEDG,Control,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,D8,Litter,3,NA,4,D,8,SEDG,Control,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,D8,AVEBAR,2,5,4,D,8,SEDG,Control,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,D8,AVEFAT,2,5,4,D,8,SEDG,Control,Avena fatua,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,D8,BRODIA,3,5,4,D,8,SEDG,Control,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,D8,BROHOR,4,5,4,D,8,SEDG,Control,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,D8,BROMAD,0,NA,4,D,8,SEDG,Control,Bromus madritensis,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/15/25,D8,STIPUL,10,4,4,D,8,SEDG,Control,Stipa pulchra,Native,Grass,Grass,Perennial,Native,Native,CalFlora
+OTL,4/15/25,D8,ESCCAL,1,1,4,D,8,SEDG,Control,Eschscholzia californica,Native,Forb,Forb,Perennial,Native,Native,CalFlora
+OTL,4/15/25,D8,CORFIL,25,1,4,D,8,SEDG,Control,Corethrogyne filaginafolia,Native,Forb,Forb,Perennial,Native,Native,CalFlora
+OTL,4/15/25,D8,EPI-1,1,1,4,D,8,SEDG,Control,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,D8,CENMEL,1,1,4,D,8,SEDG,Control,Centaurea melitensis,Non-native,Forb,Forb,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,D8,MICCAL,1,6,4,D,8,SEDG,Control,Micropus californicus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,A1,Bare,12,NA,1,A,1,ANGELO,Drought,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,A1,Litter,8,NA,1,A,1,ANGELO,Drought,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,A1,AVEBAR,20,4,1,A,1,ANGELO,Drought,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,A1,BRODIA,8,2,1,A,1,ANGELO,Drought,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,A1,BROHOR,5,4,1,A,1,ANGELO,Drought,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,A1,CLAPUR,1,6,1,A,1,ANGELO,Drought,Clarkia purpurea,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,A1,PLATNOT,1,6,1,A,1,ANGELO,Drought,Plagiobothrys nothofulvus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,A1,MADGRA,10,1,1,A,1,ANGELO,Drought,Madia gracilis,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,A1,EPI-1,1,1,1,A,1,ANGELO,Drought,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,A1,HYPGLA,7,4,1,A,1,ANGELO,Drought,Hypochaeris glabra,Non-native,Forb,Forb,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,A1,ESCCAL,1,1,1,A,1,ANGELO,Drought,Eschscholzia californica,Native,Forb,Forb,Perennial,Native,Native,CalFlora
+OTL,4/15/25,A1,GALPAR,2,4,1,A,1,ANGELO,Drought,Galium parisiense,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,A1,DAUPUS,1,1,1,A,1,ANGELO,Drought,Daucus pusillus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,A1,ELYCAP,1,2,1,A,1,ANGELO,Drought,Elymus caput-medusae,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/15/25,A1,LACSER,1,1,1,A,1,ANGELO,Drought,Lactuca serriola,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,A2,Bare,20,NA,1,A,2,WWP,Drought,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,A2,Litter,15,NA,1,A,2,WWP,Drought,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,A2,AVEBAR,7,5,1,A,2,WWP,Drought,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,A2,BRODIA,2,5,1,A,2,WWP,Drought,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,A2,BROMAD,3,9,1,A,2,WWP,Drought,Bromus madritensis,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/15/25,A2,BROARE,7,10,1,A,2,WWP,Drought,Bromus arenarius,Non-native,Grass,Grass,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,A2,EROCIC,10,5,1,A,2,WWP,Drought,Erodium cicutarium,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,A2,SALCOL,1,8,1,A,2,WWP,Drought,NA,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,A2,EPI-1,1,1,1,A,2,WWP,Drought,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,A2,PHATAN,1,9,1,A,2,WWP,Drought,Phacelia tanacetifolia,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,A2,BROHOR,1,5,1,A,2,WWP,Drought,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,A2,LACSER,1,1,1,A,2,WWP,Drought,Lactuca serriola,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,A2,AMSMEN,1,10,1,A,2,WWP,Drought,Amsinckia menziesii,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,A2,MADGRA,2,1,1,A,2,WWP,Drought,Madia gracilis,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,A2,HYPGLA,1,5,1,A,2,WWP,Drought,Hypochaeris glabra,Non-native,Forb,Forb,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,D5,Bare,6,NA,4,D,5,WWP,Control,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,D5,Litter,2,NA,4,D,5,WWP,Control,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,D5,AVEBAR,4,4,4,D,5,WWP,Control,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,D5,BROMAD,3,6,4,D,5,WWP,Control,Bromus madritensis,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/15/25,D5,BRODIA,8,5,4,D,5,WWP,Control,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,D5,BROARE,5,8,4,D,5,WWP,Control,Bromus arenarius,Non-native,Grass,Grass,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,D5,EROCIC,10,5,4,D,5,WWP,Control,Erodium cicutarium,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,D5,LUPMIC,15,6,4,D,5,WWP,Control,Lupinus microcarpus,Native,Forb,Nfixer,Annual,Native,Native,CalFlora
+OTL,4/15/25,D5,AMSMEN,1,6,4,D,5,WWP,Control,Amsinckia menziesii,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,D5,ESCCAL,3,1,4,D,5,WWP,Control,Eschscholzia californica,Native,Forb,Forb,Perennial,Native,Native,CalFlora
+OTL,4/15/25,D5,EPI-1,1,1,4,D,5,WWP,Control,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,D5,BROHOR,1,2,4,D,5,WWP,Control,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,D5,UNK-2,1,1,4,D,5,WWP,Control,Erigeron bonariensis,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,D5,PHATAN,1,8,4,D,5,WWP,Control,Phacelia tanacetifolia,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,D5,LUPSUC,1,"1, arrested fls",4,D,5,WWP,Control,Lupinus succulentus,Native,Forb,Nfixer,Annual,Native,Native,CalFlora
+OTL,4/15/25,D5,SALCOL,1,5,4,D,5,WWP,Control,NA,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,D6,Bare,10,NA,4,D,6,BORR,Control,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,D6,Litter,2,NA,4,D,6,BORR,Control,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,D6,AVEBAR,10,NA,4,D,6,BORR,Control,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,D6,BRODIA,3,3,4,D,6,BORR,Control,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,D6,BROHOR,4,4,4,D,6,BORR,Control,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,D6,VISCAT,15,1,4,D,6,BORR,Control,NA,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,D6,CLAPUR,2,4,4,D,6,BORR,Control,Clarkia purpurea,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,D6,TRIHIR,1,1,4,D,6,BORR,Control,Trifolium hirtum,Non-native,Forb,Nfixer,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,D6,GERDIS,1,6,4,D,6,BORR,Control,Geranium dissectum,Non-native,Forb,Forb,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,D6,EROBOT,2,5,4,D,6,BORR,Control,Erodium botrys,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,D6,EPI-1,1,1,4,D,6,BORR,Control,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,D6,UNK-2,1,1,4,D,6,BORR,Control,Erigeron bonariensis,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,D6,DAUPUS,1,1,4,D,6,BORR,Control,Daucus pusillus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,D6,TORARV,3,1,4,D,6,BORR,Control,Torilis arvensis,Non-native,Forb,Forb,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,D6,MADGRA,1,1,4,D,6,BORR,Control,Madia gracilis,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,D7,Bare,8,NA,4,D,7,SEDG,Control,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,D7,Litter,2,NA,4,D,7,SEDG,Control,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,D7,AVEFAT,4,5,4,D,7,SEDG,Control,Avena fatua,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,D7,AVEBAR,5,5,4,D,7,SEDG,Control,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,D7,BROHOR,2,5,4,D,7,SEDG,Control,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,D7,BRODIA,25,6,4,D,7,SEDG,Control,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,D7,BROMAD,1,5,4,D,7,SEDG,Control,Bromus madritensis,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/15/25,D7,CORFIL,6,1,4,D,7,SEDG,Control,Corethrogyne filaginafolia,Native,Forb,Forb,Perennial,Native,Native,CalFlora
+OTL,4/15/25,D7,STIPUL,4,4,4,D,7,SEDG,Control,Stipa pulchra,Native,Grass,Grass,Perennial,Native,Native,CalFlora
+OTL,4/15/25,D7,CENMEL,2,1,4,D,7,SEDG,Control,Centaurea melitensis,Non-native,Forb,Forb,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,D7,LACSER,1,1,4,D,7,SEDG,Control,Lactuca serriola,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,D7,EPI-1,1,1,4,D,7,SEDG,Control,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,D7,ESCCAL,2,1,4,D,7,SEDG,Control,Eschscholzia californica,Native,Forb,Forb,Perennial,Native,Native,CalFlora
+OTL,4/15/25,D7,EROCIC,1,5,4,D,7,SEDG,Control,Erodium cicutarium,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,D7,MICCAL,1,7,4,D,7,SEDG,Control,Micropus californicus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,A6,BRODIA,25,8,1,A,6,SEDG,Drought,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,A6,CENMEL,1,2,1,A,6,SEDG,Drought,Centaurea melitensis,Non-native,Forb,Forb,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,A6,CORFIL,10,1,1,A,6,SEDG,Drought,Corethrogyne filaginafolia,Native,Forb,Forb,Perennial,Native,Native,CalFlora
+OTL,4/15/25,A6,EPI-1,1,1,1,A,6,SEDG,Drought,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,A6,STIPUL,4,5,1,A,6,SEDG,Drought,Stipa pulchra,Native,Grass,Grass,Perennial,Native,Native,CalFlora
+OTL,4/15/25,A6,MICCAL,1,9,1,A,6,SEDG,Drought,Micropus californicus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,A7,Bare,6,NA,1,A,7,SEDG,Drought,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,A7,Litter,25,NA,1,A,7,SEDG,Drought,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,A7,Bindweed,1,NA,1,A,7,SEDG,Drought,Convolvulus arvensis,Non-native,Forb,Forb,Perennial,Non-native,Non-native,CalFlora
+OTL,4/15/25,A7,AVEFAT,1,10,1,A,7,SEDG,Drought,Avena fatua,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,A7,BRODIA,30,7,1,A,7,SEDG,Drought,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,A7,BROHOR,1,5,1,A,7,SEDG,Drought,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,A7,BROMAD,1,8,1,A,7,SEDG,Drought,Bromus madritensis,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/15/25,A7,STIPUL,4,4,1,A,7,SEDG,Drought,Stipa pulchra,Native,Grass,Grass,Perennial,Native,Native,CalFlora
+OTL,4/15/25,A7,CORFIL,15,1,1,A,7,SEDG,Drought,Corethrogyne filaginafolia,Native,Forb,Forb,Perennial,Native,Native,CalFlora
+OTL,4/15/25,A7,CENMEL,2,2,1,A,7,SEDG,Drought,Centaurea melitensis,Non-native,Forb,Forb,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,A7,EPI-1,1,1,1,A,7,SEDG,Drought,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,A8,Bare,13,NA,1,A,8,MCL,Drought,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,A8,Litter,5,NA,1,A,8,MCL,Drought,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,A8,AVEBAR,8,5,1,A,8,MCL,Drought,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,A8,BROHOR,4,5,1,A,8,MCL,Drought,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,A8,BROMAD,2,5,1,A,8,MCL,Drought,Bromus madritensis,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/15/25,A8,BRODIA,5,5,1,A,8,MCL,Drought,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,A8,MICCAL,1,7,1,A,8,MCL,Drought,Micropus californicus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,A8,TRIHIR,1,5,1,A,8,MCL,Drought,Trifolium hirtum,Non-native,Forb,Nfixer,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,A8,LUPBIC,4,6,1,A,8,MCL,Drought,Lupinus bicolor,Native,Forb,Nfixer,Annual,Native,Native,CalFlora
+OTL,4/15/25,A8,CLAPUR,1,2,1,A,8,MCL,Drought,Clarkia purpurea,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,A8,HOLVIR,4,1,1,A,8,MCL,Drought,Holocarpha virgata,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,A8,EPI-1,1,1,1,A,8,MCL,Drought,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,A8,PLAERE,1,9,1,A,8,MCL,Drought,Plantago erecta,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,A8,EROBOT,3,5,1,A,8,MCL,Drought,Erodium botrys,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,A8,ELYCAP,12,2,1,A,8,MCL,Drought,Elymus caput-medusae,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/15/25,A8,LACSER,1,1,1,A,8,MCL,Drought,Lactuca serriola,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,A8,HYPGLA,2,1,1,A,8,MCL,Drought,Hypochaeris glabra,Non-native,Forb,Forb,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,H1,Bare,20,NA,3,H,1,SEDG,Control,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,H1,Litter,8,NA,3,H,1,SEDG,Control,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,H1,AVEBAR,1,5,3,H,1,SEDG,Control,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,H1,BRODIA,10,5,3,H,1,SEDG,Control,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,H1,BROHOR,2,5,3,H,1,SEDG,Control,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,H1,BROMAD,4,8,3,H,1,SEDG,Control,Bromus madritensis,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/15/25,H1,MICCAL,2,7,3,H,1,SEDG,Control,Micropus californicus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,H1,CORFIL,6,1,3,H,1,SEDG,Control,Corethrogyne filaginafolia,Native,Forb,Forb,Perennial,Native,Native,CalFlora
+OTL,4/15/25,H1,CENMEL,1,1,3,H,1,SEDG,Control,Centaurea melitensis,Non-native,Forb,Forb,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,A3,Bare,30,NA,1,A,3,BORR,Drought,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,A3,Litter,5,NA,1,A,3,BORR,Drought,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,A3,AVEBAR,12,4,1,A,3,BORR,Drought,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,A3,BRODIA,2,2,1,A,3,BORR,Drought,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,A3,BROHOR,1,5,1,A,3,BORR,Drought,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,A3,EROBOT,3,6,1,A,3,BORR,Drought,Erodium botrys,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,A3,VISCAT,2,1,1,A,3,BORR,Drought,NA,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,A3,MADGRA,5,2,1,A,3,BORR,Drought,Madia gracilis,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,A3,DAUPUS,1,1,1,A,3,BORR,Drought,Daucus pusillus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,A3,EPI-1,1,1,1,A,3,BORR,Drought,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,A3,HYPGLA,1,1,1,A,3,BORR,Drought,Hypochaeris glabra,Non-native,Forb,Forb,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,A3,LACSER,1,1,1,A,3,BORR,Drought,Lactuca serriola,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,A3,CLAPUR,1,5,1,A,3,BORR,Drought,Clarkia purpurea,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,A4,Bare,30,NA,1,A,4,WWP,Drought,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,A4,Litter,20,NA,1,A,4,WWP,Drought,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,A4,AVEBAR,12,5,1,A,4,WWP,Drought,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,A4,BRODIA,4,5,1,A,4,WWP,Drought,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,A4,BROARE,6,10,1,A,4,WWP,Drought,Bromus arenarius,Non-native,Grass,Grass,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,A4,BROMAD,2,10,1,A,4,WWP,Drought,Bromus madritensis,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/15/25,A4,AMSMEN,3,10,1,A,4,WWP,Drought,Amsinckia menziesii,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,A4,EPI-1,1,1,1,A,4,WWP,Drought,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,A4,EROCIC,2,5,1,A,4,WWP,Drought,Erodium cicutarium,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,A4,LACSER,1,1,1,A,4,WWP,Drought,Lactuca serriola,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,A4,BROHOR,1,5,1,A,4,WWP,Drought,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,A4,SALCOL,1,4,1,A,4,WWP,Drought,NA,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,A5,Bare,25,NA,1,A,5,MCL,Drought,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,A5,Litter,10,NA,1,A,5,MCL,Drought,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,A5,AVEBAR,12,4,1,A,5,MCL,Drought,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,A5,BROHOR,2,6,1,A,5,MCL,Drought,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,A5,BRODIA,4,2,1,A,5,MCL,Drought,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,A5,BROMAD,2,5,1,A,5,MCL,Drought,Bromus madritensis,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/15/25,A5,PLAERE,1,10,1,A,5,MCL,Drought,Plantago erecta,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,A5,HOLVIR,2,1,1,A,5,MCL,Drought,Holocarpha virgata,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,A5,EPI-1,1,1,1,A,5,MCL,Drought,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,A5,CLAPUR,2,5,1,A,5,MCL,Drought,Clarkia purpurea,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,A5,ELYCAP,4,1,1,A,5,MCL,Drought,Elymus caput-medusae,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/15/25,A5,TRIHIR,1,1,1,A,5,MCL,Drought,Trifolium hirtum,Non-native,Forb,Nfixer,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,A5,LACSER,1,1,1,A,5,MCL,Drought,Lactuca serriola,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,A6,Bare,25,NA,1,A,6,SEDG,Drought,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,A6,Litter,25,NA,1,A,6,SEDG,Drought,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,A6,AVEBAR,1,5,1,A,6,SEDG,Drought,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,A6,BROHOR,1,6,1,A,6,SEDG,Drought,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,A6,BROMAD,2,8,1,A,6,SEDG,Drought,Bromus madritensis,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/15/25,H5,Bare,2,NA,3,H,5,BORR,Control,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,H5,Litter,0,NA,3,H,5,BORR,Control,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,H5,AVEBAR,4,4,3,H,5,BORR,Control,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,H5,BRODIA,5,3,3,H,5,BORR,Control,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,H5,BROHOR,2,4,3,H,5,BORR,Control,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,H5,VISCAT,20,1,3,H,5,BORR,Control,NA,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,H5,TORARV,10,1,3,H,5,BORR,Control,Torilis arvensis,Non-native,Forb,Forb,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,H5,CLAPUR,1,4,3,H,5,BORR,Control,Clarkia purpurea,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,H5,LUPBIC,3,5,3,H,5,BORR,Control,Lupinus bicolor,Native,Forb,Nfixer,Annual,Native,Native,CalFlora
+OTL,4/15/25,H5,GERDIS,2,8,3,H,5,BORR,Control,Geranium dissectum,Non-native,Forb,Forb,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,H5,TRIHIR,11,2,3,H,5,BORR,Control,Trifolium hirtum,Non-native,Forb,Nfixer,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,H5,UNK-CAR,6,1,3,H,5,BORR,Control,Anthriscus caucalis,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,H5,MADGRA,10,2,3,H,5,BORR,Control,Madia gracilis,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,H5,DAUPUS,1,1,3,H,5,BORR,Control,Daucus pusillus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,H5,EPI-1,1,1,3,H,5,BORR,Control,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,H5,EROBOT,2,5,3,H,5,BORR,Control,Erodium botrys,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,H6,Bare,1,NA,3,H,6,ANGELO,Control,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,H6,Litter,0,NA,3,H,6,ANGELO,Control,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,H6,AVEBAR,3,3,3,H,6,ANGELO,Control,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,H6,BRODIA,4,2,3,H,6,ANGELO,Control,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,H6,BROHOR,2,4,3,H,6,ANGELO,Control,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,H6,HYPGLA,25,2,3,H,6,ANGELO,Control,Hypochaeris glabra,Non-native,Forb,Forb,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,H6,UNK-CARE,4,1,3,H,6,ANGELO,Control,Anthriscus caucalis,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,H6,ESCCAL,25,4,3,H,6,ANGELO,Control,Eschscholzia californica,Native,Forb,Forb,Perennial,Native,Native,CalFlora
+OTL,4/15/25,H6,MADGRA,3,3,3,H,6,ANGELO,Control,Madia gracilis,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,H6,CLAPUR,1,2,3,H,6,ANGELO,Control,Clarkia purpurea,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,H6,AIRCAR,1,2,3,H,6,ANGELO,Control,Aira caryophyllea,Non-native,Grass,Grass,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,H6,GALPAR,1,1,3,H,6,ANGELO,Control,Galium parisiense,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,H6,DAUPUS,1,1,3,H,6,ANGELO,Control,Daucus pusillus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,H6,DANCAL,1,1,3,H,6,ANGELO,Control,Danthonia californica,Native,Grass,Grass,Perennial,Native,Native,CalFlora
+OTL,4/15/25,H6,SANBIP,1,1,3,H,6,ANGELO,Control,Sanicula bipinnatifida,Native,Forb,Forb,Perennial,Native,Native,CalFlora
+OTL,4/15/25,H6,EPI-1,1,1,3,H,6,ANGELO,Control,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,H7,Bare,7,NA,3,H,7,MCL,Control,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,H7,Litter,0,NA,3,H,7,MCL,Control,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,H7,AVEBAR,1,5,3,H,7,MCL,Control,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,H7,BRODIA,4,2,3,H,7,MCL,Control,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,H7,BROHOR,2,5,3,H,7,MCL,Control,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,H7,BROMAD,1,5,3,H,7,MCL,Control,Bromus madritensis,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/15/25,H7,PLAERE,5,6,3,H,7,MCL,Control,Plantago erecta,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,H7,EROBOT,10,5,3,H,7,MCL,Control,Erodium botrys,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,H7,LUPBIC,4,6,3,H,7,MCL,Control,Lupinus bicolor,Native,Forb,Nfixer,Annual,Native,Native,CalFlora
+OTL,4/15/25,H7,CLAPUR,2,2,3,H,7,MCL,Control,Clarkia purpurea,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,H7,HOLVIR,7,1,3,H,7,MCL,Control,Holocarpha virgata,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,H7,TRIHIR,1,2,3,H,7,MCL,Control,Trifolium hirtum,Non-native,Forb,Nfixer,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,H7,ELYCAP,0,NA,3,H,7,MCL,Control,Elymus caput-medusae,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/15/25,H7,MICCAL,1,6,3,H,7,MCL,Control,Micropus californicus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,H7,UNK-CAR 1,3,1,3,H,7,MCL,Control,Anthriscus caucalis,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,H1,EROCIC,1,8,3,H,1,SEDG,Control,Erodium cicutarium,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,H1,STIPUL,3,2,3,H,1,SEDG,Control,Stipa pulchra,Native,Grass,Grass,Perennial,Native,Native,CalFlora
+OTL,4/15/25,H2,Bare,10,NA,3,H,2,ANGELO,Control,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,H2,Litter,2,NA,3,H,2,ANGELO,Control,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,H2,AVEBAR,3,4,3,H,2,ANGELO,Control,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,H2,BRODIA,4,4,3,H,2,ANGELO,Control,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,H2,BROHOR,7,3,3,H,2,ANGELO,Control,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,H2,ESCCAL,18,5,3,H,2,ANGELO,Control,Eschscholzia californica,Native,Forb,Forb,Perennial,Native,Native,CalFlora
+OTL,4/15/25,H2,LACSER,1,1,3,H,2,ANGELO,Control,Lactuca serriola,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,H2,HYPGLA,2,3,3,H,2,ANGELO,Control,Hypochaeris glabra,Non-native,Forb,Forb,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,H2,SANBIP,1,1,3,H,2,ANGELO,Control,Sanicula bipinnatifida,Native,Forb,Forb,Perennial,Native,Native,CalFlora
+OTL,4/15/25,H2,MADGRA,2,1,3,H,2,ANGELO,Control,Madia gracilis,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,H2,DAUPUS,2,1,3,H,2,ANGELO,Control,Daucus pusillus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,H2,CLAPUR,1,2,3,H,2,ANGELO,Control,Clarkia purpurea,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,H2,GALPAR,1,5,3,H,2,ANGELO,Control,Galium parisiense,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,H2,EPI-1,1,1,3,H,2,ANGELO,Control,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,H3,Bare,28,NA,3,H,3,WWP,Control,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,H3,Litter,1,NA,3,H,3,WWP,Control,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,H3,AVEBAR,1,3,3,H,3,WWP,Control,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,H3,BRODIA,2,5,3,H,3,WWP,Control,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,H3,BROMAD,1,5,3,H,3,WWP,Control,Bromus madritensis,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/15/25,H3,BROARE,1,10,3,H,3,WWP,Control,Bromus arenarius,Non-native,Grass,Grass,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,H3,LUPMIC,45,6,3,H,3,WWP,Control,Lupinus microcarpus,Native,Forb,Nfixer,Annual,Native,Native,CalFlora
+OTL,4/15/25,H3,EROCIC,5,5,3,H,3,WWP,Control,Erodium cicutarium,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,H3,SALCOL,1,6,3,H,3,WWP,Control,NA,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,H3,LUPSUC,2,7,3,H,3,WWP,Control,Lupinus succulentus,Native,Forb,Nfixer,Annual,Native,Native,CalFlora
+OTL,4/15/25,H3,UNK-CAR,6,1,3,H,3,WWP,Control,Anthriscus caucalis,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,H3,PHATAN,1,8,3,H,3,WWP,Control,Phacelia tanacetifolia,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,H4,Bare,10,NA,3,H,4,MCL,Control,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,H4,Litter,1,NA,3,H,4,MCL,Control,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,H4,AVEBAR,5,3,3,H,4,MCL,Control,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,H4,BRODIA,4,2,3,H,4,MCL,Control,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,H4,BROHOR,4,4,3,H,4,MCL,Control,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,H4,BROMAD,1,5,3,H,4,MCL,Control,Bromus madritensis,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/15/25,H4,PLAERE,5,8,3,H,4,MCL,Control,Plantago erecta,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,H4,ELYCAP,3,1,3,H,4,MCL,Control,Elymus caput-medusae,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/15/25,H4,LUPBIC,10,6,3,H,4,MCL,Control,Lupinus bicolor,Native,Forb,Nfixer,Annual,Native,Native,CalFlora
+OTL,4/15/25,H4,EROBOT,2,5,3,H,4,MCL,Control,Erodium botrys,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,H4,MICCAL,1,5,3,H,4,MCL,Control,Micropus californicus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,H4,HOLVIR,5,1,3,H,4,MCL,Control,Holocarpha virgata,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,H4,TRIHIR,3,2,3,H,4,MCL,Control,Trifolium hirtum,Non-native,Forb,Nfixer,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,H4,CLAPUR,1,2,3,H,4,MCL,Control,Clarkia purpurea,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,H4,GALPAR,1,1,3,H,4,MCL,Control,Galium parisiense,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,H4,UNK-CAR,1,1,3,H,4,MCL,Control,Anthriscus caucalis,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,H4,HYPGLA,1,2,3,H,4,MCL,Control,Hypochaeris glabra,Non-native,Forb,Forb,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,I3,EPI-1,1,1,4,I,3,WWP,Drought,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,I3,EROCIC,2,5,4,I,3,WWP,Drought,Erodium cicutarium,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,I3,GALPAR,1,1,4,I,3,WWP,Drought,Galium parisiense,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,I3,SALCOL,1,2,4,I,3,WWP,Drought,NA,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,I4,Bare,7,NA,4,I,4,BORR,Drought,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,I4,Litter,4,NA,4,I,4,BORR,Drought,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,I4,AVEBAR,5,5,4,I,4,BORR,Drought,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,I4,BRODIA,7,5,4,I,4,BORR,Drought,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,I4,BROHOR,8,5,4,I,4,BORR,Drought,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,I4,GERDIS,4,7,4,I,4,BORR,Drought,Geranium dissectum,Non-native,Forb,Forb,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,I4,EROBOT,5,5,4,I,4,BORR,Drought,Erodium botrys,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,I4,MADGRA,5,4,4,I,4,BORR,Drought,Madia gracilis,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,I4,VISCAT,2,1,4,I,4,BORR,Drought,NA,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,I4,CLAPUR,1,5,4,I,4,BORR,Drought,Clarkia purpurea,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,I4,DAUPUS,1,1,4,I,4,BORR,Drought,Daucus pusillus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,I4,HYPGLA,1,2,4,I,4,BORR,Drought,Hypochaeris glabra,Non-native,Forb,Forb,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,I4,EPI-1,1,1,4,I,4,BORR,Drought,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,I5,Bare,25,NA,4,I,5,ANGELO,Drought,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,I5,Litter,9,NA,4,I,5,ANGELO,Drought,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,I5,AVEBAR,4,5,4,I,5,ANGELO,Drought,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,I5,BRODIA,4,2,4,I,5,ANGELO,Drought,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,I5,BROHOR,2,4,4,I,5,ANGELO,Drought,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,I5,MADGRA,2,1,4,I,5,ANGELO,Drought,Madia gracilis,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,I5,CLAPUR,1,2,4,I,5,ANGELO,Drought,Clarkia purpurea,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,I5,ESCCAL,1,1,4,I,5,ANGELO,Drought,Eschscholzia californica,Native,Forb,Forb,Perennial,Native,Native,CalFlora
+OTL,4/15/25,I5,GALPAR,1,1,4,I,5,ANGELO,Drought,Galium parisiense,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,I5,EPI-1,1,1,4,I,5,ANGELO,Drought,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,I5,DAUPUS,1,1,4,I,5,ANGELO,Drought,Daucus pusillus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,I5,AVEFAT,2,5,4,I,5,ANGELO,Drought,Avena fatua,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,I6,Bare,20,NA,4,I,6,ANGELO,Drought,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,I6,Litter,8,NA,4,I,6,ANGELO,Drought,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,I6,AVEBAR,5,5,4,I,6,ANGELO,Drought,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,I6,AVEFAT,2,5,4,I,6,ANGELO,Drought,Avena fatua,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,I6,BRODIA,6,5,4,I,6,ANGELO,Drought,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,I6,BROHOR,8,5,4,I,6,ANGELO,Drought,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,I6,MADGRA,18,1,4,I,6,ANGELO,Drought,Madia gracilis,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,I6,CLAPUR,1,4,4,I,6,ANGELO,Drought,Clarkia purpurea,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,I6,EPI-1,1,1,4,I,6,ANGELO,Drought,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,I6,GALPAR,3,8,4,I,6,ANGELO,Drought,Galium parisiense,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,I6,HYPGLA,5,5,4,I,6,ANGELO,Drought,Hypochaeris glabra,Non-native,Forb,Forb,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,I6,DAUPUS,1,4,4,I,6,ANGELO,Drought,Daucus pusillus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,I7,Bare,20,NA,4,I,7,MCL,Drought,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,I7,Litter,5,NA,4,I,7,MCL,Drought,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,H8,Bare,5,NA,3,H,8,SEDG,Control,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,H8,Litter,5,NA,3,H,8,SEDG,Control,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,H8,AVEFAT,4,6,3,H,8,SEDG,Control,Avena fatua,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,H8,AVEBAR,1,5,3,H,8,SEDG,Control,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,H8,BRODIA,15,7,3,H,8,SEDG,Control,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,H8,BROHOR,5,5,3,H,8,SEDG,Control,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,H8,BROMAD,1,5,3,H,8,SEDG,Control,Bromus madritensis,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/15/25,H8,STIPUL,2,2,3,H,8,SEDG,Control,Stipa pulchra,Native,Grass,Grass,Perennial,Native,Native,CalFlora
+OTL,4/15/25,H8,ESCCAL,4,5,3,H,8,SEDG,Control,Eschscholzia californica,Native,Forb,Forb,Perennial,Native,Native,CalFlora
+OTL,4/15/25,H8,CORFIL,10,1,3,H,8,SEDG,Control,Corethrogyne filaginafolia,Native,Forb,Forb,Perennial,Native,Native,CalFlora
+OTL,4/15/25,H8,CENMEL,1,1,3,H,8,SEDG,Control,Centaurea melitensis,Non-native,Forb,Forb,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,H8,MICCAL,1,7,3,H,8,SEDG,Control,Micropus californicus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,I1,Bare,15,NA,4,I,1,BORR,Drought,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,I1,Litter,20,NA,4,I,1,BORR,Drought,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,I1,AVEBAR,15,5,4,I,1,BORR,Drought,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,I1,BRODIA,10,5,4,I,1,BORR,Drought,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,I1,BROHOR,2,1,4,I,1,BORR,Drought,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,I1,VISCAT,5,4,4,I,1,BORR,Drought,NA,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,I1,MADGRA,1,1,4,I,1,BORR,Drought,Madia gracilis,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,I1,EPI-1,1,1,4,I,1,BORR,Drought,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,I1,TRIHIR,1,1,4,I,1,BORR,Drought,Trifolium hirtum,Non-native,Forb,Nfixer,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,I1,CLAPUR,1,6,4,I,1,BORR,Drought,Clarkia purpurea,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,I1,EROBOT,2,5,4,I,1,BORR,Drought,Erodium botrys,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/15/25,I1,TORARV,1,1,4,I,1,BORR,Drought,Torilis arvensis,Non-native,Forb,Forb,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,I2,Bare,18,NA,4,I,2,SEDG,Drought,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,I2,Litter,12,NA,4,I,2,SEDG,Drought,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,I2,AVEFAT,3,7,4,I,2,SEDG,Drought,Avena fatua,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,I2,AVEBAR,2,5,4,I,2,SEDG,Drought,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,I2,BRODIA,10,7,4,I,2,SEDG,Drought,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,I2,BROHOR,5,6,4,I,2,SEDG,Drought,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,I2,BROMAD,10,9,4,I,2,SEDG,Drought,Bromus madritensis,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/15/25,I2,CENMEL,3,2,4,I,2,SEDG,Drought,Centaurea melitensis,Non-native,Forb,Forb,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,I2,EPI-1,1,1,4,I,2,SEDG,Drought,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,I2,STIPUL,1,1,4,I,2,SEDG,Drought,Stipa pulchra,Native,Grass,Grass,Perennial,Native,Native,CalFlora
+OTL,4/15/25,I2,CORFIL,2,1,4,I,2,SEDG,Drought,Corethrogyne filaginafolia,Native,Forb,Forb,Perennial,Native,Native,CalFlora
+OTL,4/15/25,I2,MICCAL,1,7,4,I,2,SEDG,Drought,Micropus californicus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/15/25,I2,ELYCAP,1,2,4,I,2,SEDG,Drought,Elymus caput-medusae,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/15/25,I3,Bare,12,NA,4,I,3,WWP,Drought,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,I3,Litter,6,NA,4,I,3,WWP,Drought,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/15/25,I3,AVEBAR,25,4,4,I,3,WWP,Drought,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,I3,BRODIA,6,3,4,I,3,WWP,Drought,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/15/25,I3,BROMAD,2,8,4,I,3,WWP,Drought,Bromus madritensis,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/15/25,I3,BROHOR,4,4,4,I,3,WWP,Drought,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/15/25,I3,BROARE,2,10,4,I,3,WWP,Drought,Bromus arenarius,Non-native,Grass,Grass,Annual,Non-native,Non-native,CalFlora
+OTL,4/16/25,I7,AVEBAR,3,5,4,I,7,MCL,Drought,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/16/25,I7,BROMAD,4,5,4,I,7,MCL,Drought,Bromus madritensis,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/16/25,I7,BROHOR,8,5,4,I,7,MCL,Drought,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/16/25,I7,BRODIA,18,2,4,I,7,MCL,Drought,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/16/25,I7,LUPBIC,10,7,4,I,7,MCL,Drought,Lupinus bicolor,Native,Forb,Nfixer,Annual,Native,Native,CalFlora
+OTL,4/16/25,I7,EPI-1,1,1,4,I,7,MCL,Drought,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/16/25,I7,MICCAL,1,6,4,I,7,MCL,Drought,Micropus californicus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/16/25,I7,ELYCAP,11,1,4,I,7,MCL,Drought,Elymus caput-medusae,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/16/25,I7,TRIHIR,1,1,4,I,7,MCL,Drought,Trifolium hirtum,Non-native,Forb,Nfixer,Annual,Limited,Invasive,Cal IPC
+OTL,4/16/25,I7,CLAPUR,1,1,4,I,7,MCL,Drought,Clarkia purpurea,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/16/25,I7,HOLVIR,1,1,4,I,7,MCL,Drought,Holocarpha virgata,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/16/25,I7,PLAERE,1,7,4,I,7,MCL,Drought,Plantago erecta,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/16/25,I7,AVEFAT,3,6,4,I,7,MCL,Drought,Avena fatua,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/16/25,I7,LACSER,1,1,4,I,7,MCL,Drought,Lactuca serriola,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/16/25,I8,Bare,8,NA,4,I,8,ANGELO,Drought,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/16/25,I8,Litter,5,NA,4,I,8,ANGELO,Drought,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/16/25,I8,AVEBAR,3,NA,4,I,8,ANGELO,Drought,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/16/25,I8,BROHOR,25,5,4,I,8,ANGELO,Drought,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/16/25,I8,BRODIA,0,NA,4,I,8,ANGELO,Drought,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/16/25,I8,EPI-1,1,1,4,I,8,ANGELO,Drought,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/16/25,I8,DAUPUS,1,1,4,I,8,ANGELO,Drought,Daucus pusillus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/16/25,I8,MADGRA,14,NA,4,I,8,ANGELO,Drought,Madia gracilis,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/16/25,I8,GALPAR,7,8,4,I,8,ANGELO,Drought,Galium parisiense,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/16/25,I8,HYPGLA,2,2,4,I,8,ANGELO,Drought,Hypochaeris glabra,Non-native,Forb,Forb,Annual,Limited,Invasive,Cal IPC
+OTL,4/16/25,I8,SANBIP,1,1,4,I,8,ANGELO,Drought,Sanicula bipinnatifida,Native,Forb,Forb,Perennial,Native,Native,CalFlora
+OTL,4/16/25,I8,CLAPUR,1,1,4,I,8,ANGELO,Drought,Clarkia purpurea,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/16/25,I8,AIRCAR,1,2,4,I,8,ANGELO,Drought,Aira caryophyllea,Non-native,Grass,Grass,Annual,Non-native,Non-native,CalFlora
+OTL,4/16/25,J1,Bare,20,NA,5,J,1,BORR,Drought,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/16/25,J1,Litter,15,NA,5,J,1,BORR,Drought,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/16/25,J1,AVEBAR,13,4,5,J,1,BORR,Drought,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/16/25,J1,BROHOR,7,5,5,J,1,BORR,Drought,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/16/25,J1,BRODIA,4,4,5,J,1,BORR,Drought,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/16/25,J1,CLAPUR,1,6,5,J,1,BORR,Drought,Clarkia purpurea,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/16/25,J1,DAUPUS,1,1,5,J,1,BORR,Drought,Daucus pusillus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/16/25,J1,MADGRA,4,4,5,J,1,BORR,Drought,Madia gracilis,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/16/25,J1,VISCAT,2,1,5,J,1,BORR,Drought,NA,NA,NA,NA,NA,NA,NA,NA
+OTL,4/16/25,J1,LUPBIC,1,1,5,J,1,BORR,Drought,Lupinus bicolor,Native,Forb,Nfixer,Annual,Native,Native,CalFlora
+OTL,4/16/25,J1,TRIHIR,1,1,5,J,1,BORR,Drought,Trifolium hirtum,Non-native,Forb,Nfixer,Annual,Limited,Invasive,Cal IPC
+OTL,4/16/25,J1,GALPAR,1,8,5,J,1,BORR,Drought,Galium parisiense,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/16/25,J1,TORARV,1,1,5,J,1,BORR,Drought,Torilis arvensis,Non-native,Forb,Forb,Annual,Moderate,Invasive,Cal IPC
+OTL,4/16/25,J1,GERDIS,1,7,5,J,1,BORR,Drought,Geranium dissectum,Non-native,Forb,Forb,Annual,Limited,Invasive,Cal IPC
+OTL,4/16/25,J1,EROBOT,1,8,5,J,1,BORR,Drought,Erodium botrys,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/16/25,J2,Bare,5,NA,5,J,2,ANGELO,Drought,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/16/25,J2,Litter,5,NA,5,J,2,ANGELO,Drought,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/16/25,J2,AVEBAR,20,4,5,J,2,ANGELO,Drought,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/16/25,J2,BRODIA,5,2,5,J,2,ANGELO,Drought,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/16/25,J2,BROHOR,12,4,5,J,2,ANGELO,Drought,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/16/25,J2,ESCCAL,25,4,5,J,2,ANGELO,Drought,Eschscholzia californica,Native,Forb,Forb,Perennial,Native,Native,CalFlora
+OTL,4/16/25,J2,GALPAR,6,8,5,J,2,ANGELO,Drought,Galium parisiense,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/16/25,J2,CLAPUR,1,2,5,J,2,ANGELO,Drought,Clarkia purpurea,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/16/25,J2,MADGRA,3,1,5,J,2,ANGELO,Drought,Madia gracilis,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/16/25,J2,EPI-1,1,1,5,J,2,ANGELO,Drought,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/16/25,J2,HYPGLA,3,1,5,J,2,ANGELO,Drought,Hypochaeris glabra,Non-native,Forb,Forb,Annual,Limited,Invasive,Cal IPC
+OTL,4/16/25,J2,LACSER,1,1,5,J,2,ANGELO,Drought,Lactuca serriola,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/16/25,J3,Bare,35,NA,5,J,3,MCL,Drought,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/16/25,J3,Litter,6,NA,5,J,3,MCL,Drought,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/16/25,J3,AVEBAR,7,5,5,J,3,MCL,Drought,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/16/25,J3,BRODIA,7,2,5,J,3,MCL,Drought,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/16/25,J3,BROHOR,2,5,5,J,3,MCL,Drought,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/16/25,J3,BROMAD,2,2,5,J,3,MCL,Drought,Bromus madritensis,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/16/25,J3,HOLVIR,2,1,5,J,3,MCL,Drought,Holocarpha virgata,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/16/25,J3,GALPAR,1,1,5,J,3,MCL,Drought,Galium parisiense,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/16/25,J3,EPI-1,1,1,5,J,3,MCL,Drought,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/16/25,J3,CLAPUR,1,2,5,J,3,MCL,Drought,Clarkia purpurea,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/16/25,J3,ELYCAP,5,1,5,J,3,MCL,Drought,Elymus caput-medusae,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/16/25,J3,PLAERE,1,9,5,J,3,MCL,Drought,Plantago erecta,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/16/25,J4,Bare,15,NA,5,J,4,WWP,Drought,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/16/25,J4,Litter,20,NA,5,J,4,WWP,Drought,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/16/25,J4,AVEBAR,20,4,5,J,4,WWP,Drought,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/16/25,J4,BROMAD,3,6,5,J,4,WWP,Drought,Bromus madritensis,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/16/25,J4,BRODIA,20,5,5,J,4,WWP,Drought,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/16/25,J4,EROCIC,5,5,5,J,4,WWP,Drought,Erodium cicutarium,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/16/25,J4,SALCOL,1,5,5,J,4,WWP,Drought,NA,NA,NA,NA,NA,NA,NA,NA
+OTL,4/16/25,J4,BROARE,2,9,5,J,4,WWP,Drought,Bromus arenarius,Non-native,Grass,Grass,Annual,Non-native,Non-native,CalFlora
+OTL,4/16/25,J5,Bare,10,NA,5,J,5,SEDG,Drought,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/16/25,J5,Litter,20,NA,5,J,5,SEDG,Drought,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/16/25,J5,AVEBAR,10,NA,5,J,5,SEDG,Drought,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/16/25,J5,AVEFAT,2,8,5,J,5,SEDG,Drought,Avena fatua,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/16/25,J5,BRODIA,10,8,5,J,5,SEDG,Drought,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/16/25,J5,BROHOR,4,7,5,J,5,SEDG,Drought,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/16/25,J5,BROMAD,6,9,5,J,5,SEDG,Drought,Bromus madritensis,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/16/25,J5,CENMEL,9,2,5,J,5,SEDG,Drought,Centaurea melitensis,Non-native,Forb,Forb,Annual,Moderate,Invasive,Cal IPC
+OTL,4/16/25,J5,CORFIL,8,1,5,J,5,SEDG,Drought,Corethrogyne filaginafolia,Native,Forb,Forb,Perennial,Native,Native,CalFlora
+OTL,4/16/25,J5,STIPUL,3,1,5,J,5,SEDG,Drought,Stipa pulchra,Native,Grass,Grass,Perennial,Native,Native,CalFlora
+OTL,4/16/25,J5,EPI-1,1,1,5,J,5,SEDG,Drought,Epilobium brachycarpum,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/16/25,J6,Bare,15,NA,5,J,6,MCL,Drought,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/16/25,J6,Litter,15,NA,5,J,6,MCL,Drought,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/16/25,J6,AVEBAR,17,4,5,J,6,MCL,Drought,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/16/25,J6,BROHOR,6,6,5,J,6,MCL,Drought,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/16/25,J6,BRODIA,4,6,5,J,6,MCL,Drought,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/16/25,J6,BROMAD,2,5,5,J,6,MCL,Drought,Bromus madritensis,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/16/25,J6,CLAPUR,1,6,5,J,6,MCL,Drought,Clarkia purpurea,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/16/25,J6,HOLVIR,7,1,5,J,6,MCL,Drought,Holocarpha virgata,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/16/25,J6,UNKCAR,3,1,5,J,6,MCL,Drought,Anthriscus caucalis,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/16/25,J6,PLAERE,1,10,5,J,6,MCL,Drought,Plantago erecta,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/16/25,J6,MICCAL,1,10,5,J,6,MCL,Drought,Micropus californicus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/16/25,J7,Bare,50,NA,5,J,7,WWP,Drought,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/16/25,J7,Litter,7,NA,5,J,7,WWP,Drought,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/16/25,J7,AVEBAR,7,5,5,J,7,WWP,Drought,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/16/25,J7,BRODIA,4,4,5,J,7,WWP,Drought,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/16/25,J7,BROMAD,2,5,5,J,7,WWP,Drought,Bromus madritensis,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/16/25,J7,BROARE,3,9,5,J,7,WWP,Drought,Bromus arenarius,Non-native,Grass,Grass,Annual,Non-native,Non-native,CalFlora
+OTL,4/16/25,J7,EROCIC,2,6,5,J,7,WWP,Drought,Erodium cicutarium,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/16/25,J7,UNKCAR,4,1,5,J,7,WWP,Drought,Anthriscus caucalis,Non-native,Forb,Forb,Annual,Non-native,Non-native,CalFlora
+OTL,4/16/25,J7,SALCOL,1,6,5,J,7,WWP,Drought,NA,NA,NA,NA,NA,NA,NA,NA
+OTL,4/16/25,J7,ESCCAL,1,1,5,J,7,WWP,Drought,Eschscholzia californica,Native,Forb,Forb,Perennial,Native,Native,CalFlora
+OTL,4/16/25,J7,AMSMEN,2,7,5,J,7,WWP,Drought,Amsinckia menziesii,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/16/25,J8,Bare,19,NA,5,J,8,SEDG,Drought,Bare Ground,NA,NA,NA,NA,NA,NA,NA
+OTL,4/16/25,J8,Litter,13,NA,5,J,8,SEDG,Drought,Litter,NA,NA,NA,NA,NA,NA,NA
+OTL,4/16/25,J8,AVEFAT,1,9,5,J,8,SEDG,Drought,Avena fatua,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/16/25,J8,AVEBAR,3,5,5,J,8,SEDG,Drought,Avena barbata,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/16/25,J8,BRODIA,15,7,5,J,8,SEDG,Drought,Bromus diandrus,Non-native,Grass,Grass,Annual,Moderate,Invasive,Cal IPC
+OTL,4/16/25,J8,BROHOR,3,6,5,J,8,SEDG,Drought,Bromus hordeaceus,Non-native,Grass,Grass,Annual,Limited,Invasive,Cal IPC
+OTL,4/16/25,J8,BROMAD,2,8,5,J,8,SEDG,Drought,Bromus madritensis,Non-native,Grass,Grass,Annual,High,Invasive,Cal IPC
+OTL,4/16/25,J8,STIPUL,10,4,5,J,8,SEDG,Drought,Stipa pulchra,Native,Grass,Grass,Perennial,Native,Native,CalFlora
+OTL,4/16/25,J8,CENMEL,6,2,5,J,8,SEDG,Drought,Centaurea melitensis,Non-native,Forb,Forb,Annual,Moderate,Invasive,Cal IPC
+OTL,4/16/25,J8,ESCCAL,5,1,5,J,8,SEDG,Drought,Eschscholzia californica,Native,Forb,Forb,Perennial,Native,Native,CalFlora
+OTL,4/16/25,J8,MICCAL,1,8,5,J,8,SEDG,Drought,Micropus californicus,Native,Forb,Forb,Annual,Native,Native,CalFlora
+OTL,4/16/25,J8,CORFIL,6,1,5,J,8,SEDG,Drought,Corethrogyne filaginafolia,Native,Forb,Forb,Perennial,Native,Native,CalFlora
