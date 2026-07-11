@@ -107,7 +107,7 @@ Precip data from WorlClim
 # ----- climate data -----
 ppt <- worldclim_global(var = "prec", res = 2.5, path = "data/")
 ppt_annual <- sum(ppt)
-
+?worldclim_global
 # ----- California boundary -----
 ca <- states(cb = TRUE) |> subset(NAME == "California")
 ca_vect <- vect(ca)
@@ -287,7 +287,7 @@ scale_fill_manual(
              ,"Phacelia tanacetifolia" = colors[36]
              ,"Mirabilis multiflora" = colors[37]
     )
-    , guide = none
+    , guide = "none"
   ) +
   geom_sf(data = ca, fill = NA, color = "black",linewidth = 0.75) +
   coord_sf(xlim = c(-127, -113), ylim = c(32, 42)) +
@@ -306,21 +306,124 @@ scale_fill_manual(
                  size = 4)
 
 
-#ggsave(here::here("figs/CA_precip_comp_map.jpg"))
+ggsave(here::here("figs/CA_precip_comp_map.jpg"))
 
-# rm(ca,
-#   ca_vect,
-#   comp_reduced,
-#   comp_sum, 
-#   comp_wide,
-#   pl_list,
-#   plant_comp,
-#   PlList_2023,
- #  ppt_df)
+ rm(ca,
+   ca_vect,
+   comp_reduced,
+   comp_sum, 
+   comp_wide,
+   pl_list,
+   plant_comp,
+   PlList_2023,
+   ppt_df)
 ```
 
+```{r}
+library(ggplot2)
 
+species <- c(
+  "Acmispon parviflorus",
+  "Aira caryophyllea",
+  "Bromus diandrus",
+  "Bromus hordeaceus",
+  "Clarkia purpurea",
+  "Danthonia californica",
+  "Daucus pusillus",
+  "Eschscholzia californica",
+  "Galium parisiense",
+  "Hypochaeris glabra",
+  "Madia gracilis",
+  "Sanicula bipinnatifida",
+  "Avena barbata",
+  "Erodium botrys",
+  "Geranium dissectum",
+  "Lupinus bicolor",
+  "Torilis arvensis",
+  "Trifolium hirtum",
+  "Vicia sativa",
+  "Bromus madritensis",
+  "Elymus caput-medusae",
+  "Holocarpha virgata",
+  "Micropus californicus",
+  "Plantago erecta",
+  "Avena fatua",
+  "Calandrinia menziesii",
+  "Centaurea melitensis",
+  "Corethrogyne filaginifolia",
+  "Erodium cicutarium",
+  "Stipa pulchra",
+  "Amsinckia menziesii",
+  "Bromus arenarius",
+  "Caulanthus coulteri",
+  "Lupinus microcarpus",
+  "Lupinus succulentus",
+  "Phacelia tanacetifolia",
+  "Mirabilis multiflora"
+)
 
+legend_df <- data.frame(
+  Species = factor(species, levels = species),
+  x = 1,
+  y = seq_along(species)
+)
+
+legend_plot <- ggplot(legend_df,
+                      aes(x, y, fill = Species)) +
+  geom_point(shape = 21, size = 5) +
+  scale_fill_manual(
+    values = c(
+                   "Acmispon parviflorus" = colors[1]
+             ,"Aira caryophyllea" = colors[2]
+             ,"Bromus diandrus" = colors[3]
+             ,"Bromus hordeaceus" = colors[4]
+             ,"Clarkia purpurea" = colors[5]
+             ,"Danthonia californica" = colors[6]
+             ,"Daucus pusillus" = colors[7]
+             ,"Eschscholzia californica" = colors[8]
+             ,"Galium parisiense" = colors[9]
+             ,"Hypochaeris glabra" = colors[10]
+             ,"Madia gracilis" = colors[11]
+             ,"Sanicula bipinnatifida" = colors[12]
+             ,"Avena barbata" = colors[13]
+             ,"Erodium botrys" = colors[14]
+             ,"Geranium dissectum" = colors[15]
+             ,"Lupinus bicolor" = colors[16]
+             ,"Torilis arvensis" = colors[17]
+             ,"Trifolium hirtum" = colors[18]
+             ,"Vicia sativa" = colors[19]
+             ,"Bromus madritensis" = colors[20]
+             ,"Elymus caput-medusae" = colors[21]
+             ,"Holocarpha virgata" = colors[22]
+             ,"Micropus californicus" = colors[23]
+             ,"Plantago erecta" = colors[24]
+             ,"Avena fatua" = colors[25]
+             ,"Calandrinia menziesii" = colors[26]
+             ,"Centaurea melitensis" = colors[27]
+             ,"Corethrogyne filaginifolia" = colors[28]
+             ,"Erodium cicutarium" = colors[29]
+             ,"Stipa pulchra" = colors[30]
+             ,"Amsinckia menziesii" = colors[31]
+             ,"Bromus arenarius" = colors[32]
+             ,"Caulanthus coulteri" = colors[33]
+             ,"Lupinus microcarpus" = colors[34]
+             ,"Lupinus succulentus" = colors[35]
+             ,"Phacelia tanacetifolia" = colors[36]
+             ,"Mirabilis multiflora" = colors[37]
+    )
+  ) +
+  theme_void() +
+  theme(
+    legend.position = "right"
+  )
+
+ggsave(here::here("figs/SpeciesLegend.jpg"),
+       legend_plot,
+       width = 4,
+       height = 10)
+```
+
+Combine the two in powerpoint
 
 ```{r}
 #| label: fig-plot
