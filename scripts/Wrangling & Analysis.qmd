@@ -89,11 +89,160 @@ library(magick)
 require(devtools)
 # devtools::install_github('seschaub/getSpei')
 require(getSpei)
+library(SPEI)
 library(influence.ME)
 # install.packages("MuMIn")
 library(MuMIn)
 library(ggeffects)
 ```
+
+## Soil Sites
+
+```{r}
+soil <- read_csv(here::here("data/Site Nitrogen.csv"))
+str(soil)
+
+soil <- soil |> 
+  mutate(`NO3-N` = (
+    case_when(
+      `NO3-N` == "<0.10" ~ 0.05
+      , TRUE ~ as.numeric(`NO3-N`)
+    )
+  )) |> 
+  pivot_longer(cols = c(`NH4-N`, 
+                        `NO3-N`),
+               names_to = "Nitrogen_Type",
+               values_to = "Concentration_ppm")
+
+# Calculate mean and standard error for each site × nutrient
+plot_dat <- soil %>%
+  group_by(Site, Nitrogen_Type) %>%
+  summarise(
+    mean = mean(Concentration_ppm, na.rm = TRUE),
+    se = sd(Concentration_ppm, na.rm = TRUE) / sqrt(sum(!is.na(Concentration_ppm))),
+    .groups = "drop"
+  )
+
+# Specify which site should be red
+red_site <- "OTL"
+
+# Plot
+ggplot(plot_dat, aes(x = mean, y = Nitrogen_Type, color = Site)) +
+  geom_errorbar(
+    aes(xmin = mean - se, xmax = mean + se),
+    orientation = "y",
+    width = 0,
+    linewidth = 0.8
+  ) +
+  geom_point(size = 3) +
+  scale_color_manual(
+    values = c(
+      "ACR" = "black",
+      "MCL" = "black",
+      "BORR" = "black",
+      "SEDG" = "black",
+      "WWP" = "black",
+      "OTL" = "red"
+    )
+  ) +
+  labs(
+    x = "Concentration (ppm)",
+    y = NULL
+  ) +
+  theme_classic() +
+  theme(
+    legend.position = "none",
+    axis.text.y = element_text(size = 12),
+    axis.text.x = element_text(size = 11),
+    axis.title.x = element_text(size = 12)
+  )
+  
+
+library(dplyr)
+library(ggplot2)
+
+# Calculate mean and standard error for each site × nutrient
+summary_data <- soil %>%
+  group_by(Site, Nitrogen_Type) %>%
+  summarise(
+    Mean = mean(Concentration_ppm, na.rm = TRUE),
+    SE = sd(Concentration_ppm, na.rm = TRUE) /
+         sqrt(sum(!is.na(Concentration_ppm))),
+    .groups = "drop"
+  )
+
+# Give each site a small vertical offset
+summary_data <- summary_data %>%
+  mutate(
+    Nitrogen_Type = factor(
+      Nitrogen_Type,
+      levels = c("NO3-N", "NH4-N")
+    ),
+    Site = factor(
+      Site,
+      levels = c("ACR", "MCL", "BORR",
+                 "SEDG", "WWP", "OTL")
+    ),
+    y_offset = as.numeric(Nitrogen_Type) +
+               (as.numeric(Site) - 3.5) * 0.10
+  )
+
+# Plot
+ggplot(summary_data, aes(
+  x = Mean,
+  y = y_offset,
+  color = Site
+)) +
+  
+  # Standard error lines
+  geom_errorbar(
+    aes(
+      xmin = Mean - SE,
+      xmax = Mean + SE
+    ),
+    orientation = "y",
+    width = 0,
+    linewidth = 0.8
+  ) +
+  
+  # Mean points
+  geom_point(size = 3) +
+  
+  # Five sites black, one site red
+  scale_color_manual(
+    values = c(
+      "ACR" = "black",
+      "MCL" = "black",
+      "BORR" = "black",
+      "SEDG" = "black",
+      "WWP" = "black",
+      "OTL" = "red"
+    )
+  ) +
+  
+  # Put the nutrient names back on the y axis
+  scale_y_continuous(
+    breaks = c(1, 2),
+    labels = c("NO3-N", "NH4-N")
+  ) +
+  
+  labs(
+    x = "Soil Concentration (ppm)",
+    y = NULL
+  ) +
+  
+  theme_classic() +
+  theme(
+    legend.position = "none",
+    axis.text.y = element_text(size = 12),
+    axis.text.x = element_text(size = 11),
+    axis.title.x = element_text(size = 12)
+  )
+
+ggsave(here::here("figs/soil_nitrogen.jpg"), height = 3.5, width = 7)
+
+```
+
 
 ## CA Map and Plant Comp
 
@@ -320,6 +469,7 @@ ggsave(here::here("figs/CA_precip_comp_map.jpg"))
 ```
 
 ```{r}
+#| eval: false
 library(ggplot2)
 
 species <- c(
@@ -866,7 +1016,7 @@ rm(summary,
    )
 ```
 
-Founnd and added in SPEI using package `getSPEI`
+Found and added in SPEI using package `getSPEI`
 
 ```{r}
 #| eval: false
@@ -4026,7 +4176,7 @@ p4 <- ggbiplot(pca, groups = pca_scores_2$Rating, ellipse = TRUE, circle = TRUE)
   theme_minimal()
 
 new_names <- c(
-  "Height RGR",
+  "Height Growth Rate",
   "Maximum Height",
   "Leaf N",
   "Flower Date",
@@ -4773,165 +4923,3 @@ p_main <- ggplot() +
     label = "Slow vertical growth",
     hjust = -0.125,
     vjust = 2.9,
-    size = 4
-  ) +
-  annotate(
-    "text",
-    x = -Inf,
-    y = Inf,
-    label = "Tall",
-    hjust = -0.7,
-    vjust = 4.3,
-    size = 4
-  ) +
-  labs(
-    x = "Ln(Vegetative Biomass)",
-    y = "Predicted\nLn(Reproductive Biomass)",
-    tag = "A"
-  ) +
-
-  theme_classic() +
-  theme(legend.position = "bottom")
-
-ggsave(here::here("figs/model_PC3.jpg"), p_main, width = 7, height = 4)
-```
-
-I wonder if I could make a graph with two small panels showing the effect of SPEI and PC3 to the right and to left is this big graph with PC lines
-
-```{r}
-library(ggeffects)
-
-pc3_eff <- ggpredict(m_both, terms = "PC3")
-spei_eff <- ggpredict(m_both, terms = "spei_c")
-
-p_pc3 <- ggplot(pc3_eff,
-                aes(x, predicted)) +
-  geom_line(linewidth = 1) +
-  geom_ribbon(
-    aes(ymin = conf.low,
-        ymax = conf.high),
-    alpha = 0.2
-  ) +
-  labs(
-    x = "PC3",
-    y = "Predicted\nreproductive biomass (ln)",
-    tag = "B"
-  ) +
-  theme_classic()
-
-p_spei <- ggplot(spei_eff,
-                 aes(x, predicted)) +
-  geom_line(linewidth = 1) +
-  geom_ribbon(
-    aes(ymin = conf.low,
-        ymax = conf.high),
-    alpha = 0.2
-  ) +
-  labs(
-    x = "SPEI",
-    y = "Predicted\nreproductive biomass",
-    tag = "C"
-  ) +
-  theme_classic()
-
-
-#p_spei <- p_spei +
-#  scale_x_continuous(
-#    breaks = c(-0.4, 0, 0.4),
-#    labels = scales::label_number()
- # )
-
-
-p_pc3 <- p_pc3 +
-  theme(
-    axis.title.y = element_blank(),
-    axis.text.y = element_blank(),
-    axis.ticks.y = element_blank()
-  )
-
-p_spei <- p_spei +
-  theme(
-    axis.title.y = element_blank(),
-    axis.text.y = element_blank(),
-    axis.ticks.y = element_blank()
-  )
-
-
-library(patchwork)
-
-p_all <- (p_main | (p_pc3 / p_spei)) +
-  plot_layout(
-    widths = c(3, 1))
-p_all
-
-ggsave(here::here("figs/m_both_PC3_spei.jpg"), p_all, width = 7, height = 4)
-```
-
-
-```{r}
-# SPEI predictions (3 lines: low, mean, high)
-pred_pc3 <- ggpredict(m_both, terms = c("Veg_Mass_ln", "PC3"))
-
-library(dplyr)
-
-pred_pc3 <- as.data.frame(pred_pc3) %>%
-  mutate(panel = "PC3")
-
-pred_pc3$PC3 <-as.numeric(pred_pc3$group) 
-pred_pc3 <- pred_pc3 %>% 
-  mutate(PC3 =
-    case_when(
-      PC3 == 1 ~ -1.19,
-      PC3 == 2 ~ -0.08,
-      PC3 == 3 ~ 1.03
-    )
-  )
-
-pg <- ggplot() +
-
-  # Raw data points
-  geom_point(
-    data = analysis_df_plus,
-    aes(x = Veg_Mass_ln,
-        y = total_fl_mass_ln),
-    alpha = 0.3
-  ) +
-
-  # Predicted lines
-  geom_line(
-    data = pred_pc3,
-    aes(x = x,
-        y = predicted,
-        color = PC3,
-        group = PC3),
-    linewidth = 1.2
-  ) +
-
-  # Shared continuous scale
-  scale_color_viridis_c(
-    direction = -1,
-    name = "PC3",
-    option = "plasma"
-  ) +
-  scale_fill_viridis_c(
-    direction = -1,
-    name = "PC3",
-    option = "plasma",
-    guide = "none"   # prevents duplicate legend
-  ) +
-
-  labs(
-    x = "Ln(Vegetative Biomass)",
-    y = "Predicted ln(Reproductive Biomass)"
-  ) +
-
-  theme_classic() +
-  theme(legend.position = "bottom")
-
-pg
-```
-Big error when trying to re-run code and PCA. Need to go back through with fine-toothed comb. Left off on trying to get PCA graph labels to spread out for readability. Grrrrr
-
-
-
-
