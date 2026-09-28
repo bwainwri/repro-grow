@@ -8,7 +8,7 @@ execute:
 
 ## Background
 
-These data come from a common garden drought experiment in Davis, California investigating the functional trait strategies of California grassland plants from five different grassland communities spanning California's latitudinal precipitation gradient. There 10-12 species per community or provenance, each provenance has 16 plots (8 drought, 8 control) across 10 shelters (5 drought, 5 control). In 2022-2023, we focused on collecting whole plant traits, including reproductive investment. This study focuses on how these traits relate to reproductive investment depending on native status, growth habit or provenance. This document will clean and wrangle the many datasets and images associated with this study as well as carry out analysis and ceration of figures.
+These data come from a common garden drought experiment in Davis, California investigating the functional trait strategies of California grassland plants from five different grassland communities spanning California's latitudinal precipitation gradient. There 10-12 species per community or provenance, each provenance has 16 plots (8 drought, 8 control) across 10 shelters (5 drought, 5 control). In 2022-2023, we focused on collecting whole plant traits, including reproductive investment. This study focuses on how these traits relate to reproductive investment depending on native status, growth habit or provenance. This document will clean and wrangle the many datasets and images associated with this study as well as carry out analysis and creation of figures.
 
 ## Traits & Objectives
 
@@ -39,13 +39,10 @@ Q3: Does native status or provenance have an effect on reproductive scaling of f
 Q4: How do aboveground traits associate with reproductive allocation and reproductive scaling?
 
 ## To-do list
-- Check for effects of drought treatment
-- Check assumptions for models
-- Fix Map orientation
-- Licor outliers and mismatches
-- Include seed mass in PCA
-- Figure out if PCA is predicting something
-- check for outliers in not RGR and non reproductive stuff
+- Replace SPEI with different aridity measure
+- add asterisks to perennials in map figure
+- Clean up PCA step
+- Break up final PCA lma into two steps
 
 ## Setup
 
@@ -243,6 +240,11 @@ ggsave(here::here("figs/soil_nitrogen.jpg"), height = 3.5, width = 7)
 
 ```
 
+## Water sites
+Do the same thing as the nitrogen figure but for MAP (or current year?)
+
+I could do soil moisture, same year rainfall, or MAP...
+
 
 ## CA Map and Plant Comp
 
@@ -340,7 +342,7 @@ comp_wide$lat_move[5] <- comp_wide$lat[5] - 1.5
 comp_wide
 
 comp_wide[is.na(comp_wide)] <- 0
-colors <- rainbow_hcl(37)
+my_colors <- rainbow_hcl(37)
 
 
 # ----- plot -----
@@ -398,43 +400,43 @@ ggplot() +
 scale_fill_manual(
     name = "Species",
     values = c(
-             "Acmispon parviflorus" = colors[1]
-             ,"Aira caryophyllea" = colors[2]
-             ,"Bromus diandrus" = colors[3]
-             ,"Bromus hordeaceus" = colors[4]
-             ,"Clarkia purpurea" = colors[5]
-             ,"Danthonia californica" = colors[6]
-             ,"Daucus pusillus" = colors[7]
-             ,"Eschscholzia californica" = colors[8]
-             ,"Galium parisiense" = colors[9]
-             ,"Hypochaeris glabra" = colors[10]
-             ,"Madia gracilis" = colors[11]
-             ,"Sanicula bipinnatifida" = colors[12]
-             ,"Avena barbata" = colors[13]
-             ,"Erodium botrys" = colors[14]
-             ,"Geranium dissectum" = colors[15]
-             ,"Lupinus bicolor" = colors[16]
-             ,"Torilis arvensis" = colors[17]
-             ,"Trifolium hirtum" = colors[18]
-             ,"Vicia sativa" = colors[19]
-             ,"Bromus madritensis" = colors[20]
-             ,"Elymus caput-medusae" = colors[21]
-             ,"Holocarpha virgata" = colors[22]
-             ,"Micropus californicus" = colors[23]
-             ,"Plantago erecta" = colors[24]
-             ,"Avena fatua" = colors[25]
-             ,"Calandrinia menziesii" = colors[26]
-             ,"Centaurea melitensis" = colors[27]
-             ,"Corethrogyne filaginifolia" = colors[28]
-             ,"Erodium cicutarium" = colors[29]
-             ,"Stipa pulchra" = colors[30]
-             ,"Amsinckia menziesii" = colors[31]
-             ,"Bromus arenarius" = colors[32]
-             ,"Caulanthus coulteri" = colors[33]
-             ,"Lupinus microcarpus" = colors[34]
-             ,"Lupinus succulentus" = colors[35]
-             ,"Phacelia tanacetifolia" = colors[36]
-             ,"Mirabilis multiflora" = colors[37]
+             "Acmispon parviflorus" = my_colors[1]
+             ,"Aira caryophyllea" = my_colors[2]
+             ,"Bromus diandrus" = my_colors[3]
+             ,"Bromus hordeaceus" = my_colors[4]
+             ,"Clarkia purpurea" = my_colors[5]
+             ,"Danthonia californica" = my_colors[6]
+             ,"Daucus pusillus" = my_colors[7]
+             ,"Eschscholzia californica" = my_colors[8]
+             ,"Galium parisiense" = my_colors[9]
+             ,"Hypochaeris glabra" = my_colors[10]
+             ,"Madia gracilis" = my_colors[11]
+             ,"Sanicula bipinnatifida" = my_colors[12]
+             ,"Avena barbata" = my_colors[13]
+             ,"Erodium botrys" = my_colors[14]
+             ,"Geranium dissectum" = my_colors[15]
+             ,"Lupinus bicolor" = my_colors[16]
+             ,"Torilis arvensis" = my_colors[17]
+             ,"Trifolium hirtum" = my_colors[18]
+             ,"Vicia sativa" = my_colors[19]
+             ,"Bromus madritensis" = my_colors[20]
+             ,"Elymus caput-medusae" = my_colors[21]
+             ,"Holocarpha virgata" = my_colors[22]
+             ,"Micropus californicus" = my_colors[23]
+             ,"Plantago erecta" = my_colors[24]
+             ,"Avena fatua" = my_colors[25]
+             ,"Calandrinia menziesii" = my_colors[26]
+             ,"Centaurea melitensis" = my_colors[27]
+             ,"Corethrogyne filaginifolia" = my_colors[28]
+             ,"Erodium cicutarium" = my_colors[29]
+             ,"Stipa pulchra" = my_colors[30]
+             ,"Amsinckia menziesii" = my_colors[31]
+             ,"Bromus arenarius" = my_colors[32]
+             ,"Caulanthus coulteri" = my_colors[33]
+             ,"Lupinus microcarpus" = my_colors[34]
+             ,"Lupinus succulentus" = my_colors[35]
+             ,"Phacelia tanacetifolia" = my_colors[36]
+             ,"Mirabilis multiflora" = my_colors[37]
     )
     , guide = "none"
   ) +
@@ -478,13 +480,13 @@ species <- c(
   "Bromus diandrus",
   "Bromus hordeaceus",
   "Clarkia purpurea",
-  "Danthonia californica",
+  "Danthonia californica*",
   "Daucus pusillus",
-  "Eschscholzia californica",
+  "Eschscholzia californica*",
   "Galium parisiense",
   "Hypochaeris glabra",
   "Madia gracilis",
-  "Sanicula bipinnatifida",
+  "Sanicula bipinnatifida*",
   "Avena barbata",
   "Erodium botrys",
   "Geranium dissectum",
@@ -500,16 +502,16 @@ species <- c(
   "Avena fatua",
   "Calandrinia menziesii",
   "Centaurea melitensis",
-  "Corethrogyne filaginifolia",
+  "Corethrogyne filaginifolia*",
   "Erodium cicutarium",
-  "Stipa pulchra",
+  "Stipa pulchra*",
   "Amsinckia menziesii",
   "Bromus arenarius",
   "Caulanthus coulteri",
   "Lupinus microcarpus",
   "Lupinus succulentus",
   "Phacelia tanacetifolia",
-  "Mirabilis multiflora"
+  "Mirabilis multiflora*"
 )
 
 legend_df <- data.frame(
@@ -523,48 +525,50 @@ legend_plot <- ggplot(legend_df,
   geom_point(shape = 21, size = 5) +
   scale_fill_manual(
     values = c(
-                   "Acmispon parviflorus" = colors[1]
-             ,"Aira caryophyllea" = colors[2]
-             ,"Bromus diandrus" = colors[3]
-             ,"Bromus hordeaceus" = colors[4]
-             ,"Clarkia purpurea" = colors[5]
-             ,"Danthonia californica" = colors[6]
-             ,"Daucus pusillus" = colors[7]
-             ,"Eschscholzia californica" = colors[8]
-             ,"Galium parisiense" = colors[9]
-             ,"Hypochaeris glabra" = colors[10]
-             ,"Madia gracilis" = colors[11]
-             ,"Sanicula bipinnatifida" = colors[12]
-             ,"Avena barbata" = colors[13]
-             ,"Erodium botrys" = colors[14]
-             ,"Geranium dissectum" = colors[15]
-             ,"Lupinus bicolor" = colors[16]
-             ,"Torilis arvensis" = colors[17]
-             ,"Trifolium hirtum" = colors[18]
-             ,"Vicia sativa" = colors[19]
-             ,"Bromus madritensis" = colors[20]
-             ,"Elymus caput-medusae" = colors[21]
-             ,"Holocarpha virgata" = colors[22]
-             ,"Micropus californicus" = colors[23]
-             ,"Plantago erecta" = colors[24]
-             ,"Avena fatua" = colors[25]
-             ,"Calandrinia menziesii" = colors[26]
-             ,"Centaurea melitensis" = colors[27]
-             ,"Corethrogyne filaginifolia" = colors[28]
-             ,"Erodium cicutarium" = colors[29]
-             ,"Stipa pulchra" = colors[30]
-             ,"Amsinckia menziesii" = colors[31]
-             ,"Bromus arenarius" = colors[32]
-             ,"Caulanthus coulteri" = colors[33]
-             ,"Lupinus microcarpus" = colors[34]
-             ,"Lupinus succulentus" = colors[35]
-             ,"Phacelia tanacetifolia" = colors[36]
-             ,"Mirabilis multiflora" = colors[37]
+              "Acmispon parviflorus" = my_colors[1]
+             ,"Aira caryophyllea" = my_colors[2]
+             ,"Bromus diandrus" = my_colors[3]
+             ,"Bromus hordeaceus" = my_colors[4]
+             ,"Clarkia purpurea" = my_colors[5]
+             ,"Danthonia californica*" = my_colors[6]
+             ,"Daucus pusillus" = my_colors[7]
+             ,"Eschscholzia californica*" = my_colors[8]
+             ,"Galium parisiense" = my_colors[9]
+             ,"Hypochaeris glabra" = my_colors[10]
+             ,"Madia gracilis" = my_colors[11]
+             ,"Sanicula bipinnatifida*" = my_colors[12]
+             ,"Avena barbata" = my_colors[13]
+             ,"Erodium botrys" = my_colors[14]
+             ,"Geranium dissectum" = my_colors[15]
+             ,"Lupinus bicolor" = my_colors[16]
+             ,"Torilis arvensis" = my_colors[17]
+             ,"Trifolium hirtum" = my_colors[18]
+             ,"Vicia sativa" = my_colors[19]
+             ,"Bromus madritensis" = my_colors[20]
+             ,"Elymus caput-medusae" = my_colors[21]
+             ,"Holocarpha virgata" = my_colors[22]
+             ,"Micropus californicus" = my_colors[23]
+             ,"Plantago erecta" = my_colors[24]
+             ,"Avena fatua" = my_colors[25]
+             ,"Calandrinia menziesii" = my_colors[26]
+             ,"Centaurea melitensis" = my_colors[27]
+             ,"Corethrogyne filaginifolia*" = my_colors[28]
+             ,"Erodium cicutarium" = my_colors[29]
+             ,"Stipa pulchra*" = my_colors[30]
+             ,"Amsinckia menziesii" = my_colors[31]
+             ,"Bromus arenarius" = my_colors[32]
+             ,"Caulanthus coulteri" = my_colors[33]
+             ,"Lupinus microcarpus" = my_colors[34]
+             ,"Lupinus succulentus" = my_colors[35]
+             ,"Phacelia tanacetifolia" = my_colors[36]
+             ,"Mirabilis multiflora*" = my_colors[37]
     )
   ) +
   theme_void() +
   theme(
-    legend.position = "right"
+    legend.position = "right",
+    legend.title = element_text(face = "bold"),
+  legend.text = element_text(face = "bold.italic")
   )
 
 ggsave(here::here("figs/SpeciesLegend.jpg"),
@@ -1018,9 +1022,10 @@ rm(summary,
 
 Found and added in SPEI using package `getSPEI`
 
+HERE'S where we replace
+
 ```{r}
 #| eval: false
-
 
 workdir <- getwd()
 setwd(workdir)
@@ -4923,3 +4928,165 @@ p_main <- ggplot() +
     label = "Slow vertical growth",
     hjust = -0.125,
     vjust = 2.9,
+    size = 4
+  ) +
+  annotate(
+    "text",
+    x = -Inf,
+    y = Inf,
+    label = "Tall",
+    hjust = -0.7,
+    vjust = 4.3,
+    size = 4
+  ) +
+  labs(
+    x = "Ln(Vegetative Biomass)",
+    y = "Predicted\nLn(Reproductive Biomass)",
+    tag = "A"
+  ) +
+
+  theme_classic() +
+  theme(legend.position = "bottom")
+
+ggsave(here::here("figs/model_PC3.jpg"), p_main, width = 7, height = 4)
+```
+
+I wonder if I could make a graph with two small panels showing the effect of SPEI and PC3 to the right and to left is this big graph with PC lines
+
+```{r}
+library(ggeffects)
+
+pc3_eff <- ggpredict(m_both, terms = "PC3")
+spei_eff <- ggpredict(m_both, terms = "spei_c")
+
+p_pc3 <- ggplot(pc3_eff,
+                aes(x, predicted)) +
+  geom_line(linewidth = 1) +
+  geom_ribbon(
+    aes(ymin = conf.low,
+        ymax = conf.high),
+    alpha = 0.2
+  ) +
+  labs(
+    x = "PC3",
+    y = "Predicted\nreproductive biomass (ln)",
+    tag = "B"
+  ) +
+  theme_classic()
+
+p_spei <- ggplot(spei_eff,
+                 aes(x, predicted)) +
+  geom_line(linewidth = 1) +
+  geom_ribbon(
+    aes(ymin = conf.low,
+        ymax = conf.high),
+    alpha = 0.2
+  ) +
+  labs(
+    x = "SPEI",
+    y = "Predicted\nreproductive biomass",
+    tag = "C"
+  ) +
+  theme_classic()
+
+
+#p_spei <- p_spei +
+#  scale_x_continuous(
+#    breaks = c(-0.4, 0, 0.4),
+#    labels = scales::label_number()
+ # )
+
+
+p_pc3 <- p_pc3 +
+  theme(
+    axis.title.y = element_blank(),
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank()
+  )
+
+p_spei <- p_spei +
+  theme(
+    axis.title.y = element_blank(),
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank()
+  )
+
+
+library(patchwork)
+
+p_all <- (p_main | (p_pc3 / p_spei)) +
+  plot_layout(
+    widths = c(3, 1))
+p_all
+
+ggsave(here::here("figs/m_both_PC3_spei.jpg"), p_all, width = 7, height = 4)
+```
+
+
+```{r}
+# SPEI predictions (3 lines: low, mean, high)
+pred_pc3 <- ggpredict(m_both, terms = c("Veg_Mass_ln", "PC3"))
+
+library(dplyr)
+
+pred_pc3 <- as.data.frame(pred_pc3) %>%
+  mutate(panel = "PC3")
+
+pred_pc3$PC3 <-as.numeric(pred_pc3$group) 
+pred_pc3 <- pred_pc3 %>% 
+  mutate(PC3 =
+    case_when(
+      PC3 == 1 ~ -1.19,
+      PC3 == 2 ~ -0.08,
+      PC3 == 3 ~ 1.03
+    )
+  )
+
+pg <- ggplot() +
+
+  # Raw data points
+  geom_point(
+    data = analysis_df_plus,
+    aes(x = Veg_Mass_ln,
+        y = total_fl_mass_ln),
+    alpha = 0.3
+  ) +
+
+  # Predicted lines
+  geom_line(
+    data = pred_pc3,
+    aes(x = x,
+        y = predicted,
+        color = PC3,
+        group = PC3),
+    linewidth = 1.2
+  ) +
+
+  # Shared continuous scale
+  scale_color_viridis_c(
+    direction = -1,
+    name = "PC3",
+    option = "plasma"
+  ) +
+  scale_fill_viridis_c(
+    direction = -1,
+    name = "PC3",
+    option = "plasma",
+    guide = "none"   # prevents duplicate legend
+  ) +
+
+  labs(
+    x = "Ln(Vegetative Biomass)",
+    y = "Predicted ln(Reproductive Biomass)"
+  ) +
+
+  theme_classic() +
+  theme(legend.position = "bottom")
+
+pg
+```
+Big error when trying to re-run code and PCA. Need to go back through with fine-toothed comb. Left off on trying to get PCA graph labels to spread out for readability. Grrrrr
+
+
+
+
