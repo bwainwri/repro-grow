@@ -1006,7 +1006,6 @@ summary(repro_fill)
 repro_fill_hi_n_narm <- repro_fill[-(which(repro_fill$total_fl_mass %in% c(NA, -Inf))),]
 
 repro_fill_hi_n_narm_1 <- repro_fill_hi_n_narm
-
 # Lastly add in precipitation
 precip <- read_csv(here::here("data/Site_Precip.csv"))
 repro_fill_hi_n_narm <- left_join(repro_fill_hi_n_narm_1,precip, by=join_by("Population"))
@@ -1023,6 +1022,78 @@ rm(summary,
 Found and added in SPEI using package `getSPEI`
 
 HERE'S where we replace
+
+Try using AI and CWD from TerraClimate. This gives climate data for roughly 4 km by 4 km grid cell
+
+```{r}
+#| eval: false
+
+#install.packages("remotes")  # if you don't have it
+#remotes::install_github("mikejohnson51/AOI")
+#remotes::install_github("mikejohnson51/climateR")
+library(AOI)
+library(climateR)
+library(sf)
+library(terra)
+library(dplyr)
+
+# Define your five points
+sites <- data.frame(
+  site = c("SEDG", "WWP", "MCL", "BORR", "ANGELO"),
+  lon  = c(-120.1, -119.2, -121.7, -122.4, -123.6),
+  lat  = c(34.7,   34.9,   37.4,   38.9,   39.8)
+)
+
+# ── KEY FIX: convert to sf before passing to getTerraClim ────────
+pts_sf <- st_as_sf(sites, coords = c("lon", "lat"), crs = 4326)
+
+# Pull TerraClimate — returns a named list of SpatRasters
+tc_raw <- getTerraClim(
+  AOI       = pts_sf,
+  varname   = c("def", "pet", "ppt"),
+  startDate = "1958-01-01",
+  endDate   = "2023-12-31"
+)
+
+# ── Extract point values from each SpatRaster ─────────────────────
+pts_vect <- vect(pts_sf)   # terra needs SpatVector, not sf
+
+extract_var <- function(var_name) {
+  r   <- tc_raw[[var_name]]
+  ex  <- terra::extract(r, pts_vect)           # rows = sites, cols = time steps
+  ex  <- ex[, -1]                              # drop ID column
+  
+  # Build a time index — one row per month across all years
+  n_layers <- nlyr(r)
+  yr_start <- 1958
+  dates    <- seq(as.Date(paste0(yr_start, "-01-01")), by = "month",
+                  length.out = n_layers)
+  
+  # Reshape: sites as rows → pivot to long format
+  ex_t <- as.data.frame(t(ex))                # now rows = months, cols = sites
+  colnames(ex_t) <- sites$site
+  ex_t$date     <- dates
+  ex_t$variable <- var_name
+  
+  tidyr::pivot_longer(ex_t, cols = all_of(sites$site),
+                      names_to = "site", values_to = "value")
+}
+
+tc_long <- bind_rows(lapply(c("def", "pet", "ppt"), extract_var))
+
+# ── Annual summaries + Aridity Index ─────────────────────────────
+annual <- tc_long |>
+  mutate(year = as.integer(format(date, "%Y"))) |>
+  group_by(site, year, variable) |>
+  summarise(annual_mm = sum(value, na.rm = TRUE), .groups = "drop") |>
+  tidyr::pivot_wider(names_from = variable, values_from = annual_mm) |>
+  mutate(aridity_index = ppt / pet)
+
+# Save
+write.csv(tc_long, here::here("data/terraclimate_monthly.csv"), row.names = FALSE)
+write.csv(annual, here::here("data/terraclimate_annual.csv"),  row.names = FALSE)
+```
+
 
 ```{r}
 #| eval: false
