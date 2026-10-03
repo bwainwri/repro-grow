@@ -39,8 +39,6 @@ Q3: Does native status or provenance have an effect on reproductive scaling of f
 Q4: How do aboveground traits associate with reproductive allocation and reproductive scaling?
 
 ## To-do list
-- Replace SPEI with different aridity measure
-- add asterisks to perennials in map figure
 - Clean up PCA step
 - Break up final PCA lma into two steps
 
@@ -96,6 +94,7 @@ library(ggeffects)
 ## Soil Sites
 
 ```{r}
+#| eval: false
 soil <- read_csv(here::here("data/Site Nitrogen.csv"))
 str(soil)
 
@@ -244,6 +243,75 @@ ggsave(here::here("figs/soil_nitrogen.jpg"), height = 3.5, width = 7)
 Do the same thing as the nitrogen figure but for MAP (or current year?)
 
 I could do soil moisture, same year rainfall, or MAP...
+Below is soil moisture
+
+```{r}
+#| eval: false
+sm <- read_csv(here::here("data/Site Soil Moisture.csv"))
+str(sm)
+
+# Calculate mean and SE for each site
+summary_data <- sm %>%
+  group_by(Site) %>%
+  summarise(
+    Mean = mean(sm, na.rm = TRUE),   # replace with your column name
+    SE   = sd(sm, na.rm = TRUE) /
+           sqrt(sum(!is.na(sm))),
+    .groups = "drop"
+  ) %>%
+  arrange(Site) %>%                          # sets a consistent order
+  mutate(
+    row      = row_number(),
+    n        = n(),
+    y_offset = 1 + (row - (n + 1) / 2) * 0.10
+  )
+
+  
+# Plot
+ggplot(summary_data, aes(
+  x     = Mean,
+  y     = y_offset,
+  color = Site
+)) +
+  geom_errorbar(
+    aes(xmin = Mean - SE, xmax = Mean + SE),
+    orientation = "y",
+    width        = 0,
+    linewidth    = 0.8
+  ) +
+  geom_point(size = 3) +
+  scale_color_manual(
+    values = c(
+      "Angelo"  = "black",
+      "McL"  = "black",
+      "BORR" = "black",
+      "Sedgwick" = "black",
+      "WW"  = "black",
+      "OTL-Drought"  = "red",
+      "OTL-Control" = "blue"
+    )
+  ) +
+  scale_y_continuous(
+    breaks = 1,
+    labels = "Sites",
+    limits = c(0.5, 1.5)    # padding so jittered points aren't clipped
+  ) +
+  labs(
+    x = "Soil Moisture (% VWC)",   # adjust units as needed
+    y = NULL
+  ) +
+  theme_classic() +
+  theme(
+    legend.position = "none",
+    axis.text.y     = element_text(size = 12),
+    axis.text.x     = element_text(size = 11),
+    axis.title.x    = element_text(size = 12)
+  )
+
+ggsave(here::here("figs/soil_moisture.jpg"), height = 3.5, width = 7)
+
+
+```
 
 
 ## CA Map and Plant Comp
@@ -1094,6 +1162,9 @@ write.csv(tc_long, here::here("data/terraclimate_monthly.csv"), row.names = FALS
 write.csv(annual, here::here("data/terraclimate_annual.csv"),  row.names = FALSE)
 ```
 
+def is CWD
+
+Old SPEI workflow
 
 ```{r}
 #| eval: false
@@ -1206,6 +1277,81 @@ head(repro_fill_hi_n_narm)
 
 anova(lm(total_fl_mass_ln ~ Veg_Mass_ln*Treatment, data = repro_fill_hi_n_narm))
 ```
+```{r}
+#| eval: false
+sm <- read_csv(here::here("data/Site Soil Moisture.csv"))
+str(sm)
+
+sm <- sm |> 
+  filter(Site %in% c("OTL-Drought","OTL-Control"))
+unique(sm$Site)
+
+
+library(dplyr)
+library(ggplot2)
+
+# Define treatment and block for each shelter
+shelter_info <- tibble(
+  ID        = c("A",       "B",       "C",       "D",       "E",
+                "F",       "G",       "H",       "I",       "J"),
+  Treatment = c("Drought", "Drought", "Drought", "Control", "Control",
+                "Control", "Control", "Control", "Drought", "Drought"),
+  Block     = c("Block 1", "Block 2", "Block 3", "Block 4", "Block 5",
+                "Block 1", "Block 2", "Block 3", "Block 4", "Block 5")
+)
+
+# Summarise hourly soil moisture to one mean ± SE per shelter
+summary_data <- sm %>%
+  left_join(shelter_info, by = "ID") %>%
+  group_by(ID, Treatment, Block) %>%
+  summarise(
+    Mean = mean(sm, na.rm = TRUE),
+    SE   = sd(sm, na.rm = TRUE) / sqrt(sum(!is.na(sm))),
+    .groups = "drop"
+  )
+
+ggplot(summary_data, aes(
+  x    = Block,
+  y    = Mean,
+  fill = Treatment
+)) +
+  geom_col(
+    position = position_dodge(width = 0.9),
+    width    = 0.8
+  ) +
+  geom_errorbar(
+    aes(ymin = Mean - SE, ymax = Mean + SE),
+    position  = position_dodge(width = 0.9),
+    width     = 0.2,
+    linewidth = 0.8
+  ) +
+ # geom_text(
+  #  aes(label = ID, y = Mean + SE + 0.005),
+   # position    = position_dodge(width = 0.9),
+  #  size        = 3.5,
+  #  show.legend = FALSE
+  #) +
+  scale_fill_viridis_d(option = "cividis") +
+  scale_y_continuous(
+    expand = expansion(mult = c(0, 0.05))  # starts at 0, small padding at top
+  ) +
+  labs(
+    x    = "Block",
+    y    = "Mean Soil Moisture",
+    fill = "Treatment"
+  ) +
+  theme_classic() +
+  theme(
+    axis.text    = element_text(size = 11),
+    axis.title   = element_text(size = 12),
+    legend.title = element_text(size = 12),
+    legend.text  = element_text(size = 11)
+  )
+
+ggsave(here::here("figs/drought.jpg"), height = 3.5, width = 7)
+
+
+```
 
 
 ## Q1: 1:1
@@ -1229,6 +1375,11 @@ Herbaceous species are thought to have a 1:1 scaling relationship between vegeta
 # Standardized Major Axis Regression
 # install.packages("smatr")
 library(smatr)
+
+order(unique(repro_fill_hi_n_narm$Sp_Code))
+repro_fill_hi_n_narm %>%
+  count(Growth_Habit, sort = TRUE)
+
 
 repro_fill_hi_n_narm_2 <- repro_fill_hi_n_narm %>% 
   filter(!Sp_Code %in% c("ACMPAR","CAUCOU"))
@@ -1426,7 +1577,9 @@ ggsave(here::here("figs/Q1_slopes_spp_prez.jpg"), width = 7,height = 3.5)
 
 Q2: Is there a difference in reproductive allometric scaling between annual forbs and grasses?
 
-Let's separate them anayway since all grasses are not native, then forbs if invasive matters and if site matters. And ask grasses if invasive level matters and if site matters
+Let's separate them anyway since all grasses are not native, then forbs if invasive matters and if site matters. And ask grasses if invasive level matters and if site matters
+
+LEFT OFF HERE
 
 ```{r}
 # Use a mixed effects linear regression to reflect experimental structure
